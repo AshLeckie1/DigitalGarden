@@ -1,0 +1,18 @@
+{
+    "debug":0,
+    
+    "SQLUser":"",
+    "SQLPass":"",
+    "SQLServer":"localhost",
+    "SQLDatabase":"",
+
+    "DecryptKey":"",
+
+    "NodeServer":"",
+    "NodePort":"3000",
+
+    "SQLLogLocation":"Logs\\SqlTransLog",
+    "ServiceLogLocation":"Logs\\ServiceLog",
+    "DefaultLogs":"Logs\\Log",
+    "LogAgeDays":7
+}
