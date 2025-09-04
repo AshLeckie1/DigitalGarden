@@ -2,7 +2,8 @@ import express from "express";
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import CONFIG from './Config/Config.json' with { type: "json" };
-
+import fs from 'node:fs';
+import fsp from 'node:fs/promises';
 
 const app = express();
 
@@ -13,8 +14,8 @@ const corsOptions = {
 
 app.get('/', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
-    //res.status(403).send("You do not have rights to visit this page");
-    res.redirect(`${CONFIG.server}:8080\index.html`)
+    res.status(403).send("You do not have rights to visit this page");
+    //res.redirect(`${CONFIG.server}:8080\index.html`)
 });
 
 app.listen(CONFIG.NodePort, () => {
@@ -139,7 +140,9 @@ function log(content, logType, StringDump) {
     var logFile;
 
     if(CONFIG.debug){
-        console.log(`${getDate()} - ${content}`)
+        const date = new Date();
+        var formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        console.log(`[${formattedDate}] ${content}`)
     }
 
     switch(logType.toUpperCase()){
@@ -166,7 +169,7 @@ function log(content, logType, StringDump) {
     if(!fs.existsSync(`data/${logType.toUpperCase()}Pos.txt`)){
         fs.writeFile(`data/${logType.toUpperCase()}Pos.txt`,'0', err => {
             if (err) {
-                console.log(`${formattedDate} [ERROR] ${err}`);
+                console.log(`[ERROR] ${err}`);
             } else {
                 //console.log(`${getDate()} [INFO] written to log ${logFile}`)
             }

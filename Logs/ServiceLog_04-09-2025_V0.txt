@@ -1,0 +1,11 @@
+04/09/2025 20:09 [BOOT] Version: undefined 
+04/09/2025 20:09 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+04/09/2025 20:09 [BOOT] Port: 3000 
+04/09/2025 20:11 [BOOT] Version: undefined 
+04/09/2025 20:11 [BOOT] Port: 3000 
+04/09/2025 20:11 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+04/09/2025 20:11 [BOOT] WiseRiver Started! 
+04/09/2025 20:12 [BOOT] WiseRiver Started! 
+04/09/2025 20:12 [BOOT] Port: 3000 
+04/09/2025 20:12 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+04/09/2025 20:12 [BOOT] Version: undefined 
