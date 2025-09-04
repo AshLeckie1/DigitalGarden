@@ -1,9 +1,13 @@
 import express from "express";
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import CONFIG from './Config/Config.json' with { type: "json" };
+import CONFIG from './Config/Config.json' with { type: "json" }; // For Windows
+// import CONFIG from './Config/Config.json' assert { type: "json" };   // For Linux
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
+import mysql from 'mysql2/promise';
+import db from 'mysql2-promise'
+import crypto from 'crypto'
 
 const app = express();
 
@@ -34,6 +38,24 @@ app.use(bodyParser.json())
 var $UserSessions = []
 //{Username:{User},SessionStart:{DateTime},SessionID={GUID}}
 
+const algorithm = 'aes-256-cbc';
+const iv = crypto.randomBytes(16);
+
+function encrypt(text) {
+    let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(CONFIG.DecryptKey), iv);
+    let encrypted = cipher.update(text);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
+}
+
+function decrypt(text) {
+    let iv = buffer.from(text.iv, 'hex');
+    let encryptedText = Buffer.from(text.encryptedData, 'hex');
+    let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(CONFIG.DecryptKey), iv);
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString();
+}
 
 app.post('/NewUser', (req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -44,56 +66,125 @@ app.post('/NewUser', (req,res) => {
         return;
     }
     
-    try{
+   try{
 
         //assign all req values
         var Username = req.body.Username
         var Password = req.body.Password
         var InviteKey = req.body.InviteKey
-        var UserData = JSON.parse(req.body.UserData)
+        var UserData = req.body.UserData
 
         //check invite key is valid
-        var sql = `SELECT * FROM invite_tokens WHERE ID -eq '${InviteKey}' AND Experation -gt NOW()`
-        SqlQuery(sql).then(result =>{
-            if(result.length > 0){
+        var sqlInviteKey = `SELECT * FROM digitalGarden.invite_tokens WHERE ID = '${InviteKey}' AND Experation > NOW()`
+        var sqlExistingUser = `SELECT COUNT(ID) AS users FROM digitalgarden.users WHERE UPPER(Username) = '${Username.toUpperCase()}'`
+        const allPromise = Promise.all([SqlQuery(sqlInviteKey),SqlQuery(sqlExistingUser)])
+        allPromise.then(result  =>{
+
+           
+
+            const InviteKey = result[0]
+            //console.log(`Invite Key - ${JSON.stringify(InviteKey)} \n \n`)
+
+
+            const ExistingUsers = result[1][0]
+            //console.log(`Existing Users  - ${JSON.stringify(ExistingUsers)} \n \n`)
+
+            if(ExistingUsers.users > 0){
+                //there is aleady an exsisting user with this username
+                res.status(400).send({"error":true,msg:`The username ${Username} is already taken!`})
+                return;
+            }
+
+            //console.log(InviteKey)
+
+            if(InviteKey.length > 0){
                 //encrypt password
-                var encrypted = crypto.publicEncrypt(CONFIG.DecryptKey, Password);
+                var encrypted = encrypt(Password);
                 //add user record to DB
-                sql = `INSERT INTO users (ID, Username, UserData, Passkey) VALUES ((SELECT UUID() AS ID), '${Username}', '${UserData}', '${encrypted}');`
+                var sql = `INSERT INTO users (ID, Username, UserData, Passkey) VALUES ((SELECT UUID() AS ID), '${Username}', '${UserData}', '${JSON.stringify(encrypted)}');`
                 SqlQuery(sql).then(result =>{
                     // TODO validate result
-                    // Send user login session
-                    var sessionID = uuidv4()
-                    $UserSessions.push({Username:Username,SessionStart:0,SessionID:sessionID})
-                    res.status(200).send({"error":FALSE,loginSession,"loginSession":JSON.stringify({Username:Username,SessionStart:0,SessionID:sessionID})})
+                    if(result.affectedRows > 0){
+                        // Send user login session
+                        var sessionID = uuidv4()
 
+                        // TODO session start
+                        $UserSessions.push({Username:Username,SessionStart:0,SessionID:sessionID})
+                        res.status(200).send({"error":false,"loginSession":JSON.stringify({Username:Username,SessionStart:0,SessionID:sessionID})})
+                    }else{
+                        var tracker = uuidv4()
+                        log(`[ERROR] [${tracker}] There was a SQL error adding user - ${JSON.stringify(result, null, 2)}`,"Service");
+                        res.status(500).send({"error":true,"msg":"There was an issue adding a user to the DB","tracker":tracker})
+                    }
+                    
+                    
                 }).catch(err => {
                     //there was an issue adding the user
                     var tracker = uuidv4()
                     log(`[ERROR] [${tracker}] Cannot adding user to DB- ${JSON.stringify(err, null, 2)}`,"Service");
-                    res.status(500).send({"error":TRUE,"msg":"There was an issue adding a user to the DB","tracker":tracker})
+                    res.status(500).send({"error":true,"msg":"There was an issue adding a user to the DB","tracker":tracker})
                 });
                 
             }else{
                 //key is invalid or has expired
-                res.status(401).send({"error":TRUE,"msg":"Invite key is invalid or has expired!"})
+                res.status(401).send({"error":true,"msg":"Invite key is invalid or has expired!"})
             }
-        }).catch(err => {
-            //there was a server error getting the invite key
-            var tracker = uuidv4()
-            log(`[ERROR] [${tracker}] Cannot get invite key from DB - ${JSON.stringify(err, null, 2)}`,"Service");
-            res.status(500).send({"error":TRUE,"msg":"Cannot get invite key from DB","tracker":tracker})
+        })//.catch(err => {
+        //     //there was a server error getting the invite key
+        //     var tracker = uuidv4()
+        //     log(`[ERROR] [${tracker}] Cannot get invite key from DB - ${JSON.stringify(err, null, 2)}`,"Service");
+        //     res.status(500).send({"error":true,"msg":"Cannot get invite key from DB","tracker":tracker})
 
-        });
+        // });
         
-
-
     }catch(err){
-        res.status(500).send({"error":TRUE,"msg":err})
+        res.status(500).send({"error":true,"msg":err})
         return;
     }
 
+});
 
+app.post("/Login",(req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var Username = req.body.Username
+    var Password = req.body.Password
+
+    if(Username ==  undefined || Password ==  undefined){
+        res.status(400).send({"error":true,"msg":"Missing username or password!"})
+    }
+
+    try{
+        var sql = `SELECT * FROM digitalgarden.users WHERE UPPER(Username) = '${Username}'`
+        SqlQuery(sql).then(result =>{
+            
+            if(result.length > 0){
+                // user not found
+                res.send(401).send({"error":true,"msg":"Username or password is incorrect"})
+            }
+            
+            var UserData = result[0]           
+
+            if(Password == decrypt(UserData.Passkey)){
+                // login user
+                var sessionID = uuidv4()
+                $UserSessions.push({Username:UserData.Username,SessionStart:0,SessionID:sessionID})
+            }else{
+                // password is incorrect
+                res.send(401).send({"error":true,"msg":"Username or password is incorrect"})
+            }
+
+
+        })
+
+
+    }catch(err){
+
+    }
 });
 
 async function SqlQuery(query) {
@@ -106,31 +197,24 @@ async function SqlQuery(query) {
 
     }
 
-    var sqlConfig = {
-        user: CONFIG.SQLUser,
-        password: CONFIG.SQLPass,
-        server: CONFIG.SQLServer,
-        database: CONFIG.SQLDatabase,
-        trustServerCertificate: true
-    }
-
     try {
-        //send request
-        let pool = await sql.connect(sqlConfig)
-        let result = await pool.request()
-            .query(query)
+        let Connection = await mysql.createConnection({
+            host     : CONFIG.SQLServer,
+            user     : CONFIG.SQLUser,
+            password : CONFIG.SQLPass,
+            database : CONFIG.SQLDatabase
+        })
 
-        //Log result to log file
-        log(` [INFO] SQL RESULT - `, "SQL", JSON.stringify(result, null, 2))
-        return result
+        var result = await Connection.query(query)
+        //log(` [INFO] SQL RESULT - `, "SQL", JSON.stringify(result, null, 2))
+
+        return result[0]
 
     } catch (err) {
-
         //log error to log file
         log(` [ERROR] `, "SQL", JSON.stringify(err, null, 2))
         return err
     }
-
 }
 
 
@@ -142,7 +226,15 @@ function log(content, logType, StringDump) {
     if(CONFIG.debug){
         const date = new Date();
         var formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-        console.log(`[${formattedDate}] ${content}`)
+        
+        if(StringDump != undefined){
+            console.log(`[${formattedDate}] ${content} Dump:${StringDump}`)
+
+        }else{
+            console.log(`[${formattedDate}] ${content}`)
+
+        }
+        
     }
 
     switch(logType.toUpperCase()){

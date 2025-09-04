@@ -3,7 +3,12 @@
   "dependencies": {
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "^5.1.0",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.14.4",
+    "mysql2-promise": "^0.1.4",
+    "sql": "^0.78.0"
   }
 }
