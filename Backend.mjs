@@ -6,7 +6,6 @@ import CONFIG from './Config/Config.json' with { type: "json" }; // For Windows
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import mysql from 'mysql2/promise';
-import db from 'mysql2-promise'
 import crypto from 'crypto'
 
 const app = express();
@@ -23,7 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(CONFIG.NodePort, () => {
-    log(`[BOOT] WiseRiver Started!`,"Service")
+    log(`[BOOT] DigitalGarden Started!`,"Service")
     log(`[BOOT] Version: ${CONFIG.version}`,"Service")
     log(`[BOOT] Port: ${CONFIG.NodePort}`,"Service");
     log(`[BOOT] Cors Options: ${JSON.stringify(corsOptions)}`,"Service")
@@ -41,6 +40,8 @@ var $UserSessions = []
 const algorithm = 'aes-256-cbc';
 const iv = crypto.randomBytes(16);
 
+
+// Code from https://stackoverflow.com/questions/60369148/how-do-i-replace-deprecated-crypto-createcipher-in-node-js
 function encrypt(text) {
     let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(CONFIG.DecryptKey), iv);
     let encrypted = cipher.update(text);
@@ -49,7 +50,7 @@ function encrypt(text) {
 }
 
 function decrypt(text) {
-    let iv = buffer.from(text.iv, 'hex');
+    let iv = Buffer.from(text.iv, 'hex');
     let encryptedText = Buffer.from(text.encryptedData, 'hex');
     let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(CONFIG.DecryptKey), iv);
     let decrypted = decipher.update(encryptedText);
@@ -57,11 +58,13 @@ function decrypt(text) {
     return decrypted.toString();
 }
 
+// Code From End
+
 app.post('/NewUser', (req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     
     if (req.body == null) {
-        //if post is missing body
+        // if post is missing body
         res.status(400).send({"error":TRUE,msg:"missing POST body!"});
         return;
     }
@@ -79,23 +82,15 @@ app.post('/NewUser', (req,res) => {
         var sqlExistingUser = `SELECT COUNT(ID) AS users FROM digitalgarden.users WHERE UPPER(Username) = '${Username.toUpperCase()}'`
         const allPromise = Promise.all([SqlQuery(sqlInviteKey),SqlQuery(sqlExistingUser)])
         allPromise.then(result  =>{
-
-           
-
+            
             const InviteKey = result[0]
-            //console.log(`Invite Key - ${JSON.stringify(InviteKey)} \n \n`)
-
-
             const ExistingUsers = result[1][0]
-            //console.log(`Existing Users  - ${JSON.stringify(ExistingUsers)} \n \n`)
 
             if(ExistingUsers.users > 0){
                 //there is aleady an exsisting user with this username
                 res.status(400).send({"error":true,msg:`The username ${Username} is already taken!`})
                 return;
             }
-
-            //console.log(InviteKey)
 
             if(InviteKey.length > 0){
                 //encrypt password
@@ -105,12 +100,9 @@ app.post('/NewUser', (req,res) => {
                 SqlQuery(sql).then(result =>{
                     // TODO validate result
                     if(result.affectedRows > 0){
-                        // Send user login session
-                        var sessionID = uuidv4()
+                        // Send user confirmation
+                        res.status(200).send({"error":false})
 
-                        // TODO session start
-                        $UserSessions.push({Username:Username,SessionStart:0,SessionID:sessionID})
-                        res.status(200).send({"error":false,"loginSession":JSON.stringify({Username:Username,SessionStart:0,SessionID:sessionID})})
                     }else{
                         var tracker = uuidv4()
                         log(`[ERROR] [${tracker}] There was a SQL error adding user - ${JSON.stringify(result, null, 2)}`,"Service");
@@ -129,13 +121,12 @@ app.post('/NewUser', (req,res) => {
                 //key is invalid or has expired
                 res.status(401).send({"error":true,"msg":"Invite key is invalid or has expired!"})
             }
-        })//.catch(err => {
-        //     //there was a server error getting the invite key
-        //     var tracker = uuidv4()
-        //     log(`[ERROR] [${tracker}] Cannot get invite key from DB - ${JSON.stringify(err, null, 2)}`,"Service");
-        //     res.status(500).send({"error":true,"msg":"Cannot get invite key from DB","tracker":tracker})
-
-        // });
+        }).catch(err => {
+            //there was a server error getting the invite key
+            var tracker = uuidv4()
+            log(`[ERROR] [${tracker}] Cannot get invite key from DB - ${JSON.stringify(err, null, 2)}`,"Service");
+            res.status(500).send({"error":true,"msg":"Cannot get invite key from DB","tracker":tracker})
+        });
         
     }catch(err){
         res.status(500).send({"error":true,"msg":err})
@@ -161,31 +152,195 @@ app.post("/Login",(req,res) => {
     try{
         var sql = `SELECT * FROM digitalgarden.users WHERE UPPER(Username) = '${Username}'`
         SqlQuery(sql).then(result =>{
-            
-            if(result.length > 0){
-                // user not found
-                res.send(401).send({"error":true,"msg":"Username or password is incorrect"})
-            }
-            
-            var UserData = result[0]           
 
-            if(Password == decrypt(UserData.Passkey)){
+            if(result.length == 0){
+                // user not found
+                res.status(401).send({"error":true,"msg":"Username or password is incorrect"})
+                return;
+            }
+
+            var UserData = result[0]  
+            var ServerPass = decrypt(JSON.parse(UserData.Passkey))
+       
+
+            if(Password == ServerPass){
+                
+                //remove any cloned sessions
+                $UserSessions.map((UserSession) =>{
+                    try{
+                        if(UserSession.Username === Username){
+                            removeUserSession(UserSession.SessionID)
+                        }  
+                    }catch{}                 
+                })   
+
                 // login user
                 var sessionID = uuidv4()
-                $UserSessions.push({Username:UserData.Username,SessionStart:0,SessionID:sessionID})
+                var sessionStart = Date.now()
+                var SessionVar = {ID:UserData.ID,Username:UserData.Username,SessionStart:sessionStart,SessionID:sessionID}
+
+                $UserSessions.push(SessionVar)
+
+                log(`[INFO] User ${UserData.Username} logged in succesfully`,"Service")
+
+                res.status(200).send({"error":false,"loginSession":{Username:UserData.Username,SessionStart:sessionStart,SessionID:sessionID}})
+
+
+
             }else{
                 // password is incorrect
-                res.send(401).send({"error":true,"msg":"Username or password is incorrect"})
+                log(`[INFO] User ${UserData.Username}failed to login`,"Service")
+                res.status(401).send({"error":true,"msg":"Username or password is incorrect"})
             }
-
-
         })
-
 
     }catch(err){
 
     }
 });
+
+app.post('/ActiveSessions',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    try{
+        // to be tunred back on
+        // var AdminSessionID = req.body.AdminSessionID
+        // var adminAccount = IsUserSessionValid(AdminSessionID)
+
+        // if(adminAccount.Group == "ADMIN"){
+        //     res.send($UserSessions)
+        // }
+        // else{
+        //     res.status(500).send({error:true,msg:"User not an admin"})
+        // }
+
+        res.send($UserSessions)
+
+    }catch(err){
+        log(`[ERROR] /ActiveSessions`, "service", JSON.stringify(err))
+        res.status(500).send({error:true,msg:err})
+    }
+});
+
+app.post('/NewDraft',(req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+    
+    const date = new Date();
+    var formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+    //check if user session is valid
+    var userSession = IsUserSessionValid(req.body.SessionID)
+    //if login is invalid 
+    if(!userSession.login){
+        res.status(401).send({"error":true,"msg":userSession.error})
+        return
+    }
+
+    var Draft = {
+        ID:uuidv4(),
+        Created:formattedDate,
+        Modified:formattedDate,
+        Author:userSession.UserID
+    }
+
+    var sql = `INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('${Draft.ID}','${JSON.stringify(Draft)}','DRAFT','${Draft.Author}')`
+        
+    const allPromise = Promise.all([createFolder(),SqlQuery(sql)])
+    allPromise.then(result  =>{
+        if(result[0] && result[1].length > 0){
+            // both ran successfully
+            res.status(200).send(Draft)
+        }else{
+            // there was an error
+            res.status(500).send({"error":true})
+        }
+    });
+
+    async function createFolder(){
+        //create folder for Draft
+        fs.mkdir(`data\\drafts\\${Draft.ID}`,
+            (err) => {
+            if (err) {
+                log(`[ERROR] Creating Draft folder ${err}`,"Service")
+                return false;
+            }
+            return true
+        });
+    }
+})
+
+function IsUserSessionValid(LoginSession){
+    var result = $UserSessions.find(obj => {
+        return obj.SessionID === LoginSession
+    })
+
+    if(result){
+
+        //twelve days
+        var expirationDate = Date(Date(result.sessionStart) + (12*24*60*60*100))
+
+        if(expirationDate < Date.now() && !result.StayLoggedIn){
+            //session has expired
+
+            //remove from sessions array
+            removeUserSession(LoginSession)
+
+            return {"login":false,"error":"Session has timed out"}
+        }
+
+        //even keep logged in users will expire, this uses the UserLoginMaxAgeDays setting
+        expirationDate = Date(Date(result.sessionStart) + (CONFIG.UserLoginMaxAgeDays*24*60*60*100))
+
+        if(expirationDate < Date.now()){
+            //session has expired
+
+            //remove from sessions array
+            removeUserSession(LoginSession)
+
+            return {"login":false,"error":"Session has timed out"}
+        }
+        
+        //update last active time
+        $UserSessions = $UserSessions.map((UserSession) =>{
+
+            if(UserSession.SessionID === LoginSession){
+                return {
+                    ...UserSession,
+                    LastActive:getDate()
+                };
+            }
+
+            return UserSession
+        })
+
+        //send confirmation
+        return {"login":true,"Username":result.Username,"UserID":result.ID}
+        
+    }else{
+        return {"login":false,"error":"No User Session Found"}
+    }
+}
+
+
+function removeUserSession(SessionID){
+    
+    var output = "No session Found"
+
+    $UserSessions= $UserSessions.filter(function (UserSession) {
+        if(UserSession.SessionID != SessionID){
+            return UserSession
+        }
+        else{
+            log(`[INFO] Removing user sesssion ${SessionID}`,"Service")
+            output = "Session Removed"
+        }
+    });    
+
+    return {msg:output}
+}
 
 async function SqlQuery(query) {
 
@@ -206,7 +361,7 @@ async function SqlQuery(query) {
         })
 
         var result = await Connection.query(query)
-        //log(` [INFO] SQL RESULT - `, "SQL", JSON.stringify(result, null, 2))
+
 
         return result[0]
 
@@ -358,6 +513,18 @@ function log(content, logType, StringDump) {
         }
 
     }
+}
+
+function getDate() {
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${day}-${month}-${year} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    return currentDate
 }
 
 

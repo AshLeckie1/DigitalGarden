@@ -1,0 +1,68 @@
+05/09/2025 22:36 [BOOT] Version: undefined gin":"*","optionsSuccessStatus":200} 
+05/09/2025 22:36 [BOOT] Port: 3000 
+05/09/2025 22:36 [BOOT] WiseRiver Started! 
+05/09/2025 22:49 [BOOT] Version: undefined 
+05/09/2025 22:49 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 22:49 [BOOT] WiseRiver Started! 
+05/09/2025 22:49 [BOOT] Port: 3000 
+05/09/2025 22:50 [BOOT] WiseRiver Started! 
+05/09/2025 22:50 [BOOT] Version: undefined 
+05/09/2025 22:50 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 22:50 [BOOT] Port: 3000 
+05/09/2025 22:51 [BOOT] WiseRiver Started! 
+05/09/2025 22:51 [BOOT] Port: 3000 
+05/09/2025 22:51 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 22:51 [BOOT] Version: undefined 
+05/09/2025 22:51 [BOOT] WiseRiver Started! 
+05/09/2025 22:51 [BOOT] Version: undefined 
+05/09/2025 22:51 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 22:51 [BOOT] Port: 3000 
+05/09/2025 23:13 [BOOT] Port: 3000 
+05/09/2025 23:13 [BOOT] WiseRiver Started! 
+05/09/2025 23:13 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:13 [BOOT] Version: undefined 
+05/09/2025 23:14 [BOOT] Port: 3000 
+05/09/2025 23:14 [BOOT] WiseRiver Started! 
+05/09/2025 23:14 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:14 [BOOT] Version: undefined 
+05/09/2025 23:16 [BOOT] WiseRiver Started! 
+05/09/2025 23:16 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:16 [BOOT] Version: undefined 
+05/09/2025 23:16 [BOOT] Port: 3000 
+05/09/2025 23:18 [BOOT] Version: undefined 
+05/09/2025 23:18 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:18 [BOOT] Port: 3000 
+05/09/2025 23:18 [BOOT] WiseRiver Started! 
+05/09/2025 23:19 [BOOT] WiseRiver Started! 
+05/09/2025 23:19 [BOOT] Version: undefined 
+05/09/2025 23:19 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:19 [BOOT] Port: 3000 
+05/09/2025 23:23 [BOOT] WiseRiver Started! 
+05/09/2025 23:23 [BOOT] Version: undefined 
+05/09/2025 23:23 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:23 [BOOT] Port: 3000 
+05/09/2025 23:23 [BOOT] WiseRiver Started! 
+05/09/2025 23:23 [BOOT] Version: undefined 
+05/09/2025 23:23 [BOOT] Port: 3000 
+05/09/2025 23:23 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:28 [BOOT] Port: 3000 
+05/09/2025 23:28 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:28 [BOOT] WiseRiver Started! 
+05/09/2025 23:28 [BOOT] Version: undefined 
+05/09/2025 23:29 [BOOT] Port: 3000 
+05/09/2025 23:29 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:29 [BOOT] WiseRiver Started! 
+05/09/2025 23:29 [BOOT] Version: undefined 
+05/09/2025 23:30 [BOOT] Version: undefined 
+05/09/2025 23:30 [BOOT] WiseRiver Started! 
+05/09/2025 23:30 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:30 [BOOT] Port: 3000 
+05/09/2025 23:34 [BOOT] Port: 3000 
+05/09/2025 23:34 [BOOT] Version: undefined 
+05/09/2025 23:34 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:34 [BOOT] WiseRiver Started! 
+05/09/2025 23:35 [BOOT] Version: undefined 
+05/09/2025 23:35 [BOOT] WiseRiver Started! 
+05/09/2025 23:35 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+05/09/2025 23:35 [BOOT] Port: 3000 
+05/09/2025 23:35 [INFO] User Admin logged in succesfully 

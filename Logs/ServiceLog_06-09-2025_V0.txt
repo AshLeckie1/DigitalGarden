@@ -1,0 +1,39 @@
+06/09/2025 00:31 [BOOT] Version: undefined 
+06/09/2025 00:31 [BOOT] WiseRiver Started! 
+06/09/2025 00:31 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/09/2025 00:31 [INFO] User Admin logged in succesfully 
+06/09/2025 00:44 [BOOT] Port: 3000 
+06/09/2025 00:44 [BOOT] WiseRiver Started! 
+06/09/2025 00:44 [BOOT] Version: undefined 
+06/09/2025 00:44 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/09/2025 00:44 [INFO] User Admin logged in succesfully 
+06/09/2025 00:45 [BOOT] WiseRiver Started! 
+06/09/2025 00:45 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/09/2025 00:45 [BOOT] Version: undefined 
+06/09/2025 00:45 [BOOT] Port: 3000 
+06/09/2025 00:45 [INFO] User Admin logged in succesfully 
+06/09/2025 00:47 [BOOT] WiseRiver Started! 
+06/09/2025 00:47 [BOOT] Port: 3000 
+06/09/2025 00:47 [BOOT] Version: undefined 
+06/09/2025 00:47 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/09/2025 00:47 [INFO] User Admin logged in succesfully 
+06/09/2025 00:48 [BOOT] Port: 3000 
+06/09/2025 00:48 [BOOT] Version: undefined 
+06/09/2025 00:48 [BOOT] WiseRiver Started! 
+06/09/2025 00:48 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/09/2025 00:49 [INFO] User Admin logged in succesfully 
+06/09/2025 00:50 [BOOT] WiseRiver Started! 
+06/09/2025 00:50 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/09/2025 00:50 [BOOT] Version: undefined 
+06/09/2025 00:50 [BOOT] Port: 3000 
+06/09/2025 00:51 [INFO] User Admin logged in succesfully 
+06/09/2025 00:53 [BOOT] Version: undefined 
+06/09/2025 00:53 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/09/2025 00:53 [BOOT] WiseRiver Started! 
+06/09/2025 00:53 [BOOT] Port: 3000 
+06/09/2025 00:53 [INFO] User Admin logged in succesfully 
+06/09/2025 00:56 [BOOT] Port: 3000 
+06/09/2025 00:56 [BOOT] WiseRiver Started! 
+06/09/2025 00:56 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/09/2025 00:56 [BOOT] Version: undefined 
+06/09/2025 00:56 [INFO] User Admin logged in succesfully 

@@ -1,0 +1,18 @@
+06/09/2025 00:31  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'Admin' 
+06/09/2025 00:44  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'Admin' 
+06/09/2025 00:45  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'Admin' 
+06/09/2025 00:47  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'Admin' 
+06/09/2025 00:49  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'Admin' 
+06/09/2025 00:50  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'Admin' 
+06/09/2025 00:53  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'Admin' 
+06/09/2025 00:54  [INFO] SQL REQUEST - INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('28bf0df7-5c79-4b73-9cd9-87325df2901f','{"ID":"28bf0df7-5c79-4b73-9cd9-87325df2901f","Created":"06/09/2025 00:54","Modified":"06/09/2025 00:54","Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}','DRAFT','undefined') 
+06/09/2025 00:54  [ERROR]  <span id="ca1b2d99-e1a1-47ce-a2f8-6df2f957d9a3" class="ConsoleHiddenElementButton" onclick="ShowHide(this)">[show]</span><div id="pca1b2d99-e1a1-47ce-a2f8-6df2f957d9a3" class="ConsoleHiddenElement" hidden>{
+  "message": "Cannot add or update a child row: a foreign key constraint fails (`digitalgarden`.`posts`, CONSTRAINT `UserID` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`))",
+  "code": "ER_NO_REFERENCED_ROW_2",
+  "errno": 1452,
+  "sql": "INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('28bf0df7-5c79-4b73-9cd9-87325df2901f','{\"ID\":\"28bf0df7-5c79-4b73-9cd9-87325df2901f\",\"Created\":\"06/09/2025 00:54\",\"Modified\":\"06/09/2025 00:54\",\"Author\":\"dc21302d-89e0-11f0-9275-000c298d25c1\"}','DRAFT','undefined')",
+  "sqlState": "23000",
+  "sqlMessage": "Cannot add or update a child row: a foreign key constraint fails (`digitalgarden`.`posts`, CONSTRAINT `UserID` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`))"
+}</div>
+06/09/2025 00:56  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'Admin' 
+06/09/2025 00:56  [INFO] SQL REQUEST - INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('61c1da56-4d21-4fc0-8813-68a2c45226ae','{"ID":"61c1da56-4d21-4fc0-8813-68a2c45226ae","Created":"06/09/2025 00:56","Modified":"06/09/2025 00:56","Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}','DRAFT','dc21302d-89e0-11f0-9275-000c298d25c1') 
