@@ -3,12 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
+    <link href="Style/Skeleton/normalize.css" rel="stylessheet">
+    <link href="Style/Style.css" rel = "stylesheet">
+    <script src="scripts/userSession.js"></script>
+    <!-- <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script> -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="Scripts/config.js"></script>
+    <script type="module">
+        WebComponents.waitFor(() => {
+        let el = document.createElement('script');
+        el.src = 'https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js';
+        document.head.appendChild(el);
+        });
+    </script>
     <title>New Post</title>
 </head>
 <body>
-    <textarea id="">
+    <div class="container MainBody"> 
+        <div class="Row">
 
-    </textarea>
-    
+                <div class="six columns">
+                    <h2>Editor</h2>
+                    <ul>
+                        <li><span id="saveStatus"></span></li>
+                        <li><button>post</button></li>
+                    </ul>
+                    <textarea id="Editor" onchange=""></textarea>
+                </div>
+                <div class="six columns">
+                    <h2>Preview</h2>
+                    <div id="MarkdownViewer">
+                        
+                        <zero-md style="padding-bottom: 10rem;">
+                        </zero-md>
+                    </div>
+                </div>
+            
+        </div>
+    </div>
 </body>
+<script>
+
+    $Session = {
+        DraftID:""
+    }
+
+    var Editor = document.getElementById('Editor');
+    if (Editor.addEventListener) {
+    Editor.addEventListener('input', function() {
+        updateMD()
+        // event handling code for sane browsers
+    }, false);
+    } else if (Editor.attachEvent) {
+    Editor.attachEvent('onpropertychange', function() {
+        updateMD()
+        // IE-specific event handling code
+    });
+    }
+
+    $(document).ready(function() {
+        console.log(window.location.href)
+        try{
+            if(new URL(window.location.href).searchParams.get("draft") != null){
+                $Session.DraftID =new URL(window.location.href).searchParams.get("draft")
+            }
+            else{
+                $Session.DraftID = uuidv4()
+                //create new draft
+
+                CreateDraft()
+
+                async function CreateDraft() {
+                    const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/NewDraft`, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        method: "POST",
+                        body: JSON.stringify({
+                            DraftID : $Session.DraftID,
+                            SessionID : GetUserSession()
+                        })
+                    });
+                }
+            }
+        }catch{
+           
+        }
+    });
+
+
+
+    function updateMD(){
+        document.getElementById("MarkdownViewer").innerHTML = `<zero-md style="padding-bottom: 10rem;"><template><xmp>${document.getElementById("Editor").value}</xmp></template></zero-md>`
+        //attempt to update draft
+        UpdateDraft()
+    }
+
+    // cooldown
+    // server request cooldown
+    var cooldown = false    
+
+    function UpdateDraft(){
+        // if cooldown is set to true ignore this request
+        if(!cooldown){
+            async function ModifyPost() {
+                const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/ModifyDraft`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        PostID : $Session.DraftID,
+                        SessionID : GetUserSession(),
+                        PostText : document.getElementById("Editor").value
+                    })
+                });
+
+                const json = await response.json()
+            }
+        }
+    }
+
+    function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+        );
+    }
+
+</script>
+
 </html>
+

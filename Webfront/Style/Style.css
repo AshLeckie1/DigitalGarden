@@ -1,0 +1,90 @@
+body{
+    background-color: darkgray;
+    height:100%;
+}
+
+.MainBody{
+    background-color: lightgray;
+    height:100%;
+}
+
+/* New Post Page */
+
+#Editor{
+    width:90%;
+    margin-left: 5%;
+    height:50rem;
+    overflow-y: scroll;
+    resize: none;
+
+}
+
+#MarkdownViewer{
+    width:95%;
+    margin-left: 0.25%;
+    background-color:white;
+    padding:5px;
+    height:50rem;
+    overflow-y: scroll;
+    
+}
+
+
+/* Login Page */
+
+.LoginContainer {
+    position: absolute;
+    top: 5rem;
+    left: calc(50% - 10rem);
+    width: 20rem;
+    padding-bottom: 2rem;
+    border: #919191 solid 1px;
+    border-radius: 5px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    background-color: white;
+}
+
+
+.LoginContainer h2 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+}
+
+.LoginContainer .SubContainer {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 2rem;
+
+}
+
+.LoginContainer .StayLogged {
+    margin-left: 1rem;
+    margin-top: 2rem;
+}
+
+.LoginContainer .SubContainer input {
+    height: 2rem;
+}
+
+.LoginContainer .SubContainer input,
+.LoginContainer .SubContainer label {
+    display: block;
+    width: 18rem;
+
+    box-sizing: border-box;
+}
+
+.LoginContainer button {
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    width: 18rem;
+    height: 2rem;
+    box-sizing: border-box;
+}
+
+.LoginContainer #ErrorMessage {
+    color:red;
+    margin-left:1rem;
+    margin-right:1rem;
+}

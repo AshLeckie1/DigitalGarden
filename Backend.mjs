@@ -33,6 +33,23 @@ app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 
+//connect to database
+let SQLConnection = await mysql.createConnection({
+    host     : CONFIG.SQLServer,
+    user     : CONFIG.SQLUser,
+    password : CONFIG.SQLPass,
+    database : CONFIG.SQLDatabase
+});
+
+//check that Database is connected
+await SQLConnection.query("SELECT 1").then(result =>{
+    if(result[0].length < 1){
+        log(`[ERROR] Could not obtaine Database Connection!`,"service")
+    }else{
+        log("[BOOT] Connected to Database!","Service");
+    }
+})
+
 
 var $UserSessions = []
 //{Username:{User},SessionStart:{DateTime},SessionID={GUID}}
@@ -65,7 +82,7 @@ app.post('/NewUser', (req,res) => {
     
     if (req.body == null) {
         // if post is missing body
-        res.status(400).send({"error":TRUE,msg:"missing POST body!"});
+        res.status(400).send({"error":true,msg:"missing POST body!"});
         return;
     }
     
@@ -138,12 +155,12 @@ app.post('/NewUser', (req,res) => {
 app.post("/Login",(req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body == null) {
-        res.status(400).send({"error":"Missing query"});
+        res.status(400).send({"error":true, msg:"Missing query"});
         return;
     }
 
-    var Username = req.body.Username
-    var Password = req.body.Password
+    var Username = req.body.username
+    var Password = req.body.password
 
     if(Username ==  undefined || Password ==  undefined){
         res.status(400).send({"error":true,"msg":"Missing username or password!"})
@@ -224,7 +241,7 @@ app.post('/ActiveSessions',(req,res) =>{
 app.post('/NewDraft',(req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body == null) {
-        res.status(400).send({"error":"Missing query"});
+        res.status(400).send({"error":true, msg:"Missing query"});
         return;
     }
     
@@ -239,8 +256,23 @@ app.post('/NewDraft',(req,res) => {
         return
     }
 
+    try{
+        var DraftID = req.body.DraftID
+        //check value is a guid
+        const regex = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+        if(!regex.test(DraftID)){
+            res.status(400).send({"error":true,msg:"Draft ID is not a valid GUID"})
+        }
+
+        // TODO check that GUID isnt already in use
+
+    }catch{
+        var DraftID = uuidv4()
+    }
+
+
     var Draft = {
-        ID:uuidv4(),
+        ID:DraftID,
         Created:formattedDate,
         Modified:formattedDate,
         Author:userSession.UserID
@@ -250,18 +282,18 @@ app.post('/NewDraft',(req,res) => {
         
     const allPromise = Promise.all([createFolder(),SqlQuery(sql)])
     allPromise.then(result  =>{
-        if(result[0] && result[1].length > 0){
+        if(result[0] && result[1].affectedRows > 0){
             // both ran successfully
             res.status(200).send(Draft)
         }else{
             // there was an error
-            res.status(500).send({"error":true})
+            res.status(500).send({"error":true,msg:result})
         }
     });
 
     async function createFolder(){
         //create folder for Draft
-        fs.mkdir(`data\\drafts\\${Draft.ID}`,
+        return await fs.mkdir(`data\\drafts\\${Draft.ID}`,
             (err) => {
             if (err) {
                 log(`[ERROR] Creating Draft folder ${err}`,"Service")
@@ -270,6 +302,76 @@ app.post('/NewDraft',(req,res) => {
             return true
         });
     }
+})
+
+app.post('/ModifyDraft', (req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var PostID = req.body.PostID
+    var SessionID = req.body.SessionID
+    var PostText = req.body.PostText
+
+
+    var userSession = IsUserSessionValid(SessionID)
+    //if login is invalid 
+    if(!userSession.login){
+        res.status(401).send({"error":true,"msg":userSession.error})
+        return
+    }
+
+    //get draft details
+    var sql = `SELECT * FROM posts WHERE ID = '${PostID}'`
+    SqlQuery(sql).then(result => {
+
+        //no post found
+        if(result.length == 0){
+            //no post exists with given ID
+            res.status(404).send({"error":true,"msg":"Post not found!"})
+        }
+
+        // check that user is the one who created the draft
+        if(result.UserID == userSession.UserID){
+            // check if post it modifiable
+            if(result.Stage == "DRAFT"){
+                // Allow post ot be modified
+                var postData = JSON.parse(result.PostData)
+                postData.Modified = Date.now()  
+
+                //update DB
+                sql = `UPDATE posts SET postData = '${JSON.stringify(postData)}' WHERE ID = '${PostID}'`
+                SqlQuery(sql)
+
+                // Update or create MD file
+                try{
+                    fs.writeFileSync(`data/drafts/${PostID}.md`,{encoding:'utf8',flag:'w'})
+
+                    log(`[INFO] Draft ${PostID} Modified sucessfully by ${UserSession.UserID}`,"status")
+                    res.status(200).send({"error":false,msg:"Draft Updated!"})
+
+                }catch(err){
+                    log(`[ERROR] Editing Draft ${PostID} - ${err}`,"status")
+                    res.status(500).send({"error":false,msg:err})
+                }
+            }
+            else{
+                // post cannot be modified
+                res.status(403).send({"error":true, "msg":"Post is no longer modifiable!"})
+            }
+        }
+        else{
+            //user is not valid
+            log(`[ERROR] an attempt was made by ${JSON.stringify(usersession)} to modify a draft that they do not own. Draft ID ${PostID}`,"status")
+            res.status(403).send({"error":true,"msg":"You do not have permissiosn to edit this post"})
+        }
+    })
+        
+
+
+
 })
 
 function IsUserSessionValid(LoginSession){
@@ -342,6 +444,8 @@ function removeUserSession(SessionID){
     return {msg:output}
 }
 
+
+
 async function SqlQuery(query) {
 
     //log request to log file
@@ -353,16 +457,7 @@ async function SqlQuery(query) {
     }
 
     try {
-        let Connection = await mysql.createConnection({
-            host     : CONFIG.SQLServer,
-            user     : CONFIG.SQLUser,
-            password : CONFIG.SQLPass,
-            database : CONFIG.SQLDatabase
-        })
-
-        var result = await Connection.query(query)
-
-
+        var result = await SQLConnection.query(query)
         return result[0]
 
     } catch (err) {
