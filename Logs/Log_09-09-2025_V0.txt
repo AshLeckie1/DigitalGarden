@@ -1,0 +1,34 @@
+09/09/2025 23:01 [ERROR] an attempt was made by {"login":true,"Username":"Admin","UserID":"dc21302d-89e0-11f0-9275-000c298d25c1"} to modify a draft that they do not own. Draft ID b959a6f0-1675-4486-a665-52180950bc8f 
+09/09/2025 23:05 [ERROR] an attempt was made by {"login":true,"Username":"Admin","UserID":"dc21302d-89e0-11f0-9275-000c298d25c1"} to modify a draft that they do not own. Draft ID ea95ef6f-1e91-432d-ae7c-7a6366f69acb 
+09/09/2025 23:07 [ERROR] Editing Draft 95715926-8eb6-4798-8e04-8b6b4a122657 - ReferenceError: UserSession is not defined 
+09/09/2025 23:10 [ERROR] Editing Draft 95715926-8eb6-4798-8e04-8b6b4a122657 - ReferenceError: UserSession is not defined 
+09/09/2025 23:11 [ERROR] Editing Draft 6187ad91-2b58-468d-b4a1-d33c389435a2 - Error: ENOENT: no such file or directory, open 'D:\Git\DigitalGarden\data\drafts\6187ad91-2b58-468d-b4a1-d33c389435a2\post.md' 
+09/09/2025 23:16 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:17 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:17 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:17 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:17 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:17 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:18 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:18 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:18 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:18 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:18 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:19 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:19 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:19 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:19 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:19 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:19 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:19 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:20 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:20 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:21 [INFO] Draft d4aace02-71bd-48cd-9f81-ab2139113c95 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:23 [INFO] Draft e239f0d7-4261-4d1c-9e5f-0301f4c4a9e6 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:23 [INFO] Draft e239f0d7-4261-4d1c-9e5f-0301f4c4a9e6 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:24 [INFO] Draft c19e8e99-e505-400e-a390-bd1bd6c31bf5 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:24 [INFO] Draft c19e8e99-e505-400e-a390-bd1bd6c31bf5 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:24 [INFO] Draft c19e8e99-e505-400e-a390-bd1bd6c31bf5 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:25 [INFO] Draft c19e8e99-e505-400e-a390-bd1bd6c31bf5 Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:25 [INFO] Draft 98e3a2f0-28f5-4a3c-9795-23ab4dbf04ae Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 
+09/09/2025 23:25 [INFO] Draft 98e3a2f0-28f5-4a3c-9795-23ab4dbf04ae Modified sucessfully by dc21302d-89e0-11f0-9275-000c298d25c1 

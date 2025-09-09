@@ -69,7 +69,7 @@
                 
                 //document.cookie=`sessionLogin = ${json.SessionID};`
                 localStorage.setItem('SessionID',json.loginSession.SessionID)
-                location.href = `/index.html`
+                location.href = `index.html`
             
             }else{
                 document.getElementById("ErrorMessage").innerHTML = json.msg

@@ -293,14 +293,14 @@ app.post('/NewDraft',(req,res) => {
 
     async function createFolder(){
         //create folder for Draft
-        return await fs.mkdir(`data\\drafts\\${Draft.ID}`,
-            (err) => {
-            if (err) {
-                log(`[ERROR] Creating Draft folder ${err}`,"Service")
-                return false;
-            }
-            return true
-        });
+        try{
+            return await fs.mkdirSync(`data\\DRAFT\\${Draft.ID}`)
+        }
+        catch(err){
+            log(`[ERROR] creating new draft folder ${Draft.ID} - ${JSON.stringify(err)}`,"service")
+            return err
+        }
+
     }
 })
 
@@ -326,7 +326,10 @@ app.post('/ModifyDraft', (req,res) =>{
     //get draft details
     var sql = `SELECT * FROM posts WHERE ID = '${PostID}'`
     SqlQuery(sql).then(result => {
-
+        
+        //result is an array of one
+        result = result[0]
+        
         //no post found
         if(result.length == 0){
             //no post exists with given ID
@@ -347,9 +350,9 @@ app.post('/ModifyDraft', (req,res) =>{
 
                 // Update or create MD file
                 try{
-                    fs.writeFileSync(`data/drafts/${PostID}.md`,{encoding:'utf8',flag:'w'})
+                    fs.writeFileSync(`data/DRAFT/${PostID}/post.md`,PostText,{encoding:'utf8',flag:'w'})
 
-                    log(`[INFO] Draft ${PostID} Modified sucessfully by ${UserSession.UserID}`,"status")
+                    log(`[INFO] Draft ${PostID} Modified sucessfully by ${userSession.UserID}`,"status")
                     res.status(200).send({"error":false,msg:"Draft Updated!"})
 
                 }catch(err){
@@ -364,7 +367,7 @@ app.post('/ModifyDraft', (req,res) =>{
         }
         else{
             //user is not valid
-            log(`[ERROR] an attempt was made by ${JSON.stringify(usersession)} to modify a draft that they do not own. Draft ID ${PostID}`,"status")
+            log(`[ERROR] an attempt was made by ${JSON.stringify(userSession)} to modify a draft that they do not own. Draft ID ${PostID}`,"status")
             res.status(403).send({"error":true,"msg":"You do not have permissiosn to edit this post"})
         }
     })
@@ -372,6 +375,62 @@ app.post('/ModifyDraft', (req,res) =>{
 
 
 
+})
+
+app.post('/GetPost', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var PostID = req.body.PostID
+    var UserSessionID = req.body.SessionID
+
+    //get post from database
+    var sql = `SELECT * FROM digitalgarden.posts WHERE ID = '${PostID}'`
+    SqlQuery(sql).then(result =>{
+        
+        // Result validation
+        try{
+            if(result[0].ID != undefined){
+
+                //if the post is a draft the only user that should be able to access it is the user who owns the post
+                // if the user is a guest and not logged in they wont have access to any drafts anyway.
+                
+                if(UserSessionID == undefined && result[0].Stage == "DRAFT"){
+                    log(`[INFO] Attempt made to access draft ${result[0].ID} by unkonwn user`,"service")
+                    res.status(403).send({"error":true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                }else{
+                    //check if logged user has access to draft
+                    var userSession = IsUserSessionValid(UserSessionID)
+                    if(userSession.UserID != result[0].UserID && result[0].Stage == "DRAFT"){
+                        //refuse request if logged user is not the owner of the draft
+                        log(`[INFO] Attempt made to access draft ${result[0].ID} by ${userSession.Username}`,"service")
+                        res.status(403).send({"error":true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                    }
+                }
+
+                //read post MD
+                try{
+                    var postText = fs.readFileSync(`data\\${result[0].Stage}\\${PostID}\\post.md`)
+
+                    //send post data
+                    res.status(200).send({
+                        PostData:result[0].PostData,
+                        PostText:postText.toString(),
+                        Stage:result[0].Stage
+                    })
+
+                }catch(err){
+                    res.status(500).send({"error":true,"msg":"Cannot Read post md file","result":err})
+                }
+                
+            }
+        }catch(err){
+            res.status(500).send({"error":true,"msg":"Cannot get post from database","result":result,"Err":err})
+        }
+    });
 })
 
 function IsUserSessionValid(LoginSession){

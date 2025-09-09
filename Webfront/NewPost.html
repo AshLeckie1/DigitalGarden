@@ -30,7 +30,7 @@
                         <li><span id="saveStatus"></span></li>
                         <li><button>post</button></li>
                     </ul>
-                    <textarea id="Editor" onchange=""></textarea>
+                    <textarea id="Editor"></textarea>
                 </div>
                 <div class="six columns">
                     <h2>Preview</h2>
@@ -53,12 +53,13 @@
     var Editor = document.getElementById('Editor');
     if (Editor.addEventListener) {
     Editor.addEventListener('input', function() {
-        updateMD()
+        setTimeout(updateMD,5000)
+
         // event handling code for sane browsers
     }, false);
     } else if (Editor.attachEvent) {
     Editor.attachEvent('onpropertychange', function() {
-        updateMD()
+        setTimeout(updateMD,5000)
         // IE-specific event handling code
     });
     }
@@ -67,7 +68,33 @@
         console.log(window.location.href)
         try{
             if(new URL(window.location.href).searchParams.get("draft") != null){
-                $Session.DraftID =new URL(window.location.href).searchParams.get("draft")
+                $Session.DraftID = new URL(window.location.href).searchParams.get("draft")
+
+                document.getElementById("saveStatus").innerHTML = "Loading Draft..."
+                //get draft from server
+                GetPost($Session.DraftID).then(result => {
+                    //check that post is a draft
+                    if(result.Stage == "DRAFT"){
+                        document.getElementById("Editor").innerHTML = result.PostText
+                        document.getElementById("saveStatus").innerHTML = "Draft Loaded"
+
+                        //update md preview but prevent saving to DB
+                        cooldown = true
+                        setTimeout(clearTimeout,5000)
+
+                        function clearTimeout(){
+                            cooldown = false
+                        }
+                        updateMD()
+
+                    }else{
+                        $Session.DraftID = null
+                        alert("This post is not a draft!")
+                        location.href = `index.html`
+                    }
+                })
+
+
             }
             else{
                 $Session.DraftID = uuidv4()
@@ -94,7 +121,21 @@
         }
     });
 
+    async function GetPost(PostID){
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetPost`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                PostID : PostID,
+                SessionID : GetUserSession()
+            })
+        });
 
+        return response.json()
+    }
 
     function updateMD(){
         document.getElementById("MarkdownViewer").innerHTML = `<zero-md style="padding-bottom: 10rem;"><template><xmp>${document.getElementById("Editor").value}</xmp></template></zero-md>`
@@ -109,6 +150,28 @@
     function UpdateDraft(){
         // if cooldown is set to true ignore this request
         if(!cooldown){
+
+            document.getElementById("saveStatus").innerHTML = "Saving..."
+
+            ModifyPost().then(result =>{
+                console.log(result)
+                // TODO check that it did actually save 
+                setTimeout( updateSave,1000)
+
+                function updateSave(){
+                    document.getElementById("saveStatus").innerHTML = "Saved"
+                }
+               
+            })
+
+            //set cooldown
+            cooldown = true
+            setTimeout(clearTimeout,5000)
+
+            function clearTimeout(){
+                cooldown = false
+            }
+
             async function ModifyPost() {
                 const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/ModifyDraft`, {
                     headers: {
