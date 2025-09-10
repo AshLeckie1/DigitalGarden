@@ -44,7 +44,7 @@ let SQLConnection = await mysql.createConnection({
 //check that Database is connected
 await SQLConnection.query("SELECT 1").then(result =>{
     if(result[0].length < 1){
-        log(`[ERROR] Could not obtaine Database Connection!`,"service")
+        log(`[ERROR] Could not obtain Database Connection!`,"service")
     }else{
         log("[BOOT] Connected to Database!","Service");
     }
@@ -95,7 +95,7 @@ app.post('/NewUser', (req,res) => {
         var UserData = req.body.UserData
 
         //check invite key is valid
-        var sqlInviteKey = `SELECT * FROM digitalGarden.invite_tokens WHERE ID = '${InviteKey}' AND Experation > NOW()`
+        var sqlInviteKey = `SELECT * FROM digitalGarden.invite_tokens WHERE ID = '${InviteKey}' AND Expiration > NOW()`
         var sqlExistingUser = `SELECT COUNT(ID) AS users FROM digitalgarden.users WHERE UPPER(Username) = '${Username.toUpperCase()}'`
         const allPromise = Promise.all([SqlQuery(sqlInviteKey),SqlQuery(sqlExistingUser)])
         allPromise.then(result  =>{
@@ -104,7 +104,7 @@ app.post('/NewUser', (req,res) => {
             const ExistingUsers = result[1][0]
 
             if(ExistingUsers.users > 0){
-                //there is aleady an exsisting user with this username
+                //there is already an existing user with this username
                 res.status(400).send({"error":true,msg:`The username ${Username} is already taken!`})
                 return;
             }
@@ -198,7 +198,7 @@ app.post("/Login",(req,res) => {
 
                 $UserSessions.push(SessionVar)
 
-                log(`[INFO] User ${UserData.Username} logged in succesfully`,"Service")
+                log(`[INFO] User ${UserData.Username} logged in successfully`,"Service")
 
                 res.status(200).send({"error":false,"loginSession":{Username:UserData.Username,SessionStart:sessionStart,SessionID:sessionID}})
 
@@ -219,7 +219,7 @@ app.post("/Login",(req,res) => {
 app.post('/ActiveSessions',(req,res) =>{
     res.set('Access-Control-Allow-Origin', '*');
     try{
-        // to be tunred back on
+        // to be turned back on
         // var AdminSessionID = req.body.AdminSessionID
         // var adminAccount = IsUserSessionValid(AdminSessionID)
 
@@ -264,7 +264,7 @@ app.post('/NewDraft',(req,res) => {
             res.status(400).send({"error":true,msg:"Draft ID is not a valid GUID"})
         }
 
-        // TODO check that GUID isnt already in use
+        // TODO check that GUID isn't already in use
 
     }catch{
         var DraftID = uuidv4()
@@ -352,7 +352,7 @@ app.post('/ModifyDraft', (req,res) =>{
                 try{
                     fs.writeFileSync(`data/DRAFT/${PostID}/post.md`,PostText,{encoding:'utf8',flag:'w'})
 
-                    log(`[INFO] Draft ${PostID} Modified sucessfully by ${userSession.UserID}`,"status")
+                    log(`[INFO] Draft ${PostID} Modified successfully by ${userSession.UserID}`,"status")
                     res.status(200).send({"error":false,msg:"Draft Updated!"})
 
                 }catch(err){
@@ -368,7 +368,7 @@ app.post('/ModifyDraft', (req,res) =>{
         else{
             //user is not valid
             log(`[ERROR] an attempt was made by ${JSON.stringify(userSession)} to modify a draft that they do not own. Draft ID ${PostID}`,"status")
-            res.status(403).send({"error":true,"msg":"You do not have permissiosn to edit this post"})
+            res.status(403).send({"error":true,"msg":"You do not have permissions to edit this post"})
         }
     })
         
@@ -399,7 +399,7 @@ app.post('/GetPost', (req,res) => {
                 // if the user is a guest and not logged in they wont have access to any drafts anyway.
                 
                 if(UserSessionID == undefined && result[0].Stage == "DRAFT"){
-                    log(`[INFO] Attempt made to access draft ${result[0].ID} by unkonwn user`,"service")
+                    log(`[INFO] Attempt made to access draft ${result[0].ID} by unknown user`,"service")
                     res.status(403).send({"error":true,"msg":"You do not have access to this draft, this access attempt has been logged"})
                 }else{
                     //check if logged user has access to draft
@@ -432,6 +432,59 @@ app.post('/GetPost', (req,res) => {
         }
     });
 })
+
+app.post('/PostDraft', (req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+    
+    var PostID = req.body.PostID
+    var UserSessionID = req.body.SessionID
+
+    //get post from database
+    var sql = `SELECT * FROM digitalgarden.posts WHERE ID = '${PostID}'`
+    SqlQuery(sql).then(result =>{
+        try{
+            if(result[0].ID != undefined){
+
+                //if the post is a draft the only user that should be able to access it is the user who owns the post
+                // if the user is a guest and not logged in they wont have access to any drafts anyway.
+                
+                if(UserSessionID == undefined && result[0].Stage == "DRAFT"){
+                    log(`[INFO] Attempt made to access draft ${result[0].ID} by unknown user`,"service")
+                    res.status(403).send({"error":true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                }else{
+                    //check if logged user has access to draft
+                    var userSession = IsUserSessionValid(UserSessionID)
+                    if(userSession.UserID != result[0].UserID && result[0].Stage == "DRAFT"){
+                        //refuse request if logged user is not the owner of the draft
+                        log(`[INFO] Attempt made to access draft ${result[0].ID} by ${userSession.Username}`,"service")
+                        res.status(403).send({"error":true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                    }
+                }
+
+                //change post stage to POST
+                var sql = `UPDATE digitalgarden.posts SET Stage = "LIVE" WHERE ID = "${PostID}"`
+                SqlQuery(sql).then(result =>{ 
+                    if(result.affectedRows > 0){
+                        res.status(200).send({"error":false,msg:"Message updated to post"})
+                    }
+                    else{
+                        res.status(500).send({"error":true,msg:JSON.stringify(result)})
+                    }
+                })
+
+            }
+        }catch(err){
+            res.status(500).send({"error":true,"msg":"Cannot get post from database","result":result,"Err":err})
+        }
+    });
+
+
+
+});
 
 function IsUserSessionValid(LoginSession){
     var result = $UserSessions.find(obj => {
@@ -495,7 +548,7 @@ function removeUserSession(SessionID){
             return UserSession
         }
         else{
-            log(`[INFO] Removing user sesssion ${SessionID}`,"Service")
+            log(`[INFO] Removing user session ${SessionID}`,"Service")
             output = "Session Removed"
         }
     });    
@@ -560,7 +613,7 @@ function log(content, logType, StringDump) {
     //string dump max length
     if(StringDump != undefined){
         if(StringDump.length > 5000){
-            StringDump = `Dump more then 5000 chrar long, trimmed version: \n ${StringDump.substring(0,5000)}`
+            StringDump = `Dump more then 5000 charr long, trimmed version: \n ${StringDump.substring(0,5000)}`
         }
     }
     

@@ -36,3 +36,29 @@
 10/09/2025 00:26  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'e239f0d7-4261-4d1c-9e5f-0301f4c4a9e6' 
 10/09/2025 00:26  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"e239f0d7-4261-4d1c-9e5f-0301f4c4a9e6","Created":"09/09/2025 23:23","Modified":1757460376849,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'e239f0d7-4261-4d1c-9e5f-0301f4c4a9e6' 
 10/09/2025 00:26  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = 'e239f0d7-4261-4d1c-9e5f-0301f4c4a9e6' 
+10/09/2025 22:45  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+10/09/2025 22:45  [INFO] SQL REQUEST - INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('73aef6ad-090e-4c3a-a8ce-1944bb6bc41d','{"ID":"73aef6ad-090e-4c3a-a8ce-1944bb6bc41d","Created":"10/09/2025 22:45","Modified":"10/09/2025 22:45","Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}','DRAFT','dc21302d-89e0-11f0-9275-000c298d25c1') 
+10/09/2025 22:45  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:45  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"73aef6ad-090e-4c3a-a8ce-1944bb6bc41d","Created":"10/09/2025 22:45","Modified":1757540737686,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:45  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:45  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"73aef6ad-090e-4c3a-a8ce-1944bb6bc41d","Created":"10/09/2025 22:45","Modified":1757540755958,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:46  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:46  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"73aef6ad-090e-4c3a-a8ce-1944bb6bc41d","Created":"10/09/2025 22:45","Modified":1757540761429,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:46  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:46  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"73aef6ad-090e-4c3a-a8ce-1944bb6bc41d","Created":"10/09/2025 22:45","Modified":1757540766440,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:46  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:46  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"73aef6ad-090e-4c3a-a8ce-1944bb6bc41d","Created":"10/09/2025 22:45","Modified":1757540788725,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:47  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+10/09/2025 22:47  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:47  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:47  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"73aef6ad-090e-4c3a-a8ce-1944bb6bc41d","Created":"10/09/2025 22:45","Modified":1757540851310,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:47  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+10/09/2025 22:47  [INFO] SQL REQUEST - UPDATE digitalgarden.posts SET Stage = "POST" WHERE ID = "73aef6ad-090e-4c3a-a8ce-1944bb6bc41d" 
+10/09/2025 22:47  [ERROR]  <span id="6e642acd-4b71-45bc-8454-10a6f128d3c9" class="ConsoleHiddenElementButton" onclick="ShowHide(this)">[show]</span><div id="p6e642acd-4b71-45bc-8454-10a6f128d3c9" class="ConsoleHiddenElement" hidden>{
+  "message": "Data truncated for column 'Stage' at row 1",
+  "code": "WARN_DATA_TRUNCATED",
+  "errno": 1265,
+  "sql": "UPDATE digitalgarden.posts SET Stage = \"POST\" WHERE ID = \"73aef6ad-090e-4c3a-a8ce-1944bb6bc41d\"",
+  "sqlState": "01000",
+  "sqlMessage": "Data truncated for column 'Stage' at row 1"
+}</div>

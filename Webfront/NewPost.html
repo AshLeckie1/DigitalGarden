@@ -121,6 +121,37 @@
         }
     });
 
+    function SaveDraftAsPost(){
+        
+        UpdateDraft()
+
+        PostDraft($Session.DraftID).then(result =>{
+            if(!result.error){
+                alert("Post Made!")
+                location.href = `index.html`
+            }
+            else{
+                alert("Something went wrong!")
+            }
+        })  
+    }
+
+    async function PostDraft(PostID){
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/PostDraft`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                PostID : PostID,
+                SessionID : GetUserSession()
+            })
+        });
+
+        return response.json()
+    }
+
     async function GetPost(PostID){
         const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetPost`, {
             headers: {
