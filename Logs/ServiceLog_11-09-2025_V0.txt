@@ -1,0 +1,4 @@
+11/09/2025 00:07 [BOOT] Version: undefined ed! 
+11/09/2025 00:07 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+11/09/2025 00:07 [BOOT] Port: 3000 
+11/09/2025 00:07 [BOOT] Connected to Database! 

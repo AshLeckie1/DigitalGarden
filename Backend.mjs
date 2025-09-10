@@ -481,10 +481,31 @@ app.post('/PostDraft', (req,res) =>{
             res.status(500).send({"error":true,"msg":"Cannot get post from database","result":result,"Err":err})
         }
     });
-
-
-
 });
+
+app.post('/GetFeed', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var pos = req.body.pos
+    if(pos == undefined){
+        pos = 0
+    }
+
+    var sql = `SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+    SqlQuery(sql).then(result => {
+        res.send(
+            {
+                posts:result,
+                PostGetLimit:CONFIG.PostGetLimit
+            }
+        )
+    })
+
+})
 
 function IsUserSessionValid(LoginSession){
     var result = $UserSessions.find(obj => {
