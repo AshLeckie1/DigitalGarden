@@ -1,1 +1,56 @@
 11/09/2025 00:07  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 20:24  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+11/09/2025 20:25  [INFO] SQL REQUEST - INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('cf9e56c2-442d-47ec-af88-d1c111ef3c85','{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":"11/09/2025 20:25","Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}','DRAFT','dc21302d-89e0-11f0-9275-000c298d25c1') 
+11/09/2025 20:25  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618720082,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618728727,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618733976,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618739501,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618745365,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618750377,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:25  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618755493,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:26  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:26  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618760555,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:26  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:26  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618767144,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:26  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:26  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618799104,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:26  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:26  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618804340,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:27  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:27  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618823417,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:27  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:27  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618834073,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:27  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 20:27  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"cf9e56c2-442d-47ec-af88-d1c111ef3c85","Created":"11/09/2025 20:25","Modified":1757618867776,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'cf9e56c2-442d-47ec-af88-d1c111ef3c85' 
+11/09/2025 22:54  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+11/09/2025 22:56  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+11/09/2025 23:17  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+11/09/2025 23:23  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:25  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:41  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:42  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:42  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = 'undefined' 
+11/09/2025 23:43  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:43  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+11/09/2025 23:44  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:44  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+11/09/2025 23:45  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:45  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+11/09/2025 23:50  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:50  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+11/09/2025 23:50  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+11/09/2025 23:50  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:50  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+11/09/2025 23:58  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:58  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+11/09/2025 23:58  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:58  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+11/09/2025 23:59  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+11/09/2025 23:59  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 

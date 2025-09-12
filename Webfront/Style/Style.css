@@ -1,6 +1,7 @@
 body{
     background-color: darkgray;
     height:100%;
+    margin: 0;
 }
 
 .MainBody{
@@ -28,6 +29,45 @@ body{
     overflow-y: scroll;
     
 }
+
+/* INdex Page */
+.MainTitle{
+    height:15rem;
+    background-color: aliceblue;
+    margin: 0;
+    position: relative;
+}
+
+.MainTitle #Title{
+    position:absolute;
+    bottom:0;
+    margin-bottom: 10;
+}
+
+.UserIcon{
+    height:50px;
+    border-radius: 25px;
+}
+
+#UserSession{
+    position:absolute;
+    bottom:0;
+    right:3rem;
+}
+
+#UserSession #Username{
+    font-size: xx-large;
+}
+
+#UserSession a{
+    float :right;
+    cursor: pointer;
+}
+
+.PostContainer .PostDate{
+    float:right;
+}
+
 
 
 /* Login Page */

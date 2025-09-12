@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Scripts/FlippyTextReader.js"></script>
+    <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
+    <link href="Style/Skeleton/normalize.css" rel="stylessheet">
+    <link href="Style/Style.css" rel = "stylesheet">
+    <script src="scripts/userSession.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="Scripts/config.js"></script>
+    
+    <script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+    <script type="module">
+        WebComponents.waitFor(() => {
+        let el = document.createElement('script');
+        el.src = 'https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js';
+        document.head.appendChild(el);
+        });
+    </script>
+
+</head>
+<body>
+    <div class="MainTitle">
+        <h1 id="Title" style = "font-family: Consolas;"></h1>
+        <div id="UserSession"></div>
+    </div>
+    <div class="container MainBody"> 
+        <div class="Row">
+            <div class="twelve columns">
+                <div id="Feed">
+                </div>
+            </div>            
+        </div>
+    </div>
+</body>
+<script>
+
+    addEventListener('zero-md-ready', (e) => e.target.render())
+
+    $(document).ready(function() {
+        // check login
+        checkLogin()
+
+        //set site title
+        TitleLoop()
+        function TitleLoop(){
+            TriggerChange("Title")
+            setTimeout(TitleLoop,10000)
+        }
+
+        //Get Feed
+        GetFeed(0)
+    })
+
+    //<zero-md src="http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetPostMD?PostID=${PostData.ID}">
+    function GetFeed(pos){
+        PostGetFeed().then(feed => {
+            console.log(feed)
+
+            feed.posts.forEach(element => {
+                GetPost(element.ID).then(post =>{
+                    var PostData = JSON.parse(post.PostData)
+                    var Post = `
+                    <div class='PostContainer' id='${PostData.ID}'>
+                        <div class='PostInfo'>
+                            <span class='UserDetails'>
+                                <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> ${PostData.Author}
+                            </span>
+                            <span class='PostDate'>
+                                ${PostData.Modified}
+                            </span>
+                        </div>
+                        <div>
+                            <zero-md id="MD${PostData.ID}">
+                                <template>
+                                    <xmp>
+                                        ${post.PostText}   
+                                    </xmp>
+                                </template>
+                            </zero-md>
+                                                    
+                        </div>
+                    </div>
+                    <hr>`
+
+                    document.getElementById("Feed").innerHTML += Post
+
+                })
+            });
+
+
+        })
+        
+        async function GetPost(PostID) {
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetPost`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    PostID : PostID,
+                })
+            });
+
+            return response.json()
+        }
+
+        async function PostGetFeed() {
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetFeed`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    pos : 0,
+                })
+            });
+
+            return response.json()
+        }
+    }
+
+</script>
+</html>

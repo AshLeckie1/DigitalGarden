@@ -1,3 +1,4 @@
+
 async function checkLogin(){
     if(localStorage.SessionID != undefined){
         //user has logged session
@@ -5,7 +6,7 @@ async function checkLogin(){
         //SessionID = getCookie("sessionLogin")
         var SessionID = localStorage.SessionID
 
-        const response = await fetch(`http://mvs337:3000/checkLogin`, {
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/checkLogin`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -20,29 +21,25 @@ async function checkLogin(){
 
            //set new sessionID
            //document.cookie=`sessionLogin = ${json.SessionID};` 
-            if(json.Group.trim() == "ADMIN"){
-                document.getElementById("LoggedUserName").innerHTML = `${json.Username.split('@')[0]} <br> ${json.Group} <br><a href="/admin.html">[Admin Site]</a> <a id="ProcessFilesQueueIcon" onclick="ToggleProcessedFilesPopup()">[File Process Queue]</a> <a id="logout" onclick="ClearLogin()">[logout]</a>`
-            }else{
-                document.getElementById("LoggedUserName").innerHTML = `${json.Username.split('@')[0]} <br> ${json.Group} <br><a id="ProcessFilesQueueIcon" onclick="ToggleProcessedFilesPopup()">[File Process Queue]</a> <a id="logout" onclick="ClearLogin()">[logout]</a>`
-
-            }
-
+   
+            document.getElementById("UserSession").innerHTML = `<img class="UserIcon" src='Style/Images/DefaultUserProfile.png'><span id="Username">${json.Username.split('@')[0]}</span> <br> <a id="logout" onclick="ClearLogin()">[logout]</a>`
             return true
                 
         }
         else{
             //location.href="login.html"
+            document.getElementById("UserSession").innerHTML = "<a href='login.html'>[ Login ]</a>"
             return false
         }
     
     }else{
         //user is not logged in
         //location.href="login.html"
+        document.getElementById("UserSession").innerHTML = "<a href='login.html'>[ Login ]</a>"
         return false
     }
 }
 
-//checkLogin()
 
 function ClearLogin(){
     //document.cookie=`sessionLogin = 0`

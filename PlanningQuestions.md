@@ -24,3 +24,4 @@ This is something that will be more important down the line, but what style shou
 ## Posts
 
 - are we happy to go forward with markdown as a format?
+

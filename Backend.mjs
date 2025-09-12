@@ -7,6 +7,10 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import mysql from 'mysql2/promise';
 import crypto from 'crypto'
+import path from 'path';
+import { marked } from "marked";
+
+const __dirname = path.resolve();
 
 const app = express();
 
@@ -32,6 +36,8 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
+
+
 
 //connect to database
 let SQLConnection = await mysql.createConnection({
@@ -294,7 +300,7 @@ app.post('/NewDraft',(req,res) => {
     async function createFolder(){
         //create folder for Draft
         try{
-            return await fs.mkdirSync(`data\\DRAFT\\${Draft.ID}`)
+            return await fs.mkdirSync(`data\\POSTS\\${Draft.ID}`)
         }
         catch(err){
             log(`[ERROR] creating new draft folder ${Draft.ID} - ${JSON.stringify(err)}`,"service")
@@ -350,7 +356,7 @@ app.post('/ModifyDraft', (req,res) =>{
 
                 // Update or create MD file
                 try{
-                    fs.writeFileSync(`data/DRAFT/${PostID}/post.md`,PostText,{encoding:'utf8',flag:'w'})
+                    fs.writeFileSync(`data/POSTS/${PostID}/post.md`,PostText,{encoding:'utf8',flag:'w'})
 
                     log(`[INFO] Draft ${PostID} Modified successfully by ${userSession.UserID}`,"status")
                     res.status(200).send({"error":false,msg:"Draft Updated!"})
@@ -375,6 +381,33 @@ app.post('/ModifyDraft', (req,res) =>{
 
 
 
+})
+
+app.get('/GetPostMD', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    
+
+    if (req.query == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    //try{
+        var postText = fs.readFileSync(`data\\POSTS\\${req.query.PostID}\\post.md`)
+
+        //send post data
+        res.render(marked.parse(postText.toString()))
+
+    // }catch(err){
+    //     res.status(500).send({"error":true,"msg":"Cannot Read post md file","result":err})
+    // }
+
+    //try{
+        //res.sendFile(`data\\POSTS\\${req.query.PostID}\\post.md`, {root: __dirname})
+
+    // }catch(err){
+    //     res.status(500).send({"error":true,msg:err})
+    // }
 })
 
 app.post('/GetPost', (req,res) => {
@@ -413,7 +446,7 @@ app.post('/GetPost', (req,res) => {
 
                 //read post MD
                 try{
-                    var postText = fs.readFileSync(`data\\${result[0].Stage}\\${PostID}\\post.md`)
+                    var postText = fs.readFileSync(`data\\POSTS\\${PostID}\\post.md`)
 
                     //send post data
                     res.status(200).send({
@@ -476,6 +509,9 @@ app.post('/PostDraft', (req,res) =>{
                     }
                 })
 
+                // move post directory to LIVE
+
+
             }
         }catch(err){
             res.status(500).send({"error":true,"msg":"Cannot get post from database","result":result,"Err":err})
@@ -506,6 +542,25 @@ app.post('/GetFeed', (req,res) => {
     })
 
 })
+
+
+
+app.post('/checkLogin',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+
+        res.send({"error":"Missing query"});
+        return;
+    }
+    try{
+        res.send(IsUserSessionValid(req.body.SessionID))
+
+    }catch(err){
+        log(` [ERROR] Error validating user session: `, "service", JSON.stringify(err, null, 2))
+        res.send({"valid":false,"error":JSON.stringify(err, null, 2)})
+    }
+
+});
 
 function IsUserSessionValid(LoginSession){
     var result = $UserSessions.find(obj => {
