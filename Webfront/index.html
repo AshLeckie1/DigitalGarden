@@ -13,15 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="Scripts/config.js"></script>
     
-    <script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
-    <script type="module">
-        WebComponents.waitFor(() => {
-        let el = document.createElement('script');
-        el.src = 'https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js';
-        document.head.appendChild(el);
-        });
-    </script>
-
 </head>
 <body>
     <div class="MainTitle">
@@ -29,6 +20,17 @@
         <div id="UserSession"></div>
     </div>
     <div class="container MainBody"> 
+        <div class="Row">
+            <div class="twelve columns">
+                <div class="MainNav">
+                    <ul>
+                        <li onclick="location.href='NewPost.html'">New Post</li>
+                        <li>User Account</li>
+                        <li>Tags</li>
+                    </ul>
+                </div>
+            </div>   
+        </div>
         <div class="Row">
             <div class="twelve columns">
                 <div id="Feed">
@@ -39,7 +41,6 @@
 </body>
 <script>
 
-    addEventListener('zero-md-ready', (e) => e.target.render())
 
     $(document).ready(function() {
         // check login
@@ -56,40 +57,39 @@
         GetFeed(0)
     })
 
-    //<zero-md src="http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetPostMD?PostID=${PostData.ID}">
+    
     function GetFeed(pos){
         PostGetFeed().then(feed => {
             console.log(feed)
 
-            feed.posts.forEach(element => {
-                GetPost(element.ID).then(post =>{
+            feed.posts.forEach(post => {
+
+                    
+                    var PostUserData = JSON.parse(post.UserData)
                     var PostData = JSON.parse(post.PostData)
+
+                    var date = new Date(PostData.Modified) 
+                    var formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                    
+
                     var Post = `
                     <div class='PostContainer' id='${PostData.ID}'>
                         <div class='PostInfo'>
                             <span class='UserDetails'>
-                                <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> ${PostData.Author}
+                                <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> <span class="Username">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
                             </span>
                             <span class='PostDate'>
-                                ${PostData.Modified}
+                                ${formattedDate}
                             </span>
                         </div>
-                        <div>
-                            <zero-md id="MD${PostData.ID}">
-                                <template>
-                                    <xmp>
-                                        ${post.PostText}   
-                                    </xmp>
-                                </template>
-                            </zero-md>
-                                                    
+                        <div class="PostText">
+            
+                            ${post.PostHtml}   
+                               
                         </div>
                     </div>
-                    <hr>`
-
-                    document.getElementById("Feed").innerHTML += Post
-
-                })
+                    `
+                    document.getElementById("Feed").innerHTML += Post            
             });
 
 

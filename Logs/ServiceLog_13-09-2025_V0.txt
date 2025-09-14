@@ -1,0 +1,34 @@
+13/09/2025 23:47 [BOOT] DigitalGarden Started! 
+13/09/2025 23:47 [BOOT] Port: 3000 
+13/09/2025 23:47 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+13/09/2025 23:47 [BOOT] Connected to Database! 
+13/09/2025 23:54 [BOOT] DigitalGarden Started! 
+13/09/2025 23:54 [BOOT] Port: 3000 
+13/09/2025 23:54 [BOOT] Version: undefined 
+13/09/2025 23:54 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+13/09/2025 23:54 [BOOT] Connected to Database! 
+13/09/2025 23:55 [BOOT] Port: 3000 
+13/09/2025 23:55 [BOOT] DigitalGarden Started! 
+13/09/2025 23:55 [BOOT] Version: undefined 
+13/09/2025 23:55 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+13/09/2025 23:55 [BOOT] Connected to Database! 
+13/09/2025 23:55 [BOOT] DigitalGarden Started! 
+13/09/2025 23:55 [BOOT] Version: undefined 
+13/09/2025 23:55 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+13/09/2025 23:55 [BOOT] Port: 3000 
+13/09/2025 23:55 [BOOT] Connected to Database! 
+13/09/2025 23:56 [BOOT] DigitalGarden Started! 
+13/09/2025 23:56 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+13/09/2025 23:56 [BOOT] Port: 3000 
+13/09/2025 23:56 [BOOT] Version: undefined 
+13/09/2025 23:56 [BOOT] Connected to Database! 
+13/09/2025 23:58 [BOOT] DigitalGarden Started! 
+13/09/2025 23:58 [BOOT] Port: 3000 
+13/09/2025 23:58 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+13/09/2025 23:58 [BOOT] Version: undefined 
+13/09/2025 23:58 [BOOT] Connected to Database! 
+13/09/2025 23:59 [BOOT] DigitalGarden Started! 
+13/09/2025 23:59 [BOOT] Version: undefined 
+13/09/2025 23:59 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+13/09/2025 23:59 [BOOT] Port: 3000 
+13/09/2025 23:59 [BOOT] Connected to Database! 

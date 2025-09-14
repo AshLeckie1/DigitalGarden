@@ -5,7 +5,7 @@ body{
 }
 
 .MainBody{
-    background-color: lightgray;
+   
     height:100%;
 }
 
@@ -64,11 +64,72 @@ body{
     cursor: pointer;
 }
 
+.PostContainer{
+    background-color: lightgray;
+    border-radius: 20px;
+    margin-top:5px;
+    padding:5px;
+}
+
 .PostContainer .PostDate{
+    margin-top: 15px;
+    margin-right: 5px;
     float:right;
 }
 
+.PostContainer .PostText{
+    border:1px solid lightblue;
+    background-color:white;
+    border-radius: 20px;
+    margin:5px;
+    padding:5px;
+}
 
+.PostContainer .UserDetails .Username{
+    font-size: x-large;
+    cursor: pointer;
+}
+
+.PostContainer .UserDetails .Username:hover{
+    color:blue;
+}
+
+
+.PostContainer .UserDetails .Subtext{
+    font-size: small;
+}
+
+
+
+/* Main Nav */
+.MainNav{
+    background-color: dimgrey;
+    width:100%;
+    height:5rem;
+}
+
+
+.MainNav ul{
+    height:5rem;
+    display: inline;
+    list-style: none;
+}
+
+.MainNav li{
+    display: inline;
+    padding: 1rem;
+    min-width: 20rem;
+    margin:5px;
+    background-color: gray;
+    cursor: pointer;
+    border: gray 1px solid;
+    border-radius: 5px;
+}    
+
+.MainNav li:hover{
+    background-color: dimgray;
+    border: gray 1px solid;
+}
 
 /* Login Page */
 

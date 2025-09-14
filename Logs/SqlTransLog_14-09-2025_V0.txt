@@ -1,0 +1,111 @@
+14/09/2025 00:00  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+14/09/2025 00:00  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT 0, 5; 
+14/09/2025 00:00  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '171b1233-2ad4-45b4-aa6b-c1e289ee99ec' 
+14/09/2025 00:00  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+14/09/2025 00:08  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:08  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+14/09/2025 00:08  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '171b1233-2ad4-45b4-aa6b-c1e289ee99ec' 
+14/09/2025 00:10  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:10  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '171b1233-2ad4-45b4-aa6b-c1e289ee99ec' 
+14/09/2025 00:10  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+14/09/2025 00:11  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:11  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '171b1233-2ad4-45b4-aa6b-c1e289ee99ec' 
+14/09/2025 00:11  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+14/09/2025 00:12  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:12  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+14/09/2025 00:12  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '171b1233-2ad4-45b4-aa6b-c1e289ee99ec' 
+14/09/2025 00:13  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:13  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+14/09/2025 00:13  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '171b1233-2ad4-45b4-aa6b-c1e289ee99ec' 
+14/09/2025 00:14  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:14  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '171b1233-2ad4-45b4-aa6b-c1e289ee99ec' 
+14/09/2025 00:14  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = '73aef6ad-090e-4c3a-a8ce-1944bb6bc41d' 
+14/09/2025 00:14  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:17  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:18  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:19  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:21  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:24  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:26  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:27  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:29  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:29  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:30  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:31  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:31  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:32  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:32  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:32  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:32  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:34  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:34  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:34  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:35  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:37  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:37  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:37  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:40  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.users WHERE UPPER(Username) = 'admin' 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:41  [INFO] SQL REQUEST - INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('b62cea34-7523-4efc-be65-c92c0790a193','{"ID":"b62cea34-7523-4efc-be65-c92c0790a193","Created":"14/09/2025 00:41","Modified":"14/09/2025 00:41","Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}','DRAFT','dc21302d-89e0-11f0-9275-000c298d25c1') 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"b62cea34-7523-4efc-be65-c92c0790a193","Created":"14/09/2025 00:41","Modified":1757806886860,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"b62cea34-7523-4efc-be65-c92c0790a193","Created":"14/09/2025 00:41","Modified":1757806892136,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"b62cea34-7523-4efc-be65-c92c0790a193","Created":"14/09/2025 00:41","Modified":1757806897394,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"b62cea34-7523-4efc-be65-c92c0790a193","Created":"14/09/2025 00:41","Modified":1757806902824,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"b62cea34-7523-4efc-be65-c92c0790a193","Created":"14/09/2025 00:41","Modified":1757806908032,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"b62cea34-7523-4efc-be65-c92c0790a193","Created":"14/09/2025 00:41","Modified":1757806913094,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:41  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"b62cea34-7523-4efc-be65-c92c0790a193","Created":"14/09/2025 00:41","Modified":1757806918356,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:42  [INFO] SQL REQUEST - SELECT * FROM posts WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:42  [INFO] SQL REQUEST - SELECT * FROM digitalgarden.posts WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:42  [INFO] SQL REQUEST - UPDATE posts SET postData = '{"ID":"b62cea34-7523-4efc-be65-c92c0790a193","Created":"14/09/2025 00:41","Modified":1757806968373,"Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}' WHERE ID = 'b62cea34-7523-4efc-be65-c92c0790a193' 
+14/09/2025 00:42  [INFO] SQL REQUEST - UPDATE digitalgarden.posts SET Stage = "LIVE" WHERE ID = "b62cea34-7523-4efc-be65-c92c0790a193" 
+14/09/2025 00:42  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:42  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:53  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:54  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:54  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:54  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:55  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:55  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:55  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:55  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:55  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:56  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:56  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:56  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:56  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:57  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:57  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:58  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:58  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:58  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:59  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:59  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:59  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 00:59  [INFO] SQL REQUEST - INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('030240a9-bca4-45f9-86cb-6f556144b642','{"ID":"030240a9-bca4-45f9-86cb-6f556144b642","Created":"14/09/2025 00:59","Modified":"14/09/2025 00:59","Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}','DRAFT','dc21302d-89e0-11f0-9275-000c298d25c1') 
+14/09/2025 00:59  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:00  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:00  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:00  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:01  [INFO] SQL REQUEST - INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('db0942d1-fcdf-43c6-bf28-84714c44f508','{"ID":"db0942d1-fcdf-43c6-bf28-84714c44f508","Created":"14/09/2025 01:01","Modified":"14/09/2025 01:01","Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}','DRAFT','dc21302d-89e0-11f0-9275-000c298d25c1') 
+14/09/2025 01:01  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:03  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:04  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:04  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:06  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:06  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:07  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:07  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:08  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:08  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 
+14/09/2025 01:08  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT 0, 5; 

@@ -9,6 +9,7 @@ import mysql from 'mysql2/promise';
 import crypto from 'crypto'
 import path from 'path';
 import { marked } from "marked";
+import showdown from "showdown";
 
 const __dirname = path.resolve();
 
@@ -391,12 +392,16 @@ app.get('/GetPostMD', (req,res) => {
         res.status(400).send({"error":"Missing query"});
         return;
     }
+    var postText = fs.readFileSync(`data\\POSTS\\${req.query.PostID}\\post.md`)
+    let converter = new showdown.Converter(),
+    html = converter.makeHtml(postText);
+    res.status(200).send(html);
 
     //try{
-        var postText = fs.readFileSync(`data\\POSTS\\${req.query.PostID}\\post.md`)
+        
 
         //send post data
-        res.render(marked.parse(postText.toString()))
+        //res.render(marked.parse(postText.toString()))
 
     // }catch(err){
     //     res.status(500).send({"error":true,"msg":"Cannot Read post md file","result":err})
@@ -447,11 +452,13 @@ app.post('/GetPost', (req,res) => {
                 //read post MD
                 try{
                     var postText = fs.readFileSync(`data\\POSTS\\${PostID}\\post.md`)
+                    let converter = new showdown.Converter(),
+                    Posthtml = converter.makeHtml(postText.toString());
 
                     //send post data
                     res.status(200).send({
                         PostData:result[0].PostData,
-                        PostText:postText.toString(),
+                        PostText:Posthtml,
                         Stage:result[0].Stage
                     })
 
@@ -531,8 +538,23 @@ app.post('/GetFeed', (req,res) => {
         pos = 0
     }
 
-    var sql = `SELECT * FROM digitalgarden.posts WHERE Stage = "LIVE" LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
     SqlQuery(sql).then(result => {
+
+        result = result.map(e=>{
+            var postText = fs.readFileSync(`data\\POSTS\\${e.ID}\\post.md`)
+            let converter = new showdown.Converter(),
+            Posthtml = converter.makeHtml(postText.toString());
+            e["PostHtml"] = Posthtml
+
+            return e
+
+        })
+
+        
+
+        
+
         res.send(
             {
                 posts:result,
