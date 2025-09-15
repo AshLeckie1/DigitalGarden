@@ -1,0 +1,1 @@
+Testing the new post varable in the database

@@ -12,22 +12,22 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="Scripts/config.js"></script>
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SH20RAJ/ShowdownCSS@main/showdown.css">
 </head>
-<body>
+<body class="LightMode" id="body">
     <div class="MainTitle">
         <h1 id="Title" style = "font-family: Consolas;"></h1>
+        <button class="ModeSwitch" onclick="ToggleDarkMode()">Light/Dark</button>
         <div id="UserSession"></div>
     </div>
-    <div class="container MainBody"> 
+    <div class="container MainBody" > 
         <div class="Row">
             <div class="twelve columns">
                 <div class="MainNav">
-                    <ul>
-                        <li onclick="location.href='NewPost.html'">New Post</li>
-                        <li>User Account</li>
-                        <li>Tags</li>
-                    </ul>
+                    <h3 onclick="location.href='NewPost.html'">New Post</h3>
+                    <h3>User Account</h3>
+                    <h3>Tags</h3>
+                    
                 </div>
             </div>   
         </div>
@@ -41,6 +41,9 @@
 </body>
 <script>
 
+    $session = {
+        postPos:0
+    }
 
     $(document).ready(function() {
         // check login
@@ -55,22 +58,57 @@
 
         //Get Feed
         GetFeed(0)
+
+        //check for dark/light mode
+        //localStorage.setItem('SessionID',json.loginSession.SessionID)
+
+        if(localStorage.DarkMode == undefined){
+            localStorage.setItem('DarkMode',false)
+            document.getElementById("body").classList.add("LightMode")
+        }
+
+        if(localStorage.DarkMode == "false"){
+            document.getElementById("body").classList.remove("DarkMode")
+            document.getElementById("body").classList.add("LightMode")
+        }else{
+            document.getElementById("body").classList.remove("LightMode")
+            document.getElementById("body").classList.add("DarkMode")
+        }
+
     })
 
+    function ToggleDarkMode(){
+        if(localStorage.DarkMode == "true"){
+            localStorage.setItem('DarkMode',false)
+            document.getElementById("body").classList.remove("DarkMode")
+            document.getElementById("body").classList.add("LightMode")
+        }else{
+            localStorage.setItem('DarkMode',true)
+            document.getElementById("body").classList.remove("LightMode")
+            document.getElementById("body").classList.add("DarkMode")
+        }
+    }
     
     function GetFeed(pos){
-        PostGetFeed().then(feed => {
+        PostGetFeed(pos).then(feed => {
             console.log(feed)
+
+            try{
+                document.getElementById("NoPostDiv").remove()
+            }catch{}
+            
+
+            if(feed.posts.length == 0){
+                document.getElementById("Feed").innerHTML += `<dir class='NoPosts' id='NoPostDiv'><div><span>No posts found :( <br></span><br><button onclick='GetFeed(${$session.postPos})'>Refresh</button></div></div>`
+            }
 
             feed.posts.forEach(post => {
 
-                    
                     var PostUserData = JSON.parse(post.UserData)
-                    var PostData = JSON.parse(post.PostData)
+                    var PostData = JSON.parse(post.PostData.replace("-","/"))
 
-                    var date = new Date(PostData.Modified) 
+                    var date = new Date(post.posted) 
                     var formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-                    
 
                     var Post = `
                     <div class='PostContainer' id='${PostData.ID}'>
@@ -92,6 +130,12 @@
                     document.getElementById("Feed").innerHTML += Post            
             });
 
+            $session.postPos = $session.postPos + feed.posts.length
+
+            if(feed.posts.length > 0){
+                document.getElementById("Feed").innerHTML += `<dir class='NoPosts' id='NoPostDiv'><button onclick='GetFeed(${$session.postPos})'>Get More Posts</button></div></div>`
+                
+            }
 
         })
         
@@ -110,7 +154,7 @@
             return response.json()
         }
 
-        async function PostGetFeed() {
+        async function PostGetFeed(pos) {
             const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetFeed`, {
                 headers: {
                     'Accept': 'application/json',
@@ -118,7 +162,7 @@
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    pos : 0,
+                    pos : pos,
                 })
             });
 

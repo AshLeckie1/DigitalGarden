@@ -6,6 +6,7 @@
     <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
     <link href="Style/Skeleton/normalize.css" rel="stylessheet">
     <link href="Style/Style.css" rel = "stylesheet">
+    <link href="Style/NewPost.css" rel = "stylesheet">
     <script src="scripts/userSession.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -19,26 +20,29 @@
     </script>
     <title>New Post</title>
 </head>
-<body>
+<body class="LightMode" id="body">
+     <div class="MainTitle">
+        <h1 id="Title" style = "font-family: Consolas;"></h1>
+        <button class="ModeSwitch" onclick="ToggleDarkMode()">Light/Dark</button>
+        <div id="UserSession"></div>
+    </div>
     <div class="container MainBody"> 
         <div class="Row">
-
-                <div class="six columns">
-                    <h2>Editor</h2>
-                    <ul>
-                        <li><span id="saveStatus"></span></li>
-                        <li><button onclick="SaveDraftAsPost()">post</button></li>
-                    </ul>
-                    <textarea id="Editor"></textarea>
+            <div class="six columns">
+                <h2>Editor</h2>
+                <ul class="PostEditor">
+                    <li><span id="saveStatus"></span></li>
+                    <li><button onclick="SaveDraftAsPost()">post</button></li>
+                </ul>
+                <textarea id="Editor"></textarea>
+            </div>
+            <div class="six columns">
+                <h2>Preview</h2>
+                <div id="MarkdownViewer">
+                    <zero-md style="padding-bottom: 10rem;">
+                    </zero-md>
                 </div>
-                <div class="six columns">
-                    <h2>Preview</h2>
-                    <div id="MarkdownViewer">
-                        <zero-md style="padding-bottom: 10rem;">
-                        </zero-md>
-                    </div>
-                </div>
-            
+            </div>            
         </div>
     </div>
 </body>
@@ -51,18 +55,21 @@
     var Editor = document.getElementById('Editor');
     if (Editor.addEventListener) {
     Editor.addEventListener('input', function() {
-        setTimeout(updateMD,5000)
+        updateMD()
 
         // event handling code for sane browsers
     }, false);
     } else if (Editor.attachEvent) {
     Editor.attachEvent('onpropertychange', function() {
-        setTimeout(updateMD,5000)
+        updateMD()
         // IE-specific event handling code
     });
     }
 
     $(document).ready(function() {
+        //check login
+        checkLogin()
+
         console.log(window.location.href)
         try{
             if(new URL(window.location.href).searchParams.get("draft") != null){
@@ -117,7 +124,33 @@
         }catch{
            
         }
-    });
+    if(localStorage.DarkMode == undefined){
+            localStorage.setItem('DarkMode',false)
+            document.getElementById("body").classList.add("LightMode")
+        }
+
+        if(localStorage.DarkMode == "false"){
+            document.getElementById("body").classList.remove("DarkMode")
+            document.getElementById("body").classList.add("LightMode")
+        }else{
+            document.getElementById("body").classList.remove("LightMode")
+            document.getElementById("body").classList.add("DarkMode")
+        }
+
+    })
+
+    function ToggleDarkMode(){
+        if(localStorage.DarkMode == "true"){
+            localStorage.setItem('DarkMode',false)
+            document.getElementById("body").classList.remove("DarkMode")
+            document.getElementById("body").classList.add("LightMode")
+        }else{
+            localStorage.setItem('DarkMode',true)
+            document.getElementById("body").classList.remove("LightMode")
+            document.getElementById("body").classList.add("DarkMode")
+        }
+    }
+    
 
     function SaveDraftAsPost(){
         
@@ -169,7 +202,7 @@
     function updateMD(){
         document.getElementById("MarkdownViewer").innerHTML = `<zero-md style="padding-bottom: 10rem;"><template><xmp>${document.getElementById("Editor").value}</xmp></template></zero-md>`
         //attempt to update draft
-        UpdateDraft()
+        setTimeout(UpdateDraft,5000)
     }
 
     // cooldown

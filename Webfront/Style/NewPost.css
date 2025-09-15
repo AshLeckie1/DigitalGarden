@@ -1,0 +1,79 @@
+:root {
+    --DarkModePrimary:#121212;
+    --DarkModeSecondary:#282828;
+    --DarkModeTertiary:#3f3f3f;
+    --DarkModeFont:white;
+    --DarkModeHighLight:#b99eed;
+
+    --LightModePrimary:white;
+    --lightModeSecondary:#e4e5f1;
+    --lightModeTertiary:#a09d9d;
+    --LightModeFont:black;
+    --lightModeHighLight:#3598fc;
+}
+
+.LightMode .MainBody{
+    background-color: var(--LightModePrimary);
+}
+
+.DarkMode .MainBody{
+    background-color: var(--DarkModeSecondary);
+}
+
+
+#Editor{
+    width:90%;
+    margin-left: 5%;
+    height:50rem;
+    overflow-y: scroll;
+    resize: none;
+
+}
+
+#MarkdownViewer{
+    width:95%;
+    margin-left: 0.25%;
+    padding:5px;
+    height:50rem;
+    overflow-y: scroll;
+    background-color: white;
+}
+
+.PostEditor{
+    width:90%;
+    margin-left: 5%;
+    display: flex;
+    /* display: inline-block; */
+    list-style: none;
+    margin-bottom: 0;
+    height:4rem;
+}
+
+.PostEditor button{
+    height:3rem;
+    float:right;
+    margin-top:-5px;
+}
+
+.DarkMode .PostEditor button{
+    background-color: var(--DarkModeHighLight);
+}
+
+.LightMode .PostEditor button{
+    background-color: var(--LightModeHighLight);
+}
+
+.DarkMode .PostEditor{
+    background-color: var(--DarkModeTertiary);
+}
+
+.lightMode .PostEditor{
+    background-color: var(--lightModeTertiary);
+}
+
+.PostEditor li{
+    display: inline;
+    padding: 1rem;
+    flex:1;
+    width:auto;
+}

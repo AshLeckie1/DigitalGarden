@@ -18,7 +18,6 @@ async function checkLogin(){
         const json = await response.json()
     
         if(json.login){
-
            //set new sessionID
            //document.cookie=`sessionLogin = ${json.SessionID};` 
    

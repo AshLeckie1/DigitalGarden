@@ -276,8 +276,7 @@ app.post('/NewDraft',(req,res) => {
     }catch{
         var DraftID = uuidv4()
     }
-
-
+    
     var Draft = {
         ID:DraftID,
         Created:formattedDate,
@@ -289,7 +288,7 @@ app.post('/NewDraft',(req,res) => {
         
     const allPromise = Promise.all([createFolder(),SqlQuery(sql)])
     allPromise.then(result  =>{
-        if(result[0] && result[1].affectedRows > 0){
+        if(result[1].affectedRows > 0){
             // both ran successfully
             res.status(200).send(Draft)
         }else{
@@ -397,22 +396,6 @@ app.get('/GetPostMD', (req,res) => {
     html = converter.makeHtml(postText);
     res.status(200).send(html);
 
-    //try{
-        
-
-        //send post data
-        //res.render(marked.parse(postText.toString()))
-
-    // }catch(err){
-    //     res.status(500).send({"error":true,"msg":"Cannot Read post md file","result":err})
-    // }
-
-    //try{
-        //res.sendFile(`data\\POSTS\\${req.query.PostID}\\post.md`, {root: __dirname})
-
-    // }catch(err){
-    //     res.status(500).send({"error":true,msg:err})
-    // }
 })
 
 app.post('/GetPost', (req,res) => {
@@ -506,7 +489,7 @@ app.post('/PostDraft', (req,res) =>{
                 }
 
                 //change post stage to POST
-                var sql = `UPDATE digitalgarden.posts SET Stage = "LIVE" WHERE ID = "${PostID}"`
+                var sql = `UPDATE digitalgarden.posts SET Stage = "LIVE", Posted = NOW() WHERE ID = "${PostID}"`
                 SqlQuery(sql).then(result =>{ 
                     if(result.affectedRows > 0){
                         res.status(200).send({"error":false,msg:"Message updated to post"})
@@ -538,7 +521,7 @@ app.post('/GetFeed', (req,res) => {
         pos = 0
     }
 
-    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.UserData FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
     SqlQuery(sql).then(result => {
 
         result = result.map(e=>{
@@ -550,11 +533,6 @@ app.post('/GetFeed', (req,res) => {
             return e
 
         })
-
-        
-
-        
-
         res.send(
             {
                 posts:result,

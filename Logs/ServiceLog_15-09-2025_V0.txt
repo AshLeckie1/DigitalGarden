@@ -1,0 +1,42 @@
+15/09/2025 21:43 [BOOT] Version: undefined 025 21:43 [BOOT] DigitalGarden Started! 
+15/09/2025 21:43 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+15/09/2025 21:43 [BOOT] Connected to Database! 
+15/09/2025 21:46 [INFO] User Admin logged in successfully 
+15/09/2025 22:38 [BOOT] DigitalGarden Started! 
+15/09/2025 22:38 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+15/09/2025 22:38 [BOOT] Port: 3000 
+15/09/2025 22:38 [BOOT] Version: undefined 
+15/09/2025 22:38 [BOOT] Connected to Database! 
+15/09/2025 22:39 [INFO] User Admin logged in successfully 
+15/09/2025 23:28 [BOOT] Port: 3000 
+15/09/2025 23:28 [BOOT] Version: undefined 
+15/09/2025 23:28 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+15/09/2025 23:28 [BOOT] DigitalGarden Started! 
+15/09/2025 23:28 [BOOT] Connected to Database! 
+15/09/2025 23:28 [INFO] User Admin logged in successfully 
+15/09/2025 23:32 [BOOT] Version: undefined 
+15/09/2025 23:32 [BOOT] DigitalGarden Started! 
+15/09/2025 23:32 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+15/09/2025 23:32 [BOOT] Port: 3000 
+15/09/2025 23:32 [BOOT] Connected to Database! 
+15/09/2025 23:32 [BOOT] DigitalGarden Started! 
+15/09/2025 23:32 [BOOT] Version: undefined 
+15/09/2025 23:32 [BOOT] Port: 3000 
+15/09/2025 23:32 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+15/09/2025 23:32 [BOOT] Connected to Database! 
+15/09/2025 23:36 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+15/09/2025 23:36 [BOOT] Port: 3000 
+15/09/2025 23:36 [BOOT] Version: undefined 
+15/09/2025 23:36 [BOOT] DigitalGarden Started! 
+15/09/2025 23:36 [BOOT] Connected to Database! 
+15/09/2025 23:36 [INFO] User Admin logged in successfully 
+15/09/2025 23:38 [BOOT] DigitalGarden Started! 
+15/09/2025 23:38 [BOOT] Port: 3000 
+15/09/2025 23:38 [BOOT] Version: undefined 
+15/09/2025 23:38 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+15/09/2025 23:38 [BOOT] Connected to Database! 
+15/09/2025 23:42 [BOOT] DigitalGarden Started! 
+15/09/2025 23:42 [BOOT] Version: undefined 
+15/09/2025 23:42 [BOOT] Port: 3000 
+15/09/2025 23:42 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+15/09/2025 23:42 [BOOT] Connected to Database! 
