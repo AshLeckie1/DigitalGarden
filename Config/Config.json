@@ -1,18 +1,20 @@
 {
     "debug":1,
     
-    "SQLUser":"",
-    "SQLPass":"",
-    "SQLServer":"localhost",
-    "SQLDatabase":"",
+    "SQLUser":"ServiceAccount",
+    "SQLPass":"E21ZaSkQGFbRa2xKBIdv",
+    "SQLServer":"VM005",
+    "SQLDatabase":"digitalGarden",
 
-    "DecryptKey":"",
+    "DecryptKey":"39468206394101903145559142724892",
 
-    "NodeServer":"",
+    "NodeServer":"VM007",
     "NodePort":"3000",
 
     "SQLLogLocation":"Logs\\SqlTransLog",
     "ServiceLogLocation":"Logs\\ServiceLog",
     "DefaultLogs":"Logs\\Log",
-    "LogAgeDays":7
+    "LogAgeDays":7,
+
+    "PostGetLimit":5
 }

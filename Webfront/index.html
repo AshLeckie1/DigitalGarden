@@ -110,15 +110,32 @@
                     var date = new Date(post.posted) 
                     var formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
+                    var id = uuidv4()
+
                     var Post = `
-                    <div class='PostContainer' id='${PostData.ID}'>
+                    <div class='PostContainer' data-UserDataId='${PostData.ID}'>
                         <div class='PostInfo'>
-                            <span class='UserDetails'>
+                            <span class='UserDetails' id="${id}">
                                 <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> <span class="Username">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
-                            </span>
-                            <span class='PostDate'>
+                            <span class='PostDate' data-postID="${id}">
                                 ${formattedDate}
                             </span>
+                            <div class="HoverProfile" >
+                                <div class="row">
+                                    <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> 
+                                    <h3>${PostUserData.Alias}</h3>
+                                    <p>${PostUserData.Subtext}</p>
+                                </div>
+                                <div class="row">
+                                    <ul>
+                                        <li>he/him</li>
+                                        <li><a href="https://github.com/AshLeckie1/DigitalGarden">GitHub</a></li>
+                                    </ul>
+                                </div>
+                                <div class="row">
+                                    <p class="bio"></p>
+                                </div>
+                            </div>
                         </div>
                         <div class="PostText">
             
@@ -168,6 +185,12 @@
 
             return response.json()
         }
+    }
+
+    function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+        );
     }
 
 </script>

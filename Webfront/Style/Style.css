@@ -301,3 +301,17 @@ body.DarkMode{
     margin-left:1rem;
     margin-right:1rem;
 }
+
+/* User hover menu */
+.HoverProfile{
+    position:fixed;
+    z-index: 3;
+    width:50rem;
+    height:30rem;
+    border-radius: 25px;
+}
+
+.DarkMode .HoverProfile{
+    background-color: var(--DarkModeSecondary);
+    border: var(--DarkModeHighLight) 1px solid;
+}
