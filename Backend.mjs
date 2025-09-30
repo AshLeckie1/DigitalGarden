@@ -11,6 +11,7 @@ import path from 'path';
 import { marked } from "marked";
 import showdown from "showdown";
 
+
 const __dirname = path.resolve();
 
 const app = express();
@@ -102,8 +103,8 @@ app.post('/NewUser', (req,res) => {
         var UserData = req.body.UserData
 
         //check invite key is valid
-        var sqlInviteKey = `SELECT * FROM digitalGarden.invite_tokens WHERE ID = '${InviteKey}' AND Expiration > NOW()`
-        var sqlExistingUser = `SELECT COUNT(ID) AS users FROM digitalgarden.users WHERE UPPER(Username) = '${Username.toUpperCase()}'`
+        var sqlInviteKey = `SELECT * FROM DigitalGarden.invite_tokens WHERE ID = '${InviteKey}' AND Expiration > NOW()`
+        var sqlExistingUser = `SELECT COUNT(ID) AS users FROM DigitalGarden.users WHERE UPPER(Username) = '${Username.toUpperCase()}'`
         const allPromise = Promise.all([SqlQuery(sqlInviteKey),SqlQuery(sqlExistingUser)])
         allPromise.then(result  =>{
             
@@ -174,7 +175,7 @@ app.post("/Login",(req,res) => {
     }
 
     try{
-        var sql = `SELECT * FROM digitalgarden.users WHERE UPPER(Username) = '${Username}'`
+        var sql = `SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = '${Username}'`
         SqlQuery(sql).then(result =>{
 
             if(result.length == 0){
@@ -300,7 +301,7 @@ app.post('/NewDraft',(req,res) => {
     async function createFolder(){
         //create folder for Draft
         try{
-            return await fs.mkdirSync(`data\\POSTS\\${Draft.ID}`)
+            return await fs.mkdirSync(`${__dirname}\\data\\POSTS\\${Draft.ID}`)
         }
         catch(err){
             log(`[ERROR] creating new draft folder ${Draft.ID} - ${JSON.stringify(err)}`,"service")
@@ -308,7 +309,7 @@ app.post('/NewDraft',(req,res) => {
         }
 
     }
-})
+});
 
 app.post('/ModifyDraft', (req,res) =>{
     res.set('Access-Control-Allow-Origin', '*');
@@ -356,7 +357,7 @@ app.post('/ModifyDraft', (req,res) =>{
 
                 // Update or create MD file
                 try{
-                    fs.writeFileSync(`data/POSTS/${PostID}/post.md`,PostText,{encoding:'utf8',flag:'w'})
+                    fs.writeFileSync(`${__dirname}/data/POSTS/${PostID}/post.md`,PostText,{encoding:'utf8',flag:'w'})
 
                     log(`[INFO] Draft ${PostID} Modified successfully by ${userSession.UserID}`,"status")
                     res.status(200).send({"error":false,msg:"Draft Updated!"})
@@ -391,7 +392,7 @@ app.get('/GetPostMD', (req,res) => {
         res.status(400).send({"error":"Missing query"});
         return;
     }
-    var postText = fs.readFileSync(`data\\POSTS\\${req.query.PostID}\\post.md`)
+    var postText = fs.readFileSync(`${__dirname}\\data\\POSTS\\${req.query.PostID}\\post.md`)
     let converter = new showdown.Converter(),
     html = converter.makeHtml(postText);
     res.status(200).send(html);
@@ -409,7 +410,7 @@ app.post('/GetPost', (req,res) => {
     var UserSessionID = req.body.SessionID
 
     //get post from database
-    var sql = `SELECT * FROM digitalgarden.posts WHERE ID = '${PostID}'`
+    var sql = `SELECT * FROM DigitalGarden.posts WHERE ID = '${PostID}'`
     SqlQuery(sql).then(result =>{
         
         // Result validation
@@ -434,7 +435,7 @@ app.post('/GetPost', (req,res) => {
 
                 //read post MD
                 try{
-                    var postText = fs.readFileSync(`data\\POSTS\\${PostID}\\post.md`)
+                    var postText = fs.readFileSync(`${__dirname}\\data\\POSTS\\${PostID}\\post.md`)
                     let converter = new showdown.Converter(),
                     Posthtml = converter.makeHtml(postText.toString());
 
@@ -467,7 +468,7 @@ app.post('/PostDraft', (req,res) =>{
     var UserSessionID = req.body.SessionID
 
     //get post from database
-    var sql = `SELECT * FROM digitalgarden.posts WHERE ID = '${PostID}'`
+    var sql = `SELECT * FROM DigitalGarden.posts WHERE ID = '${PostID}'`
     SqlQuery(sql).then(result =>{
         try{
             if(result[0].ID != undefined){
@@ -489,7 +490,7 @@ app.post('/PostDraft', (req,res) =>{
                 }
 
                 //change post stage to POST
-                var sql = `UPDATE digitalgarden.posts SET Stage = "LIVE", Posted = NOW() WHERE ID = "${PostID}"`
+                var sql = `UPDATE DigitalGarden.posts SET Stage = "LIVE", Posted = NOW() WHERE ID = "${PostID}"`
                 SqlQuery(sql).then(result =>{ 
                     if(result.affectedRows > 0){
                         res.status(200).send({"error":false,msg:"Message updated to post"})
@@ -521,11 +522,11 @@ app.post('/GetFeed', (req,res) => {
         pos = 0
     }
 
-    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM digitalgarden.posts, digitalgarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
     SqlQuery(sql).then(result => {
 
         result = result.map(e=>{
-            var postText = fs.readFileSync(`data\\POSTS\\${e.ID}\\post.md`)
+            var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
             let converter = new showdown.Converter(),
             Posthtml = converter.makeHtml(postText.toString());
             e["PostHtml"] = Posthtml
@@ -560,6 +561,37 @@ app.post('/checkLogin',(req,res) =>{
         res.send({"valid":false,"error":JSON.stringify(err, null, 2)})
     }
 
+});
+
+app.post('/GetUserDetails',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+
+    var UserID = req.body.UserID
+
+    var sql = `SELECT Username, UserData FROM DigitalGarden.users WHERE ID = '${UserID}'`
+
+    SqlQuery(sql).then(result => {
+        //should only be one result so no need to worry abotu potentially sending the data twice
+        var data = result[0]
+        data.UserData = JSON.parse(data.UserData)
+
+        res.status(200).send(data)
+    })
+
+});
+
+app.post('/UserModification',(req,res)=>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+
+    console.log(req)
 });
 
 function IsUserSessionValid(LoginSession){
@@ -696,8 +728,8 @@ function log(content, logType, StringDump) {
 
     //get log file version
     var version  = 0
-    if(!fs.existsSync(`data/${logType.toUpperCase()}Pos.txt`)){
-        fs.writeFile(`data/${logType.toUpperCase()}Pos.txt`,'0', err => {
+    if(!fs.existsSync(`${__dirname}/data/${logType.toUpperCase()}Pos.txt`)){
+        fs.writeFile(`${__dirname}/data/${logType.toUpperCase()}Pos.txt`,'0', err => {
             if (err) {
                 console.log(`[ERROR] ${err}`);
             } else {
@@ -706,7 +738,7 @@ function log(content, logType, StringDump) {
             writeLog(version, logFile, content, StringDump)
         });
     }else{
-        fs.readFile(`data/${logType.toUpperCase()}Pos.txt`, 'utf8', (err, data) => {
+        fs.readFile(`${__dirname}/data/${logType.toUpperCase()}Pos.txt`, 'utf8', (err, data) => {
             version = data
             writeLog(version, logFile, content, StringDump)
         })
@@ -764,7 +796,7 @@ function log(content, logType, StringDump) {
             if(fileSizeInMegabytes > 10){
                 //new file needed
                 version ++
-                logFileFormat = `${logFile}_${currentDate}_V${version}.txt`
+                logFileFormat = `${__dirname}/${logFile}_${currentDate}_V${version}.txt`
 
                 //write to log
                 fs.writeFile(logFileFormat,`${formattedDate} ${content} ${StringDump}`, err => {
@@ -776,7 +808,7 @@ function log(content, logType, StringDump) {
                 });
 
                 //set log pos file 
-                fs.writeFile(`data/${logType.toUpperCase()}Pos.txt`,`${version}`, err => {
+                fs.writeFile(`${__dirname}/data/${logType.toUpperCase()}Pos.txt`,`${version}`, err => {
                     if (err) {
                         console.log(`${formattedDate} [ERROR] ${err}`);
                     } else {

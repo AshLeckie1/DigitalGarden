@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Scripts/FlippyTextReader.js"></script>
+    <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
+    <link href="Style/Skeleton/normalize.css" rel="stylessheet">
+    <link href="Style/Style.css" rel = "stylesheet">
+    <link href="Style/IconStyles.css" rel = "stylesheet">
+
+    <script src="Scripts/userSession.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="Scripts/config.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SH20RAJ/ShowdownCSS@main/showdown.css">
+</head>
+<body class="LightMode" id="body">
+    <div class="MainTitle">
+        <h1 id="Title"></h1>
+        <button class="ModeSwitch" onclick="ToggleDarkMode()">Light/Dark</button>
+        <div id="UserSession"></div>
+    </div>
+    <div class="container MainBody" > 
+        <div class="Row">
+            <div class="twelve columns EditUserDetails">
+                <h2>Edit User Details</h2>
+                <form class="w-full space-y-8" id="UserDetailsForm">
+                    <div>
+                        <label>User Icon</label>
+                        <input id="NewIcon" type="file" accept="image/*"><p>Image should be a 1 to 1 ratio</p>
+                        <img src="Style/Images/DefaultUserProfile.png" class="NewIcon" id="PrevIcon">
+                        
+                    </div>
+                    <div>
+                        <label>User Alias</label>
+                        <input id="Alias" type="text">
+                    </div>
+                    <div>
+                        <label>Pronouns</label>
+                        <Select id="Pronouns" onchange="checkIfOther()">
+                            <option selected disabled >-- please select a pronoun --</option>
+                            <option value="She/Her">She/Her</option>
+                            <option value="He/Him">He/Him</option>
+                            <option value="They/Them">They/Them</option>
+                            <option value="Other">Other</option>
+                        </Select>
+                        <span id="OptionalPronounCont" hidden>
+                            <label>Other</label>
+                            <input id="OptionalPronoun" type="text">
+                        </span>
+                    </div>
+                    <div>
+                        <label>External Links</label>
+                        <div class="LinkPreview" id="LinkPreview">
+
+                        </div>
+                        <div class="input-group grid-cols-[auto_1fr_auto]">
+                            <select id="SocialSelection" class="ig-select">
+                                <option value="Github">     <img class="Github" src="Style/Images/SocialIconsSet.png">Github</option>
+                                <option value="Facebook">   <img class="Facebook" src="Style/Images/SocialIconsSet.png">Facebook</option>
+                                <option value="Twitter">    <img class="Twitter" src="Style/Images/SocialIconsSet.png">Twitter</option>
+                                <option value="Instagram">  <img class="Instagram" src="Style/Images/SocialIconsSet.png">Instagram</option>
+                                <option value="YouTube">    <img class="YouTube" src="Style/Images/SocialIconsSet.png">YouTube</option>
+                                <option value="Snapchat">   <img class="Snapchat" src="Style/Images/SocialIconsSet.png">Snapchat</option>
+                                <option value="Pinterest">  <img class="Pinterest" src="Style/Images/SocialIconsSet.png">Pinterest</option>
+                                <option value="Threads">    <img class="Threads" src="Style/Images/SocialIconsSet.png">Threads</option>
+                                <option value="Reddit">     <img class="Reddit" src="Style/Images/SocialIconsSet.png">Reddit</option>
+                                <option value="Discord">    <img class="Discord" src="Style/Images/SocialIconsSet.png">Discord</option>
+                                <option value="BlueSky">    <img class="BlueSky" src="Style/Images/SocialIconsSet.png">BlueSky</option>                            
+                            </select>
+                            <input id="LinkUsername" type="text" class="ig-input" placeholder="Username">
+                            <button class="ig-btn preset-filled" type="button" onclick="AddLink(document.getElementById('SocialSelection').value,document.getElementById('LinkUsername').value)">Add</button>
+                            <a target="_blank ">Test Link</a>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Bio</label>
+                        <textarea id="Bio"></textarea>
+                    </div>
+                    <div>
+                        <button type="submit">Save Changes</button>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+</body>
+<script>
+
+    $('#UserDetailsForm').submit(function (e) {
+        e.preventDefault();
+        var fd = new FormData($(this)[0]);
+        $.ajax({
+            url: 'http://localhost:3000/UserModification',
+            data: fd,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(data){
+                console.log(data);
+            }
+        });
+    });
+
+    $session = {
+        UserID:""
+
+    }
+
+    $(document).ready(function() {
+        // check login
+        checkLogin()
+
+        //get user details
+        if(new URL(window.location.href).searchParams.get("user") != null){
+                $session.UserID = new URL(window.location.href).searchParams.get("user")
+            GetUserDetails($session.UserID).then(result => {
+                //fill in user details
+                document.getElementById('Alias').value = result.UserData.Alias
+                if(["She/Her","He/Him","They/Them"].includes(result.UserData.ProNouns)){
+                    document.getElementById('Pronouns').value = result.UserData.ProNouns
+                }else{
+                    document.getElementById('Pronouns').value = "Other"
+                    document.getElementById('OptionalPronoun').value = result.UserData.ProNouns
+                }
+
+                if(result.UserData.Links.length > 0){
+                    result.UserData.Links.forEach(link => {
+                        AddLink(link.Title, link.Username)
+                    });
+                }
+
+            });
+        }else{
+            alert("Missing user")
+            window.location = login.html
+        }
+        async function GetUserDetails(UserID) {
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserDetails`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    UserID : UserID,
+                })
+            });
+
+            return response.json()
+        }
+
+        //set image preview onchange
+        var imgInp = document.getElementById("NewIcon")
+        var imgPrev = document.getElementById("PrevIcon")
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                imgPrev.src = URL.createObjectURL(file)
+            }
+        }
+
+        //set site title
+        TitleLoop()
+        function TitleLoop(){
+            TriggerChange("Title")
+            setTimeout(TitleLoop,10000)
+        }
+
+        //check for dark/light mode
+        //localStorage.setItem('SessionID',json.loginSession.SessionID)
+
+        if(localStorage.DarkMode == undefined){
+            localStorage.setItem('DarkMode',false)
+            document.getElementById("body").classList.add("LightMode")
+        }
+
+        if(localStorage.DarkMode == "false"){
+            document.getElementById("body").classList.remove("DarkMode")
+            document.getElementById("body").classList.add("LightMode")
+        }else{
+            document.getElementById("body").classList.remove("LightMode")
+            document.getElementById("body").classList.add("DarkMode")
+        }
+
+    })
+
+    function ToggleDarkMode(){
+        if(localStorage.DarkMode == "true"){
+            localStorage.setItem('DarkMode',false)
+            document.getElementById("body").classList.remove("DarkMode")
+            document.getElementById("body").classList.add("LightMode")
+        }else{
+            localStorage.setItem('DarkMode',true)
+            document.getElementById("body").classList.remove("LightMode")
+            document.getElementById("body").classList.add("DarkMode")
+        }
+    }
+    
+    function AddLink(SiteName,Username){
+        var LinkId = uuidv4()
+        
+        document.getElementById('LinkPreview').innerHTML += `
+        <div id="${LinkId}" class="link">
+            <div class="IconContainer">
+                <img class="${SiteName}" src="Style/Images/SocialIconsSet.png">
+            </div>
+            <div class="Username">
+                ${Username}
+            </div>
+            <div class="remove" onclick="RemoveLink('${LinkId}')">
+                X
+            </div>
+        </div>`
+    }
+
+    function RemoveLink(ID){
+        document.getElementById(ID).remove()
+    }
+    
+    function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+        );
+    }
+
+    function checkIfOther(){
+        var select = document.getElementById("Pronouns")
+
+        if(select.value == "Other"){
+            $("#OptionalPronounCont").show()
+        }else{
+            $("#OptionalPronounCont").hide()
+        }
+
+    }
+
+
+</script>
+</html>

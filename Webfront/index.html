@@ -8,7 +8,9 @@
     <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
     <link href="Style/Skeleton/normalize.css" rel="stylessheet">
     <link href="Style/Style.css" rel = "stylesheet">
-    <script src="scripts/userSession.js"></script>
+    <link href="Style/IconStyles.css" rel = "stylesheet">
+
+    <script src="Scripts/userSession.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="Scripts/config.js"></script>
@@ -16,7 +18,7 @@
 </head>
 <body class="LightMode" id="body">
     <div class="MainTitle">
-        <h1 id="Title" style = "font-family: Consolas;"></h1>
+        <h1 id="Title"></h1>
         <button class="ModeSwitch" onclick="ToggleDarkMode()">Light/Dark</button>
         <div id="UserSession"></div>
     </div>
@@ -107,44 +109,61 @@
                     var PostUserData = JSON.parse(post.UserData)
                     var PostData = JSON.parse(post.PostData.replace("-","/"))
 
+                    var PostID = PostData.ID.split('-')[PostData.ID.split('-').length - 1]
                     var date = new Date(post.posted) 
                     var formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
-                    var id = uuidv4()
+                    var Links = ""
 
+                    PostUserData.Links.forEach(link =>{
+                        Links += `
+                        <div onclick="window.open('${link.Link}')" class="${link.Title} link">   
+                                <div class="IconContainer">
+                                    <img class="${link.Title}" src="Style/Images/SocialIconsSet.png">
+                                </div>
+                                <div class="Username">
+                                    ${link.Username}
+                                </div>
+                        </div>`
+                    });
+                    
                     var Post = `
-                    <div class='PostContainer' data-UserDataId='${PostData.ID}'>
+                    <div class='PostContainer' data-UserDataId='${PostID}'>
                         <div class='PostInfo'>
-                            <span class='UserDetails' id="${id}">
-                                <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> <span class="Username">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
-                            <span class='PostDate' data-postID="${id}">
+                            <span class='UserDetails' 
+                                <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> 
+                                <span class="PostUsername" onmouseover=" $('#${PostID}').show()" onmouseout=" $('#${PostID}').hide()" id="Username${PostData.ID}">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
+                            <span class='PostDate'>
                                 ${formattedDate}
                             </span>
-                            <div class="HoverProfile" >
-                                <div class="row">
+                            <div class="HoverProfile" id="${PostID}" onmouseover=" $('#${PostID}').show()" onmouseout=" $('#${PostID}').hide()">
+                                <div class="row ProfileTitle">
                                     <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> 
-                                    <h3>${PostUserData.Alias}</h3>
-                                    <p>${PostUserData.Subtext}</p>
+                                    <span class="Alias">${PostUserData.Alias}</span>
+                                    <span class="Subtext">${PostUserData.Subtext}</spans>
                                 </div>
                                 <div class="row">
-                                    <ul>
-                                        <li>he/him</li>
-                                        <li><a href="https://github.com/AshLeckie1/DigitalGarden">GitHub</a></li>
-                                    </ul>
+                                    <span class="Pronouns">${PostUserData.ProNouns}</span>
                                 </div>
                                 <div class="row">
-                                    <p class="bio"></p>
+                                    <div class="LinkPreview">
+                                        ${Links}                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="bio">${PostUserData.Bio}</div>
                                 </div>
                             </div>
                         </div>
                         <div class="PostText">
-            
                             ${post.PostHtml}   
-                               
                         </div>
                     </div>
                     `
-                    document.getElementById("Feed").innerHTML += Post            
+
+                    document.getElementById("Feed").innerHTML += Post  
+
+                    $(`#${PostID}`).hide()       
             });
 
             $session.postPos = $session.postPos + feed.posts.length

@@ -1,19 +1,19 @@
 {
     "debug":1,
     
-    "SQLUser":"ServiceAccount",
-    "SQLPass":"E21ZaSkQGFbRa2xKBIdv",
-    "SQLServer":"VM005",
-    "SQLDatabase":"digitalGarden",
+    "SQLUser":"root",
+    "SQLPass":"skydog",
+    "SQLServer":"localhost",
+    "SQLDatabase":"DigitalGarden",
 
     "DecryptKey":"39468206394101903145559142724892",
 
     "NodeServer":"VM007",
     "NodePort":"3000",
 
-    "SQLLogLocation":"Logs\\SqlTransLog",
-    "ServiceLogLocation":"Logs\\ServiceLog",
-    "DefaultLogs":"Logs\\Log",
+    "SQLLogLocation":"/var/www/DigitalGarden/Logs/SqlTransLog",
+    "ServiceLogLocation":"/var/www/DigitalGarden/Logs/ServiceLog",
+    "DefaultLogs":"/var/www/DigitalGarden/Logs/Log",
     "LogAgeDays":7,
 
     "PostGetLimit":5

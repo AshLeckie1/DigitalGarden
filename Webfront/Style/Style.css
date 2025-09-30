@@ -79,6 +79,9 @@ body.DarkMode{
     bottom:0;
     margin-bottom: 10;
     margin-left: 10px;
+    font-family: 'Courier New', Courier, monospace;
+
+
 }
 
 .UserIcon{
@@ -102,12 +105,14 @@ body.DarkMode{
 }
 
 .PostContainer{
+    position:relative;
     border-radius: 20px;
     margin-top:5px;
     padding:5px;
 }
 
 .LightMode .PostContainer{
+    background-color: var(--LightModePrimary);
     border: var(--lightModeHighLight) solid 1px;
     box-sizing: border-box;
 }
@@ -148,17 +153,17 @@ body.DarkMode{
 }
 
 
-.PostContainer .UserDetails .Username{
+.PostContainer .UserDetails .PostUsername{
     font-size: x-large;
     cursor: pointer;
 }
 
-.LightMode .PostContainer .UserDetails .Username:hover{
+.LightMode .PostContainer .UserDetails .PostUsername:hover{
     color:var(--lightModeHighLight);
     text-decoration: underline;
 }
 
-.DarkMode .PostContainer .UserDetails .Username:hover{
+.DarkMode .PostContainer .UserDetails .PostUsername:hover{
     color:var(--DarkModeHighLight);
     text-decoration: underline;
 }
@@ -304,14 +309,138 @@ body.DarkMode{
 
 /* User hover menu */
 .HoverProfile{
-    position:fixed;
+    padding:1rem;
+    position:absolute;
     z-index: 3;
     width:50rem;
     height:30rem;
+    margin-bottom: -30rem;
     border-radius: 25px;
 }
 
 .DarkMode .HoverProfile{
     background-color: var(--DarkModeSecondary);
     border: var(--DarkModeHighLight) 1px solid;
+}
+
+.LightMode .HoverProfile{
+    background-color: var(--LightModePrimary);
+    border: var(--lightModeHighLight) 1px solid;
+}
+
+.HoverProfile .ProfileTitle{
+    display:inline;
+    width:90%;
+}
+
+/* .HoverProfile .ExternalLinks{
+    list-style: none;
+    display:inline-block;
+}
+
+.HoverProfile .ExternalLinks li{    
+    padding-right:1rem;
+    cursor: pointer;
+    display:inline-block;
+
+}
+
+.DarkMode .HoverProfile .ExternalLinks li:hover{ 
+    color:var(--DarkModeHighLight)   
+}
+
+.LightMode .HoverProfile .ExternalLinks li:hover{ 
+    color:var(--lightModeHighLight)   
+} */
+
+
+.HoverProfile .ProfileTitle .Alias{
+    font-size: x-large;
+}
+
+.DarkMode .HoverProfile .ProfileTitle .Subtext{
+    color:var(--DarkModeHighLight)
+}
+
+.LightMode .HoverProfile .ProfileTitle .Subtext{
+    color:var(--lightModeHighLight)
+}
+
+.HoverProfile .bio{
+    margin-top:1rem;
+    width:90%;
+    border-radius:5px;
+    height:15rem;
+    padding:5px;
+    overflow:scroll
+}
+
+.DarkMode .HoverProfile .bio{
+    background-color: var(--DarkModeTertiary);
+    border:var(--DarkModeHighLight) 1px solid;
+}
+
+.LightMode .HoverProfile .bio{
+    background-color: var(--lightModeTertiary);
+    border:var(--lightModeHighLight) 1px solid;
+}
+
+.EditUserDetails{
+    Height:100%;
+    padding: 1rem;
+}
+
+.DarkMode .EditUserDetails{
+    background-color: var(--DarkModeTertiary);
+}
+
+.LightMode .EditUserDetails{
+    margin-top:5px;
+    background-color: var(--LightModePrimary);
+    border:var(--lightModeHighLight) 1px solid;
+    border-radius: 25px;
+}
+
+.EditUserDetails textarea{
+    width:100%;
+    height:5rem;
+    resize: none;
+}
+
+.DarkMode .EditUserDetails button{
+    background-color: var(--DarkModeHighLight);
+    color:var(--DarkModeFont)
+}
+
+.LightMode .EditUserDetails button{
+    background-color: var(--lightModeHighLight);
+    color:var(--lightModeFont)
+}
+
+.EditUserDetails .LinkPreview{
+    width:100%;
+    min-height:5rem;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    overflow:auto;
+}
+
+.EditUserDetails .LinkPreview .link{
+    margin-top:5px;    
+}
+
+.DarkMode .EditUserDetails .LinkPreview{
+    background-color: var(--DarkModeTertiary);
+    border: 1px solid var(--DarkModeHighLight);
+}
+
+.LightMode .EditUserDetails .LinkPreview{
+    background-color: var(--lightModeTertiary);
+    border: 1px solid var(--lightModeHighLight);
+}
+
+.EditUserDetails .NewIcon{
+    height:80px;
+    aspect-ratio: 1 1;
+    border-radius: 40px;
 }

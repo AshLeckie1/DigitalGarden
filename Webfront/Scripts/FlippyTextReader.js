@@ -1,11 +1,10 @@
-
-
 var Titles = [
     "Digital Garden",
     "Online Backyard",
     "Home Place",
     "The Blog Site",
-    "Welcome to the Amazing Digital Garden"
+    "The Amazing Digital Garden",
+    "Do you like Kombucha?"
 ]
 
 var TitleMaxLength = 45

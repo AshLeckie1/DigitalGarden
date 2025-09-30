@@ -27,14 +27,14 @@ async function checkLogin(){
         }
         else{
             //location.href="login.html"
-            document.getElementById("UserSession").innerHTML = "<a href='login.html'>[ Login ]</a>"
+            document.getElementById("UserSession").innerHTML = "<a href='Login.html'>[ Login ]</a>"
             return false
         }
     
     }else{
         //user is not logged in
         //location.href="login.html"
-        document.getElementById("UserSession").innerHTML = "<a href='login.html'>[ Login ]</a>"
+        document.getElementById("UserSession").innerHTML = "<a href='Login.html'>[ Login ]</a>"
         return false
     }
 }

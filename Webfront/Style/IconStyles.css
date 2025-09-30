@@ -1,0 +1,165 @@
+.LinkPreview .link .remove{
+    cursor:pointer;
+    padding-left:1rem;
+    padding-right:1rem;
+}
+
+.LinkPreview .link .Username{
+    padding-left:1rem;
+    padding-right:1rem;
+    font-size:small;
+}
+
+.LinkPreview .link{
+    display: inline-block;
+    border-radius: 10px;
+}
+
+.LinkPreview .link div{
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    height:32px;    
+
+}
+
+.DarkMode .LinkPreview .link div{
+     border-left: 1px solid var(--DarkModeHighLight);
+}
+
+.LightMode .LinkPreview .link div{
+     border-left: 1px solid var(--lightModeHighLight);
+}
+
+.DarkMode .LinkPreview .link{
+    border: 1px solid var(--DarkModeHighLight);
+    background-color: var(--DarkModeSecondary);
+}
+
+.LightMode .LinkPreview .link{
+    border: 1px solid var(--lightModeHighLight);
+    background-color: var(--lightModeSecondary);
+}
+
+.IconContainer{    
+    height:32px;
+    width:32px;
+    overflow:hidden;
+    border-radius:10px;
+}
+
+.IconContainer img{    
+    margin-left: -1rem;
+    object-fit: cover;
+    width:1000px;
+}
+
+.LightMode img.Github{    
+    margin-left:-750px;
+    margin-top:-95px;
+}
+
+.DarkMode img.Github{    
+    margin-left:-750px;
+    margin-top:-344px;
+}
+
+.LightMode img.Facebook{    
+    margin-left:-80px;
+    margin-top:-95px;
+}
+
+.DarkMode img.Facebook{    
+    margin-left:-80px;
+    margin-top:-344px;
+}
+
+.LightMode img.Twitter{    
+    margin-left:-150;
+    margin-top:-95px;
+}
+
+.DarkMode img.Twitter{    
+    margin-left:-150;
+    margin-top:-344px;
+}
+
+.LightMode img.Instagram{    
+    margin-left:-217px;
+    margin-top:-95px;
+}
+
+.DarkMode img.Instagram{    
+    margin-left:-217px;
+    margin-top:-344px;
+}
+
+.LightMode img.YouTube{    
+    margin-left:-410px;
+    margin-top:-95px;
+}
+
+.DarkMode img.YouTube{    
+    margin-left:-410px;
+    margin-top:-344px;
+}
+
+.LightMode img.Snapchat{    
+    margin-left:-545px;
+    margin-top:-95px;
+}
+
+.DarkMode img.Snapchat{    
+    margin-left:-545px;
+    margin-top:-344px;
+}
+
+.LightMode img.Pinterest{    
+    margin-left:-615px;
+    margin-top:-95px;
+}
+
+.DarkMode img.Pinterest{    
+    margin-left:-615px;
+    margin-top:-344px;
+}
+
+.LightMode img.Threads{    
+    margin-left:-815px;
+    margin-top:-95px;
+}
+
+.DarkMode img.Threads{    
+    margin-left:-815px;
+    margin-top:-344px;
+}
+
+.LightMode img.Reddit{    
+    margin-left:-215px;
+    margin-top:-180px;
+}
+
+.DarkMode img.Reddit{    
+    margin-left:-215px;
+    margin-top:-435px;
+}
+
+.LightMode img.Discord{    
+    margin-left:-280px;
+    margin-top:-180px;
+}
+
+.DarkMode img.Discord{    
+    margin-left:-280px;
+    margin-top:-435px;
+}
+
+.LightMode img.BlueSky{    
+    margin-left:-550px;
+    margin-top:-185px;
+}
+
+.DarkMode img.BlueSky{    
+    margin-left:-550px;
+    margin-top:-435px;
+}
