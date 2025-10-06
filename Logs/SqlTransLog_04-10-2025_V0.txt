@@ -1,0 +1,59 @@
+04/10/2025 20:26  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:26  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:30  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:31  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:33  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 2, 5; 
+04/10/2025 20:33  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:35  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:35  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:37  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:37  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:37  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:38  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 20:38  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:39  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 20:39  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:40  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 20:41  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:42  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:42  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:42  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:43  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 20:43  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 20:45  [INFO] SQL REQUEST - INSERT INTO posts (ID,PostData,Stage,UserID)VALUES('d84140e5-9939-4cc9-9325-c44c332a65df','{"ID":"d84140e5-9939-4cc9-9325-c44c332a65df","Created":"04/10/2025 20:45","Modified":"04/10/2025 20:45","Author":"dc21302d-89e0-11f0-9275-000c298d25c1"}','DRAFT','dc21302d-89e0-11f0-9275-000c298d25c1') 
+04/10/2025 20:45  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 21:09  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 21:25  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'undefined' 
+04/10/2025 21:25  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 21:25  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 21:25  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 21:25  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = '[object Object]' 
+04/10/2025 21:30  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 21:30  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 21:30  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 21:30  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = '[object Object]' 
+04/10/2025 21:31  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 21:31  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 21:31  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 21:31  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 21:31  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 21:31  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 21:53  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 22:04  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 22:14  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 22:14  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 22:14  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 22:14  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 22:14  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 22:20  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 22:20  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 22:20  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 22:27  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 22:27  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 22:27  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 22:27  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 22:27  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+04/10/2025 22:27  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 22:27  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+04/10/2025 22:27  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+04/10/2025 22:27  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 

@@ -17,6 +17,14 @@ body{
     margin: 0;
 }
 
+.DarkMode hr{
+    border: 1px solid var(--DarkModeHighLight);
+}
+
+.LightMode hr{
+    border: 1px solid var(--lightModeHighLight)
+}
+
 body.LightMode{
     background-color: var(--LightModePrimary);
     color: var(--lightModeFont)
@@ -85,8 +93,11 @@ body.DarkMode{
 }
 
 .UserIcon{
+
     height:50px;
+    width: 50px;
     border-radius: 25px;
+    object-fit: cover;
 }
 
 #UserSession{
@@ -316,6 +327,7 @@ body.DarkMode{
     height:30rem;
     margin-bottom: -30rem;
     border-radius: 25px;
+    transition: display 2s ease-in-out;
 }
 
 .DarkMode .HoverProfile{
@@ -388,10 +400,12 @@ body.DarkMode{
 .EditUserDetails{
     Height:100%;
     padding: 1rem;
+    padding-bottom: 10rem;
+
 }
 
 .DarkMode .EditUserDetails{
-    background-color: var(--DarkModeTertiary);
+    background-color: var(--DarkModeSecondary);
 }
 
 .LightMode .EditUserDetails{
@@ -417,16 +431,22 @@ body.DarkMode{
     color:var(--lightModeFont)
 }
 
+.LinkPreview{
+    cursor: pointer;  
+}
+
 .EditUserDetails .LinkPreview{
     width:100%;
     min-height:5rem;
     border-radius: 5px;
     margin-bottom: 5px;
     overflow:auto;
+    
 }
 
 .EditUserDetails .LinkPreview .link{
-    margin-top:5px;    
+    margin-top:5px;  
+   
 }
 
 .DarkMode .EditUserDetails .LinkPreview{
@@ -441,6 +461,90 @@ body.DarkMode{
 
 .EditUserDetails .NewIcon{
     height:80px;
-    aspect-ratio: 1 1;
+    width: 80px;
     border-radius: 40px;
+    object-fit: cover;
+}
+
+.DarkMode .UserSettings{
+    background-color: var(--DarkModeSecondary);
+}
+
+.LightMode .UserSettings{
+    margin-top:5px;
+    background-color: var(--LightModePrimary);
+    border:var(--lightModeHighLight) 1px solid;
+    border-radius: 25px;
+}
+
+.UserSettings{
+    Height:100%;
+    padding: 1rem;
+    
+}
+
+.UserSettings #Alias{
+    text-align: center;
+    margin: 0;
+}
+
+.UserSettings #UsernameDisplay{
+    text-align: center;
+    font-size:medium;
+}
+
+.UserSettings ul{
+    list-style-type: none;
+}
+
+.UserSettings li{
+    margin:0;
+    vertical-align: middle;
+    height:2rem;
+    padding: 1rem;
+}
+
+.UserSettings li button{
+    float:right;
+    margin-top: -1rem;
+}
+
+.DarkMode button{
+    background-color: var(--DarkModeTertiary);
+    color:var(--DarkModeFont)
+}
+
+.LightMode .UserSettings li button{
+    background-color: var(--lightModeSecondary);
+}
+
+.UserSettings li.link.logout{
+    color:rgb(245, 120, 120);
+}
+
+.UserSettings li.link{
+    cursor: pointer;
+}
+
+.DarkMode .UserSettings li.link:hover{
+    background-color: var(--DarkModeTertiary);
+}
+
+.UserSettings .UserIcon{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height:150px;
+    width:150px;
+
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.UserSettings .backButton{
+    cursor: pointer;
+}
+
+.UserSettings .backButton:hover{
+    font-weight: bold;
 }

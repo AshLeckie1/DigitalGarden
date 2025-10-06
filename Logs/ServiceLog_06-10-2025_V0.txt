@@ -1,0 +1,87 @@
+06/10/2025 21:47 [BOOT] DigitalGarden Started! 
+06/10/2025 21:47 [BOOT] Version: undefined 
+06/10/2025 21:47 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 21:47 [BOOT] Port: 3000 
+06/10/2025 21:47 [BOOT] Connected to Database! 
+06/10/2025 22:02 [BOOT] DigitalGarden Started! 
+06/10/2025 22:02 [BOOT] Port: 3000 
+06/10/2025 22:02 [BOOT] Version: undefined 
+06/10/2025 22:02 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 22:02 [BOOT] Connected to Database! 
+06/10/2025 22:08 [INFO] User Admin logged in successfully 
+06/10/2025 23:04 [BOOT] DigitalGarden Started! 
+06/10/2025 23:04 [BOOT] Port: 3000 
+06/10/2025 23:04 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:04 [BOOT] Version: undefined 
+06/10/2025 23:04 [BOOT] Connected to Database! 
+06/10/2025 23:07 [INFO] User Admin logged in successfully 
+06/10/2025 23:11 [BOOT] DigitalGarden Started! 
+06/10/2025 23:11 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:11 [BOOT] Port: 3000 
+06/10/2025 23:11 [BOOT] Version: undefined 
+06/10/2025 23:11 [BOOT] Connected to Database! 
+06/10/2025 23:11 [INFO] User Admin logged in successfully 
+06/10/2025 23:20 [BOOT] DigitalGarden Started! 
+06/10/2025 23:20 [BOOT] Port: 3000 
+06/10/2025 23:20 [BOOT] Version: undefined 
+06/10/2025 23:20 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:20 [BOOT] Connected to Database! 
+06/10/2025 23:21 [INFO] User Admin logged in successfully 
+06/10/2025 23:25 [BOOT] DigitalGarden Started! 
+06/10/2025 23:25 [BOOT] Port: 3000 
+06/10/2025 23:25 [BOOT] Version: undefined 
+06/10/2025 23:25 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:25 [BOOT] Connected to Database! 
+06/10/2025 23:26 [INFO] User Adminfailed to login 
+06/10/2025 23:26 [INFO] User Admin logged in successfully 
+06/10/2025 23:27 [BOOT] DigitalGarden Started! 
+06/10/2025 23:27 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:27 [BOOT] Version: undefined 
+06/10/2025 23:27 [BOOT] Port: 3000 
+06/10/2025 23:27 [BOOT] Connected to Database! 
+06/10/2025 23:27 [INFO] User Admin logged in successfully 
+06/10/2025 23:29 [BOOT] DigitalGarden Started! 
+06/10/2025 23:29 [BOOT] Version: undefined 
+06/10/2025 23:29 [BOOT] Port: 3000 
+06/10/2025 23:29 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:29 [BOOT] Connected to Database! 
+06/10/2025 23:29 [INFO] User Adminfailed to login 
+06/10/2025 23:29 [INFO] User Admin logged in successfully 
+06/10/2025 23:38 [BOOT] DigitalGarden Started! 
+06/10/2025 23:38 [BOOT] Port: 3000 
+06/10/2025 23:38 [BOOT] Version: undefined 
+06/10/2025 23:38 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:38 [BOOT] Connected to Database! 
+06/10/2025 23:38 [INFO] User Admin logged in successfully 
+06/10/2025 23:39 [BOOT] DigitalGarden Started! 
+06/10/2025 23:39 [BOOT] Version: undefined 
+06/10/2025 23:39 [BOOT] Port: 3000 
+06/10/2025 23:39 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:39 [BOOT] Connected to Database! 
+06/10/2025 23:39 [INFO] User Admin logged in successfully 
+06/10/2025 23:44 [BOOT] DigitalGarden Started! 
+06/10/2025 23:44 [BOOT] Version: undefined 
+06/10/2025 23:44 [BOOT] Port: 3000 
+06/10/2025 23:44 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:44 [BOOT] Connected to Database! 
+06/10/2025 23:44 [INFO] User Adminfailed to login 
+06/10/2025 23:44 [INFO] User Admin logged in successfully 
+06/10/2025 23:46 [BOOT] DigitalGarden Started! 
+06/10/2025 23:46 [BOOT] Version: undefined 
+06/10/2025 23:46 [BOOT] Port: 3000 
+06/10/2025 23:46 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:46 [BOOT] Connected to Database! 
+06/10/2025 23:46 [INFO] User Admin logged in successfully 
+06/10/2025 23:55 [BOOT] DigitalGarden Started! 
+06/10/2025 23:55 [BOOT] Version: undefined 
+06/10/2025 23:55 [BOOT] Port: 3000 
+06/10/2025 23:55 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:55 [BOOT] Connected to Database! 
+06/10/2025 23:55 [INFO] User Admin logged in successfully 
+06/10/2025 23:56 [ERROR] Couldn't convert Image err : Error: Mime type image/webp does not support decoding 
+06/10/2025 23:58 [BOOT] DigitalGarden Started! 
+06/10/2025 23:58 [BOOT] Version: undefined 
+06/10/2025 23:58 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+06/10/2025 23:58 [BOOT] Port: 3000 
+06/10/2025 23:58 [BOOT] Connected to Database! 
+06/10/2025 23:59 [INFO] User Admin logged in successfully 

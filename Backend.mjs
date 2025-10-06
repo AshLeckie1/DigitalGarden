@@ -10,6 +10,10 @@ import crypto from 'crypto'
 import path from 'path';
 import { marked } from "marked";
 import showdown from "showdown";
+import multer from "multer";
+import { Jimp } from "jimp";
+
+const FileUpload = multer({ dest: 'data/TempUploads/' })
 
 
 const __dirname = path.resolve();
@@ -36,10 +40,8 @@ app.listen(CONFIG.NodePort, () => {
 
 app.use(cors(corsOptions));
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
-
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit:'1GB'}))
 
 //connect to database
 let SQLConnection = await mysql.createConnection({
@@ -569,13 +571,22 @@ app.post('/GetUserDetails',(req,res) =>{
         res.send({"error":"Missing query"});
         return;
     }
+    
+    if(req.body.hasOwnProperty("SessionID")){
+        var temp = $UserSessions.find(obj => {
+            return obj.SessionID === req.body.SessionID
+        })
+        var UserID = temp.ID
 
-    var UserID = req.body.UserID
-
+    }else{
+        var UserID = req.body.UserID
+    }
+    console.log(UserID)
+    
     var sql = `SELECT Username, UserData FROM DigitalGarden.users WHERE ID = '${UserID}'`
 
     SqlQuery(sql).then(result => {
-        //should only be one result so no need to worry abotu potentially sending the data twice
+        //should only be one result so no need to worry about potentially sending the data twice
         var data = result[0]
         data.UserData = JSON.parse(data.UserData)
 
@@ -584,15 +595,83 @@ app.post('/GetUserDetails',(req,res) =>{
 
 });
 
-app.post('/UserModification',(req,res)=>{
+app.post('/UserModification',FileUpload.single("UserIcon"),(req,res)=>{
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body == null) {
         res.send({"error":"Missing query"});
         return;
     }
 
-    console.log(req)
+    console.log(req.file)
+
+    var UserID = IsUserSessionValid(req.body.UserID)
+    //save user icon to server
+  
+    if (!fs.existsSync(`${__dirname}/data/UserIcons/${UserID.UserID}`)){
+        fs.mkdirSync(`${__dirname}/data/UserIcons/${UserID.UserID}`);
+    }
+
+    ProcessImage(req.file,`${__dirname}/data/UserIcons/${UserID.UserID}`,"UserIcon")
+
 });
+
+app.get('/GetUserPfp',(req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.query == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+
+    if(req.query.SessionID){
+        var user = IsUserSessionValid(req.query.SessionID)
+        //check that user icon exists else send default
+        if (fs.existsSync(`${__dirname}/data/UserIcons/${user.UserID}/UserIcon.png`)){
+            res.sendFile(`${__dirname}/data/UserIcons/${user.UserID}/UserIcon.png`)
+        }else
+        {
+            res.sendFile(`${__dirname}/Webfront/Style/Images/DefaultUserProfile.png`)
+        }
+    }
+    else if(req.query.UserID){
+        var UserID = req.query.UserID
+        if (fs.existsSync(`${__dirname}/data/UserIcons/${UserID}/UserIcon.png`)){
+            res.sendFile(`${__dirname}/data/UserIcons/${UserID}/UserIcon.png`)
+        }else
+        {
+            res.sendFile(`${__dirname}/Webfront/Style/Images/DefaultUserProfile.png`)
+        }
+    }else{
+        res.sendFile(`${__dirname}/Webfront/Style/Images/DefaultUserProfile.png`)
+
+    }
+
+
+})
+
+function ProcessImage(File,TargetDropOff,NewName){
+    //add file extension to file
+    var FilePath = `${File.path}.${File.mimetype.replace("image/","")}`
+    fs.rename(
+        File.path,
+        FilePath,
+        () => {
+            //read image into Jimp
+            Jimp.read(FilePath).then(image => {
+                try{
+                    image.write(`${TargetDropOff}/${NewName}.png`,{format:'png'})
+                    fs.unlinkSync(FilePath);
+
+                }catch(err){
+                    log(`[ERROR] Couldn't write Image err : ${err}`,"service")
+
+                } 
+                
+            }) .catch(err => {
+                log(`[ERROR] Couldn't convert Image err : ${err}`,"service")
+            });
+        }
+    )  
+}
 
 function IsUserSessionValid(LoginSession){
     var result = $UserSessions.find(obj => {

@@ -1,0 +1,12 @@
+07/10/2025 00:11  [INFO] SQL REQUEST - SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = 'admin' 
+07/10/2025 00:11  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+07/10/2025 00:11  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+07/10/2025 00:12  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 
+07/10/2025 00:12  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+07/10/2025 00:14  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+07/10/2025 00:14  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+07/10/2025 00:14  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+07/10/2025 00:14  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+07/10/2025 00:15  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+07/10/2025 00:15  [INFO] SQL REQUEST - SELECT Username, UserData FROM DigitalGarden.users WHERE ID = 'dc21302d-89e0-11f0-9275-000c298d25c1' 
+07/10/2025 00:15  [INFO] SQL REQUEST - SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT 0, 5; 

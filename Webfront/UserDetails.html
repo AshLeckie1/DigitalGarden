@@ -19,23 +19,25 @@
 <body class="LightMode" id="body">
     <div class="MainTitle">
         <h1 id="Title"></h1>
-        <button class="ModeSwitch" onclick="ToggleDarkMode()">Light/Dark</button>
         <div id="UserSession"></div>
     </div>
     <div class="container MainBody" > 
         <div class="Row">
             <div class="twelve columns EditUserDetails">
                 <h2>Edit User Details</h2>
-                <form class="w-full space-y-8" id="UserDetailsForm">
+                <form class="w-full space-y-8" id="UserDetailsForm" method="post">
+                    <!-- Hidden items -->
+                    <input name="UserID", id="UserIDinput" hidden>
+                    <!-- User Visible Form -->
                     <div>
                         <label>User Icon</label>
-                        <input id="NewIcon" type="file" accept="image/*"><p>Image should be a 1 to 1 ratio</p>
+                        <input name="UserIcon" id="NewIcon" type="file" accept="image/*"><p>Image should be a 1 to 1 ratio</p>
                         <img src="Style/Images/DefaultUserProfile.png" class="NewIcon" id="PrevIcon">
                         
                     </div>
                     <div>
                         <label>User Alias</label>
-                        <input id="Alias" type="text">
+                        <input name="Alias" id="Alias" type="text">
                     </div>
                     <div>
                         <label>Pronouns</label>
@@ -50,6 +52,7 @@
                             <label>Other</label>
                             <input id="OptionalPronoun" type="text">
                         </span>
+
                     </div>
                     <div>
                         <label>External Links</label>
@@ -58,26 +61,29 @@
                         </div>
                         <div class="input-group grid-cols-[auto_1fr_auto]">
                             <select id="SocialSelection" class="ig-select">
-                                <option value="Github">     <img class="Github" src="Style/Images/SocialIconsSet.png">Github</option>
-                                <option value="Facebook">   <img class="Facebook" src="Style/Images/SocialIconsSet.png">Facebook</option>
-                                <option value="Twitter">    <img class="Twitter" src="Style/Images/SocialIconsSet.png">Twitter</option>
-                                <option value="Instagram">  <img class="Instagram" src="Style/Images/SocialIconsSet.png">Instagram</option>
-                                <option value="YouTube">    <img class="YouTube" src="Style/Images/SocialIconsSet.png">YouTube</option>
-                                <option value="Snapchat">   <img class="Snapchat" src="Style/Images/SocialIconsSet.png">Snapchat</option>
-                                <option value="Pinterest">  <img class="Pinterest" src="Style/Images/SocialIconsSet.png">Pinterest</option>
-                                <option value="Threads">    <img class="Threads" src="Style/Images/SocialIconsSet.png">Threads</option>
-                                <option value="Reddit">     <img class="Reddit" src="Style/Images/SocialIconsSet.png">Reddit</option>
-                                <option value="Discord">    <img class="Discord" src="Style/Images/SocialIconsSet.png">Discord</option>
-                                <option value="BlueSky">    <img class="BlueSky" src="Style/Images/SocialIconsSet.png">BlueSky</option>                            
+                                <option value="Github">    Github</option>
+                                <option value="Facebook">  Facebook</option>
+                                <option value="Twitter">   Twitter</option>
+                                <option value="Instagram"> Instagram</option>
+                                <option value="YouTube">   YouTube</option>
+                                <option value="Snapchat">  Snapchat</option>
+                                <option value="Pinterest"> Pinterest</option>
+                                <option value="Threads">   Threads</option>
+                                <option value="Reddit">    Reddit</option>
+                                <option value="Discord">   Discord</option>
+                                <option value="BlueSky">   BlueSky</option>                            
                             </select>
                             <input id="LinkUsername" type="text" class="ig-input" placeholder="Username">
                             <button class="ig-btn preset-filled" type="button" onclick="AddLink(document.getElementById('SocialSelection').value,document.getElementById('LinkUsername').value)">Add</button>
                             <a target="_blank ">Test Link</a>
+
+                            <!-- JS for links -->
+                            <input name="ExternalLinks" hidden>
                         </div>
                     </div>
                     <div>
                         <label>Bio</label>
-                        <textarea id="Bio"></textarea>
+                        <textarea name="Bio" id="Bio"></textarea>
                     </div>
                     <div>
                         <button type="submit">Save Changes</button>
@@ -105,38 +111,39 @@
     });
 
     $session = {
-        UserID:""
-
+        SessionID:GetUserSession(),
+        UserIconBuffer:""
     }
 
     $(document).ready(function() {
+
+        //set form action
+        document.getElementById("UserDetailsForm").action=`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserDetails`
+        document.getElementById("UserIDinput").value = GetUserSession()
+        document.getElementById("PrevIcon").src = `http://localhost:3000/GetUserPfp?SessionID=${GetUserSession()}`
         // check login
         checkLogin()
 
         //get user details
-        if(new URL(window.location.href).searchParams.get("user") != null){
-                $session.UserID = new URL(window.location.href).searchParams.get("user")
-            GetUserDetails($session.UserID).then(result => {
-                //fill in user details
-                document.getElementById('Alias').value = result.UserData.Alias
-                if(["She/Her","He/Him","They/Them"].includes(result.UserData.ProNouns)){
-                    document.getElementById('Pronouns').value = result.UserData.ProNouns
-                }else{
-                    document.getElementById('Pronouns').value = "Other"
-                    document.getElementById('OptionalPronoun').value = result.UserData.ProNouns
-                }
+       
+        GetUserDetails(GetUserSession()).then(result => {
+            //fill in user details
+            document.getElementById('Alias').value = result.UserData.Alias
+            if(["She/Her","He/Him","They/Them"].includes(result.UserData.ProNouns)){
+                document.getElementById('Pronouns').value = result.UserData.ProNouns
+            }else{
+                document.getElementById('Pronouns').value = "Other"
+                document.getElementById('OptionalPronoun').value = result.UserData.ProNouns
+            }
 
-                if(result.UserData.Links.length > 0){
-                    result.UserData.Links.forEach(link => {
-                        AddLink(link.Title, link.Username)
-                    });
-                }
+            if(result.UserData.Links.length > 0){
+                result.UserData.Links.forEach(link => {
+                    AddLink(link.Title, link.Username)
+                });
+            }
+        });
 
-            });
-        }else{
-            alert("Missing user")
-            window.location = login.html
-        }
+
         async function GetUserDetails(UserID) {
             const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserDetails`, {
                 headers: {
@@ -145,7 +152,7 @@
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    UserID : UserID,
+                    SessionID : UserID,
                 })
             });
 
@@ -159,6 +166,14 @@
             const [file] = imgInp.files
             if (file) {
                 imgPrev.src = URL.createObjectURL(file)
+            }
+
+            convertToBuffer(imgInp)
+
+            async function convertToBuffer(imgInp){
+                // const temp = await imgInp.files[0].arrayBuffer()
+                // $session.UserIconBuffer = String.fromCharCode.apply(null, new Uint8Array(temp))
+                $session.UserIconBuffer = await imgInp.files[0].arrayBuffer()
             }
         }
 
@@ -186,6 +201,45 @@
         }
 
     })
+
+    function readFile(event) {
+        $session.UserIconBlob = event.target.result
+    }
+
+    function changeFile() {
+        var file =  document.getElementById("NewIcon").files[0];
+        var reader = new FileReader();
+        reader.addEventListener('load', readFile);
+        reader.readAsText(file);
+    }
+
+
+    function SaveChanges(){
+        $session['Alias'] = document.getElementById("Alias").value
+        $session['Bio'] = document.getElementById("Bio").value
+
+        var Pronouns = document.getElementById("Pronouns")
+        if(["She/Her","He/Him","They/Them"].includes(Pronouns)){
+            $session['Pronouns'] = Pronouns
+        }else{
+            $session['Pronouns'] = document.getElementById('OptionalPronoun').value
+        }
+
+        SaveChangesServerRequest()
+    }
+
+    async function SaveChangesServerRequest(){
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/UserModification`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify($session)
+        });
+
+        return response.json()
+    }
 
     function ToggleDarkMode(){
         if(localStorage.DarkMode == "true"){

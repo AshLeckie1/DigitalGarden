@@ -14,12 +14,13 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="Scripts/config.js"></script>
+    <script src="Scripts/userPopup.js"></script>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SH20RAJ/ShowdownCSS@main/showdown.css">
 </head>
 <body class="LightMode" id="body">
     <div class="MainTitle">
         <h1 id="Title"></h1>
-        <button class="ModeSwitch" onclick="ToggleDarkMode()">Light/Dark</button>
         <div id="UserSession"></div>
     </div>
     <div class="container MainBody" > 
@@ -132,13 +133,13 @@
                         <div class='PostInfo'>
                             <span class='UserDetails' 
                                 <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> 
-                                <span class="PostUsername" onmouseover=" $('#${PostID}').show()" onmouseout=" $('#${PostID}').hide()" id="Username${PostData.ID}">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
+                                <span class="PostUsername" onmouseover="ShowUserPopup('${PostID}','${PostData.ID}')" id="Username${PostData.ID}" onmouseout="HideUserPopup('${PostID}')">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
                             <span class='PostDate'>
                                 ${formattedDate}
                             </span>
-                            <div class="HoverProfile" id="${PostID}" onmouseover=" $('#${PostID}').show()" onmouseout=" $('#${PostID}').hide()">
+                            <div class="HoverProfile" id="${PostID}" onmouseover="IsMouseInElement('${PostID}',true)" onmouseout="IsMouseInElement('${PostID}',false); HideUserPopup('${PostID}')" data-is-mouse-in=false>
                                 <div class="row ProfileTitle">
-                                    <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> 
+                                    <img class='UserIcon' src='http://localhost:3000/GetUserPfp?UserID=${PostData.Author}'> 
                                     <span class="Alias">${PostUserData.Alias}</span>
                                     <span class="Subtext">${PostUserData.Subtext}</spans>
                                 </div>
