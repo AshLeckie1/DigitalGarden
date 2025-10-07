@@ -14,6 +14,8 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="Scripts/config.js"></script>
+    <script src="Scripts/LightDarkMode.js"></script>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SH20RAJ/ShowdownCSS@main/showdown.css">
 </head>
 <body class="LightMode" id="body">
@@ -24,10 +26,14 @@
     <div class="container MainBody" > 
         <div class="Row">
             <div class="twelve columns EditUserDetails">
-                <h2>Edit User Details</h2>
+                <div class="PageBackButton" >
+                    <span onclick="window.history.go(-1);">⬅ Edit User Details</span>
+                </div>
                 <form class="w-full space-y-8" id="UserDetailsForm" method="post">
                     <!-- Hidden items -->
-                    <input name="UserID", id="UserIDinput" hidden>
+                    <input name="UserID" id="UserIDinput" hidden>
+                    <input name="UserLinks" id="UserLinksInput" value="[]" hidden>
+                    <input name="Subtext" id="SubtextInput" hidden>
                     <!-- User Visible Form -->
                     <div>
                         <label>User Icon</label>
@@ -41,7 +47,7 @@
                     </div>
                     <div>
                         <label>Pronouns</label>
-                        <Select id="Pronouns" onchange="checkIfOther()">
+                        <Select id="Pronouns" name="Pronouns" onchange="checkIfOther()">
                             <option selected disabled >-- please select a pronoun --</option>
                             <option value="She/Her">She/Her</option>
                             <option value="He/Him">He/Him</option>
@@ -50,7 +56,7 @@
                         </Select>
                         <span id="OptionalPronounCont" hidden>
                             <label>Other</label>
-                            <input id="OptionalPronoun" type="text">
+                            <input id="OptionalPronoun" Name="OptionalPronoun" type="text">
                         </span>
 
                     </div>
@@ -61,21 +67,21 @@
                         </div>
                         <div class="input-group grid-cols-[auto_1fr_auto]">
                             <select id="SocialSelection" class="ig-select">
-                                <option value="Github">    Github</option>
+                                 <option value="Github">    Github</option>
                                 <option value="Facebook">  Facebook</option>
                                 <option value="Twitter">   Twitter</option>
                                 <option value="Instagram"> Instagram</option>
                                 <option value="YouTube">   YouTube</option>
-                                <option value="Snapchat">  Snapchat</option>
+                                <!-- <option value="Snapchat">  Snapchat</option> -->
                                 <option value="Pinterest"> Pinterest</option>
                                 <option value="Threads">   Threads</option>
                                 <option value="Reddit">    Reddit</option>
                                 <option value="Discord">   Discord</option>
-                                <option value="BlueSky">   BlueSky</option>                            
+                                <option value="BlueSky">   BlueSky</option>                         
                             </select>
                             <input id="LinkUsername" type="text" class="ig-input" placeholder="Username">
                             <button class="ig-btn preset-filled" type="button" onclick="AddLink(document.getElementById('SocialSelection').value,document.getElementById('LinkUsername').value)">Add</button>
-                            <a target="_blank ">Test Link</a>
+                            <a target="_blank" onclick="TestLink()" id="TestLink">Test Link</a>
 
                             <!-- JS for links -->
                             <input name="ExternalLinks" hidden>
@@ -128,7 +134,12 @@
        
         GetUserDetails(GetUserSession()).then(result => {
             //fill in user details
+
+            document.getElementById("SubtextInput").value = result.UserData.Subtext
+
             document.getElementById('Alias').value = result.UserData.Alias
+            document.getElementById('Bio').value = result.UserData.Bio
+
             if(["She/Her","He/Him","They/Them"].includes(result.UserData.ProNouns)){
                 document.getElementById('Pronouns').value = result.UserData.ProNouns
             }else{
@@ -141,6 +152,26 @@
                     AddLink(link.Title, link.Username)
                 });
             }
+        //setup on leave 
+        let formSubmitting = false;
+        const notifyUser = (e) => {
+        if (formSubmitting) {
+            return;
+        }
+
+        const message = 'You have unsaved changes. Are you sure you want to leave?';
+        (e || window.event).returnValue = message; // For Gecko + IE
+        return message; // For Webkit, Safari, Chrome, etc.
+        };
+
+        window.addEventListener("beforeunload", notifyUser);
+
+        const setFormSubmitting = () => {
+        formSubmitting = true;
+        };
+
+        document.querySelector('form').onsubmit = setFormSubmitting;
+        
         });
 
 
@@ -183,23 +214,6 @@
             TriggerChange("Title")
             setTimeout(TitleLoop,10000)
         }
-
-        //check for dark/light mode
-        //localStorage.setItem('SessionID',json.loginSession.SessionID)
-
-        if(localStorage.DarkMode == undefined){
-            localStorage.setItem('DarkMode',false)
-            document.getElementById("body").classList.add("LightMode")
-        }
-
-        if(localStorage.DarkMode == "false"){
-            document.getElementById("body").classList.remove("DarkMode")
-            document.getElementById("body").classList.add("LightMode")
-        }else{
-            document.getElementById("body").classList.remove("LightMode")
-            document.getElementById("body").classList.add("DarkMode")
-        }
-
     })
 
     function readFile(event) {
@@ -213,49 +227,45 @@
         reader.readAsText(file);
     }
 
+    var SocialMediaLinks = [
+        {Title:"Facebook",Link:"https://www.facebook.com/"},
+        {Title:"Twitter",Link:"https://x.com/"},
+        {Title:"Instagram",Link:"https://www.instagram.com/"},
+        {Title:"YouTube",Link:"https://www.youtube.com/"},
+        {Title:"Pinterest",Link:"https://uk.pinterest.com/"},
+        {Title:"Threads",Link:"https://www.threads.com/"},
+        {Title:"Reddit",Link:"https://www.reddit.com/user/"},
+        {Title:"Discord",Link:"https://discordapp.com/users/"},
+        {Title:"BlueSky",Link:"https://bsky.app/profile/"},
+        {Title:"Github",Link:"https://github.com/"}
+    ]
 
-    function SaveChanges(){
-        $session['Alias'] = document.getElementById("Alias").value
-        $session['Bio'] = document.getElementById("Bio").value
+    function TestLink(){
+        var siteTitle = document.getElementById("SocialSelection").value
+        var site = SocialMediaLinks.filter(function(e){
+            if(e.Title == siteTitle){return e}
+        })
 
-        var Pronouns = document.getElementById("Pronouns")
-        if(["She/Her","He/Him","They/Them"].includes(Pronouns)){
-            $session['Pronouns'] = Pronouns
-        }else{
-            $session['Pronouns'] = document.getElementById('OptionalPronoun').value
-        }
-
-        SaveChangesServerRequest()
-    }
-
-    async function SaveChangesServerRequest(){
-        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/UserModification`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify($session)
-        });
-
-        return response.json()
-    }
-
-    function ToggleDarkMode(){
-        if(localStorage.DarkMode == "true"){
-            localStorage.setItem('DarkMode',false)
-            document.getElementById("body").classList.remove("DarkMode")
-            document.getElementById("body").classList.add("LightMode")
-        }else{
-            localStorage.setItem('DarkMode',true)
-            document.getElementById("body").classList.remove("LightMode")
-            document.getElementById("body").classList.add("DarkMode")
-        }
+        var Username = document.getElementById("LinkUsername").value
+        console.log(`${site[0].Link}${Username}`)
+        window.open(`${site[0].Link}${Username}`, '_blank');
     }
     
     function AddLink(SiteName,Username){
         var LinkId = uuidv4()
         
+        var site = SocialMediaLinks.filter(function(e){
+            if(e.Title == SiteName){return e}
+        })[0]
+
+        //add link to form input
+        var FormInput =  JSON.parse(document.getElementById("UserLinksInput").value)
+        site["Username"] = document.getElementById("LinkUsername").value
+        site["FormID"] = LinkId
+        FormInput.push(site)
+        document.getElementById("UserLinksInput").value = JSON.stringify(FormInput)
+
+
         document.getElementById('LinkPreview').innerHTML += `
         <div id="${LinkId}" class="link">
             <div class="IconContainer">
@@ -272,6 +282,13 @@
 
     function RemoveLink(ID){
         document.getElementById(ID).remove()
+
+        //remove form from input
+        var FormInput =  JSON.parse(document.getElementById("UserLinksInput").value)
+        FormInput = FormInput.filter(function(e){
+            if(e.FormID != ID){return e}
+        })
+        document.getElementById("UserLinksInput").value = JSON.stringify(FormInput)
     }
     
     function uuidv4() {

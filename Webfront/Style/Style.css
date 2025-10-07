@@ -13,6 +13,7 @@
 }
 
 body{
+    background-color: black;
     height:100%;
     margin: 0;
 }
@@ -104,6 +105,13 @@ body.DarkMode{
     position:absolute;
     bottom:0;
     right:3rem;
+}
+
+#UserSession .UserIcon{
+    height:100px;
+    width:100px;
+    border-radius: 50px;
+    margin-right: -2rem;
 }
 
 #UserSession #Username{
@@ -541,10 +549,25 @@ body.DarkMode{
     object-fit: cover;
 }
 
-.UserSettings .backButton{
+.PageBackButton{
+    cursor: pointer;
+    font-size: large;
+    padding-bottom:2rem;
+}
+
+.DarkMode .PageBackButton:hover{
+    text-shadow:0px 0px 2px var(--DarkModeFont);
+}
+
+.LightMode .PageBackButton:hover{
+    text-shadow:0px 0px 2px var(--lightModeFont);
+}
+
+#TestLink{
     cursor: pointer;
 }
 
-.UserSettings .backButton:hover{
-    font-weight: bold;
+.LinkPreview .remove:hover{
+    color:rgb(255, 143, 143);
+    text-shadow:0px 0px 2px  rgb(255, 143, 143);
 }

@@ -603,15 +603,41 @@ app.post('/UserModification',FileUpload.single("UserIcon"),(req,res)=>{
     }
 
     console.log(req.file)
+    console.log(req.body)
 
     var UserID = IsUserSessionValid(req.body.UserID)
-    //save user icon to server
-  
-    if (!fs.existsSync(`${__dirname}/data/UserIcons/${UserID.UserID}`)){
-        fs.mkdirSync(`${__dirname}/data/UserIcons/${UserID.UserID}`);
+    //save user icon to server if on is attached
+    if(req.file != undefined){
+        if (!fs.existsSync(`${__dirname}/data/UserIcons/${UserID.UserID}`)){
+            fs.mkdirSync(`${__dirname}/data/UserIcons/${UserID.UserID}`);
+        }
+
+        ProcessImage(req.file,`${__dirname}/data/UserIcons/${UserID.UserID}`,"UserIcon")
+    }
+    //save user changes to database
+
+    //filter out unneeded info from links
+    var UserLinks = JSON.parse(req.body.UserLinks)
+    UserLinks = UserLinks.map((e)=>{
+        return {"Title":e.Title,"Username":e.Username,"Link":e.Link}
+    })
+
+    if(req.body.Pronouns == "Other"){
+        var Pronouns = req.body.OptionalPronoun
+    }else{
+        var Pronouns = req.body.Pronouns
     }
 
-    ProcessImage(req.file,`${__dirname}/data/UserIcons/${UserID.UserID}`,"UserIcon")
+    var UserData = {
+        "Alias":req.body.Alias,
+        "Subtext":req.body.Subtext,
+        "ProNouns":Pronouns,
+        "Links":UserLinks,
+        "Bio":req.body.Bio
+    }
+
+    var sql = `UPDATE digitalgarden.users SET UserData = '${JSON.stringify(UserData)}' WHERE ID = '${UserID.UserID}'`
+    SqlQuery(sql)
 
 });
 

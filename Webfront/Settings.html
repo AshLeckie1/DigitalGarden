@@ -14,6 +14,8 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="Scripts/config.js"></script>
+    <script src="Scripts/LightDarkMode.js"></script>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SH20RAJ/ShowdownCSS@main/showdown.css">
 </head>
 <body class="LightMode" id="body">
@@ -25,8 +27,8 @@
     <div class="container MainBody" > 
         <div class="Row">
             <div class="twelve columns UserSettings">
-                <div>
-                    <span class="backButton" onclick="window.history.go(-1);">⬅ Settings</span>
+                <div class="PageBackButton" >
+                    <span onclick="window.history.go(-1);">⬅ Settings</span>
                 </div>
 
                 <img id="UserIcon" class='UserIcon' src='Style/Images/DefaultUserProfile.png'>
@@ -84,19 +86,6 @@
             document.getElementById('Alias').innerHTML = result.UserData.Alias
             document.getElementById('UsernameDisplay').innerHTML = result.Username
             document.getElementById("UserIcon").src = `http://localhost:3000/GetUserPfp?SessionID=${GetUserSession()}`
-
-            // if(["She/Her","He/Him","They/Them"].includes(result.UserData.ProNouns)){
-            //     document.getElementById('Pronouns').value = result.UserData.ProNouns
-            // }else{
-            //     document.getElementById('Pronouns').value = "Other"
-            //     document.getElementById('OptionalPronoun').value = result.UserData.ProNouns
-            // }
-
-            // if(result.UserData.Links.length > 0){
-            //     result.UserData.Links.forEach(link => {
-            //         AddLink(link.Title, link.Username)
-            //     });
-            // }
         });
 
 
@@ -114,34 +103,6 @@
 
             return response.json()
         }
-
-        if(localStorage.DarkMode == undefined){
-            localStorage.setItem('DarkMode',false)
-            document.getElementById("body").classList.add("LightMode")
-        }
-
-        if(localStorage.DarkMode == "false"){
-            document.getElementById("body").classList.remove("DarkMode")
-            document.getElementById("body").classList.add("LightMode")
-        }else{
-            document.getElementById("body").classList.remove("LightMode")
-            document.getElementById("body").classList.add("DarkMode")
-        }
     })
-
-    
-        function ToggleDarkMode(){
-            if(localStorage.DarkMode == "true"){
-                localStorage.setItem('DarkMode',false)
-                document.getElementById("body").classList.remove("DarkMode")
-                document.getElementById("body").classList.add("LightMode")
-            }else{
-                localStorage.setItem('DarkMode',true)
-                document.getElementById("body").classList.remove("LightMode")
-                document.getElementById("body").classList.add("DarkMode")
-            }
-        }
-
-
 </script>
 </html>

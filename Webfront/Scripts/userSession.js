@@ -22,12 +22,8 @@ async function checkLogin(){
            //document.cookie=`sessionLogin = ${json.SessionID};` 
    
             document.getElementById("UserSession").innerHTML = `
-            <img class="UserIcon" src='http://localhost:3000/GetUserPfp?UserID=${json.UserID}'>
-            <span id="Username">
-                ${json.Username.split('@')[0]}
-            </span> 
-            <br> 
-            <button onclick="window.location.href='Settings.html';">Settings</button>
+            <img class="UserIcon" onclick="window.location.href='Settings.html';" src='http://localhost:3000/GetUserPfp?UserID=${json.UserID}'>
+            
         `
             return true
                 
