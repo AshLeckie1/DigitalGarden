@@ -12,6 +12,7 @@ import { marked } from "marked";
 import showdown from "showdown";
 import multer from "multer";
 import { Jimp } from "jimp";
+import imageThumbnail from "image-thumbnail"
 
 const FileUpload = multer({ dest: 'data/TempUploads/' })
 
@@ -87,6 +88,38 @@ function decrypt(text) {
 
 // Code From End
 
+// Timer Jobs
+PurgeEmptyDrafts()
+function PurgeEmptyDrafts(){
+
+    //get all drafts
+    SqlQuery(`SELECT ID FROM digitalgarden.posts WHERE Stage = "DRAFT"`).then(result =>{
+        result.forEach(draft => {
+            if(!fs.existsSync(`${__dirname}\\data\\POSTS\\${draft.ID}\\post.md`)){
+                //if the post.md file dosnt exist delete the folder
+                var sql = `DELETE FROM DigitalGarden.posts WHERE ID = '${draft.ID}'`
+                SqlQuery(sql).then(result =>{
+                    if(result.affectedRows > 0){
+                        //file was removed from DB
+                        //delete folder from server
+                        fs.rmSync(`${__dirname}\\data\\POSTS\\${draft.ID}`, { recursive: true, force: true });
+                        log(`[INFO] Deleted Empty Draft ${draft.ID}`,"service")
+                    }else{ 
+                        log(`[ERROR] There was an error deleting empty Draft ${draft.ID}`,"service")
+                    }
+                })
+            }
+        });
+    })
+
+    //set to run again
+    setTimeout(PurgeEmptyDrafts,3600000)
+}
+
+
+
+// Requests
+
 app.post('/NewUser', (req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     
@@ -99,13 +132,19 @@ app.post('/NewUser', (req,res) => {
    try{
 
         //assign all req values
-        var Username = req.body.Username
-        var Password = req.body.Password
+        var Username = req.body.username
+        var Password = req.body.password
         var InviteKey = req.body.InviteKey
-        var UserData = req.body.UserData
+        var UserData = `{
+            "Alias":"${Username}",
+            "Subtext":"",
+            "ProNouns":"",
+            "Links":[],
+            "Bio":""
+        } `
 
         //check invite key is valid
-        var sqlInviteKey = `SELECT * FROM DigitalGarden.invite_tokens WHERE ID = '${InviteKey}' AND Expiration > NOW()`
+        var sqlInviteKey = `SELECT * FROM DigitalGarden.invite_tokens WHERE ID = '${InviteKey}' AND date(Experation) > NOW()`
         var sqlExistingUser = `SELECT COUNT(ID) AS users FROM DigitalGarden.users WHERE UPPER(Username) = '${Username.toUpperCase()}'`
         const allPromise = Promise.all([SqlQuery(sqlInviteKey),SqlQuery(sqlExistingUser)])
         allPromise.then(result  =>{
@@ -512,6 +551,34 @@ app.post('/PostDraft', (req,res) =>{
     });
 });
 
+app.post('/DeletePost',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    //get user
+    var User = IsUserSessionValid(req.body.SessionID)
+    
+    if(!User.login){
+        res.status(403).send({"error":true,"msg":"User session not valid"})
+    }
+
+    var sql = `DELETE FROM DigitalGarden.posts WHERE UserID = '${User.UserID}' AND ID = '${req.body.PostID}'`
+    SqlQuery(sql).then(result =>{
+        if(result.affectedRows > 0){
+            //file was removed from DB
+            //delete folder from server
+            fs.rmSync(`${__dirname}\\data\\POSTS\\${PostID}`, { recursive: true, force: true });
+            res.status(200).send({"error":false,"msg":"Post Deleted"})
+        }else{
+            res.status(500).send({"error":true,"msg":"Either post missing or User session is incorrect"})
+        }
+    })
+
+})
+
 app.post('/GetFeed', (req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body == null) {
@@ -542,6 +609,54 @@ app.post('/GetFeed', (req,res) => {
                 PostGetLimit:CONFIG.PostGetLimit
             }
         )
+    })
+
+})
+
+app.post('/GetFeedByUser', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var pos = req.body.pos
+    if(pos == undefined){
+        pos = 0
+    }
+
+    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID and users.Username = '${req.body.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+    SqlQuery(sql).then(result => {
+
+        var posts = result.map(e=>{
+            var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
+            let converter = new showdown.Converter(),
+            Posthtml = converter.makeHtml(postText.toString());
+            e["PostHtml"] = Posthtml
+
+            return e
+
+        })
+
+        var sql = `SELECT Username, ID, UserData FROM DigitalGarden.users WHERE Username = '${req.body.UserID}'`
+
+        SqlQuery(sql).then(result => {
+            //should only be one result so no need to worry about potentially sending the data twice
+            var data = result[0]
+
+
+            res.send(
+            {
+                userID:result[0].userID,
+                userInfo:JSON.parse(data.UserData),
+                posts:posts,
+                PostGetLimit:CONFIG.PostGetLimit
+            }
+        )
+        })
+
+
+        
     })
 
 })
@@ -601,9 +716,6 @@ app.post('/UserModification',FileUpload.single("UserIcon"),(req,res)=>{
         res.send({"error":"Missing query"});
         return;
     }
-
-    console.log(req.file)
-    console.log(req.body)
 
     var UserID = IsUserSessionValid(req.body.UserID)
     //save user icon to server if on is attached
@@ -674,7 +786,99 @@ app.get('/GetUserPfp',(req,res) => {
 
 })
 
+app.post('/AddImageToPost',FileUpload.single("Image"),(req,res) => {
+     res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+
+    try{
+        var PostID = req.body.PostID
+        if(req.file != undefined){
+            if (!fs.existsSync(`${__dirname}/data/POSTS/${PostID}/Images`)){
+                fs.mkdirSync(`${__dirname}/data/POSTS/${PostID}/Images`);
+            }
+            ProcessImage(req.file,`${__dirname}/data/POSTS/${PostID}/Images`,uuidv4())
+            res.status(200).send({"error":false,"msg":"Img Uploaded"})
+        }else{
+            res.status(400).send({"error":true,"msg":"Missing File!"})
+        }
+    }catch(err){
+        res.status(500).send({"error":true,"msg":err})
+    }
+})
+
+app.get('/GetImagesInPost',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.query == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+
+    try{
+        var PostID = req.query.PostID
+        var Images = fs.readdirSync(`${__dirname}/data/POSTS/${PostID}/Images`);
+        Images = Images.map(function(e){
+            return `/data/POSTS/${PostID}/Images/${e}`
+        })
+        res.send(Images)
+
+    }catch(err){
+        res.status(500).send({"error":true,"msg":err})
+    }
+})
+
+app.get('/GetImageThumbnail',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.query == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+
+    try{
+        var FilePath = `${__dirname}\\${req.query.ImgUrl}`
+        CreateThumb(FilePath).then(thumb => {
+            console.log(thumb)
+            res.send(thumb)
+        })
+        
+
+    }catch(err){
+        res.status(500).send({"error":true,"msg":err})
+    }
+
+    async function CreateThumb(FilePath) {
+        var options = {height:100,withMetaData:true}
+        return await imageThumbnail(FilePath,options)
+    }
+})
+
+app.get('/GetImage',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.query == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+
+    try{
+        var FilePath = `${__dirname}\\${req.query.ImgUrl}`
+        res.sendFile(FilePath)
+        
+
+    }catch(err){
+        res.status(500).send({"error":true,"msg":err})
+    }
+
+    async function CreateThumb(FilePath) {
+        return await imageThumbnail(FilePath)
+    }
+})
+
+
+
 function ProcessImage(File,TargetDropOff,NewName){
+    console.log(File)
     //add file extension to file
     var FilePath = `${File.path}.${File.mimetype.replace("image/","")}`
     fs.rename(
@@ -682,19 +886,29 @@ function ProcessImage(File,TargetDropOff,NewName){
         FilePath,
         () => {
             //read image into Jimp
-            Jimp.read(FilePath).then(image => {
-                try{
-                    image.write(`${TargetDropOff}/${NewName}.png`,{format:'png'})
-                    fs.unlinkSync(FilePath);
+            if(File.mimetype == 'image/png'){
+                //move file to destination
+                fs.rename(FilePath,`${TargetDropOff}/${NewName}.png`,function (err) {
+                    if (err){
+                        log(`[ERROR] Couldn't move Image err : ${err}`,"service")
+                    }
+                })
+            }else{
+                //convert file to png
+                Jimp.read(FilePath).then(image => {
+                    try{
+                        image.write(`${TargetDropOff}/${NewName}.png`,{format:'png'})
+                        fs.unlinkSync(FilePath);
 
-                }catch(err){
-                    log(`[ERROR] Couldn't write Image err : ${err}`,"service")
+                    }catch(err){
+                        log(`[ERROR] Couldn't write Image err : ${err}`,"service")
 
-                } 
-                
-            }) .catch(err => {
-                log(`[ERROR] Couldn't convert Image err : ${err}`,"service")
-            });
+                    } 
+                    
+                }) .catch(err => {
+                    log(`[ERROR] Couldn't convert Image err : ${err}`,"service")
+                });
+            }
         }
     )  
 }

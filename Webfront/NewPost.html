@@ -21,6 +21,7 @@
     </script>
     <title>New Post</title>
 </head>
+<iframe  name="dummyframe" id="dummyframe" hidden onchange="PopulateImagesInSelection()"></iframe>
 <body class="LightMode" id="body">
      <div class="MainTitle">
         <h1 id="Title" style = "font-family: Consolas;"></h1>
@@ -30,11 +31,28 @@
         <div class="PageBackButton" >
             <span onclick="window.history.go(-1);">⬅ Post Editor</span>
         </div>
+        <div class="UploadImage" id="UploadImage" hidden>
+            <div>
+                <h5 id="Title">Draft Images</h5>
+                <h5 id="Close" onclick="ToggleImageUpload()">X</h5>
+            </div>
+            <form id="UploadImageForm" method="post" enctype="multipart/form-data" target="dummyframe">
+                <input name="Image" id="ImageUpload" type="file" accept="image/*" required>
+                <input name="PostID" id="PostID" value="" hidden>
+                <button type="submit" >Upload</button>
+            </form>
+            <div class="Images" >
+                <ul id="UploadedImages">
+
+                </ul>
+            </div>
+        </div>
         <div class="Row">
             <div class="six columns">
                 <h2>Editor</h2>
                 <ul class="PostEditor">
                     <li><span id="saveStatus"></span></li>
+                    <li><button onclick="ToggleImageUpload()">Add Image</button></li>
                     <li><button onclick="SaveDraftAsPost()">post</button></li>
                 </ul>
                 <textarea id="Editor"></textarea>
@@ -71,7 +89,9 @@
 
     $(document).ready(function() {
         //check login
-        checkLogin()
+        checkLogin().then(result =>{
+            if(!result){window.location.href= "index.html"}
+        })
 
         console.log(window.location.href)
         try{
@@ -83,9 +103,9 @@
                 GetPost($Session.DraftID).then(result => {
                     //check that post is a draft
                     if(result.Stage == "DRAFT"){
-                        document.getElementById("Editor").innerHTML = result.PostText
+                        document.getElementById("Editor").innerHTML = result.PostText.replace(/(<([^>]+)>)/ig, '')
                         document.getElementById("saveStatus").innerHTML = "Draft Loaded"
-
+                        PopulateImagesInSelection()
                         //update md preview but prevent saving to DB
                         cooldown = true
                         setTimeout(clearTimeout,5000)
@@ -127,8 +147,46 @@
         }catch{
            
         }
+
+        document.getElementById("PostID").value=$Session.DraftID
+        document.getElementById("UploadImageForm").action = `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/AddImageToPost`
     })
+
+    function ToggleImageUpload(){
+         var x = document.getElementById("UploadImage");
+        if (x.hidden == true) {
+            x.hidden = false;
+        } else {
+            x.hidden = true;
+        }
+    }
     
+    function PopulateImagesInSelection(){
+
+        document.getElementById("UploadImageForm").reset()
+
+        GetImages().then(Imgs =>{
+            var html = ""
+            Imgs.forEach(Img => {
+                html += `<li><img src="http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImageThumbnail?ImgUrl=${Img}"><button onclick="GetImageEmbed('${Img}')">Copy Embed</button></li>`
+            });
+
+            document.getElementById("UploadedImages").innerHTML = html
+            
+        })
+
+        async function GetImages() {
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImagesinPost?PostID=${$Session.DraftID}`)
+            return response.json()
+        }
+    }
+
+    function GetImageEmbed(Img){
+        
+        //close image upload
+        ToggleImageUpload()
+        navigator.clipboard.writeText(`![](http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImage?ImgUrl=${Img})`)
+    }
 
     function SaveDraftAsPost(){
         

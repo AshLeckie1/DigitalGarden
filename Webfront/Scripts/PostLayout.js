@@ -23,8 +23,8 @@ function CreatePost(post){
     var Post = `
     <div class='PostContainer' data-UserDataId='${PostID}'>
         <div class='PostInfo'>
-            <span class='UserDetails' 
-                <img class='UserIcon' src='Style/Images/DefaultUserProfile.png'> 
+            <span class='UserDetails'>
+                <img class='UserIcon' src='http://localhost:3000/GetUserPfp?UserID=${PostData.Author}'> 
                 <span class="PostUsername" onmouseover="ShowUserPopup('${PostID}','${PostData.ID}')" id="Username${PostData.ID}" onmouseout="HideUserPopup('${PostID}')">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
             <span class='PostDate'>
                 ${formattedDate}
@@ -48,12 +48,27 @@ function CreatePost(post){
                 </div>
             </div>
         </div>
-        <div class="PostText">
+        <div class="PostText" id="${PostID}_Textarea">
             ${post.PostHtml}   
         </div>
+        <button class="ExpansionButton" id="${PostID}_Expand" onclick="Expand('${PostID}')">Expand</button>
     </div>
     `
-
+    setTimeout(()=>{isPostNotOverflown(PostID)},200)
     return Post
                     
+}
+
+function Expand(PostID){
+    var element = document.getElementById(`${PostID}_Textarea`)
+    element.classList.add("Expanded")
+    document.getElementById(`${PostID}_Expand`).remove()
+}
+
+function isPostNotOverflown(elementID) {
+    var element = document.getElementById(`${elementID}_Textarea`)
+    if(!(element.scrollHeight > element.clientHeight)){
+        //remove expand button
+        document.getElementById(`${elementID}_Expand`).remove()
+    }
 }

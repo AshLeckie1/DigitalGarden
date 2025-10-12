@@ -4,3 +4,31 @@
 08/10/2025 00:07 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
 08/10/2025 00:07 [BOOT] Connected to Database! 
 08/10/2025 00:07 [INFO] User Admin logged in successfully 
+08/10/2025 22:47 [BOOT] DigitalGarden Started! 
+08/10/2025 22:47 [BOOT] Version: undefined 
+08/10/2025 22:47 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+08/10/2025 22:47 [BOOT] Port: 3000 
+08/10/2025 22:47 [BOOT] Connected to Database! 
+08/10/2025 23:04 [INFO] User Admin logged in successfully 
+08/10/2025 23:11 [ERROR] Couldn't convert Image err : Error: unrecognised content at end of stream 
+08/10/2025 23:12 [ERROR] Couldn't convert Image err : Error: unrecognised content at end of stream 
+08/10/2025 23:16 [BOOT] DigitalGarden Started! 
+08/10/2025 23:16 [BOOT] Port: 3000 
+08/10/2025 23:16 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+08/10/2025 23:16 [BOOT] Version: undefined 
+08/10/2025 23:16 [BOOT] Connected to Database! 
+08/10/2025 23:16 [INFO] User Admin logged in successfully 
+08/10/2025 23:16 [ERROR] Couldn't convert Image err : Error: unrecognised content at end of stream 
+08/10/2025 23:19 [BOOT] DigitalGarden Started! 
+08/10/2025 23:19 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+08/10/2025 23:19 [BOOT] Port: 3000 
+08/10/2025 23:19 [BOOT] Version: undefined 
+08/10/2025 23:19 [BOOT] Connected to Database! 
+08/10/2025 23:20 [INFO] User Admin logged in successfully 
+08/10/2025 23:22 [BOOT] DigitalGarden Started! 
+08/10/2025 23:22 [BOOT] Version: undefined 
+08/10/2025 23:22 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
+08/10/2025 23:22 [BOOT] Port: 3000 
+08/10/2025 23:22 [BOOT] Connected to Database! 
+08/10/2025 23:22 [INFO] User Adminfailed to login 
+08/10/2025 23:22 [INFO] User Admin logged in successfully 

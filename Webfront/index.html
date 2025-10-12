@@ -28,10 +28,10 @@
     <div class="container MainBody" > 
         <div class="Row">
             <div class="twelve columns">
-                <div class="MainNav">
-                    <h3 onclick="location.href='NewPost.html'">New Post</h3>
-                    <h3>User Account</h3>
-                    <h3>Tags</h3>
+                <div class="MainNav" id="MainNav">
+                    <h3 onclick="location.href='NewPost.html'" id="NavNewPost">New Post</h3>
+                    <h3 id="NavUserAccount">User Account</h3>
+                    <h3 id="NavTags">Tags</h3>
                     
                 </div>
             </div>   
@@ -80,6 +80,7 @@
 
             feed.posts.forEach(post => {
                     document.getElementById("Feed").innerHTML += CreatePost(post)  
+                    
             });
 
             $session.postPos = $session.postPos + feed.posts.length

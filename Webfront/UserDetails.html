@@ -260,7 +260,7 @@
 
         //add link to form input
         var FormInput =  JSON.parse(document.getElementById("UserLinksInput").value)
-        site["Username"] = document.getElementById("LinkUsername").value
+        site["Username"] = Username
         site["FormID"] = LinkId
         FormInput.push(site)
         document.getElementById("UserLinksInput").value = JSON.stringify(FormInput)

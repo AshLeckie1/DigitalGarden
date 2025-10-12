@@ -99,6 +99,12 @@ body.DarkMode{
     width: 50px;
     border-radius: 25px;
     object-fit: cover;
+    overflow:hidden;
+}
+
+.UserIcon:hover{
+    filter: brightness(50%);
+     
 }
 
 #UserSession{
@@ -149,7 +155,28 @@ body.DarkMode{
 .PostContainer .PostText{
     border-radius: 20px;
     margin:5px;
-    padding:5px;
+    padding-left:5%;
+    padding-right:5%;
+    padding-top:2rem;
+    padding-bottom:2rem;
+    max-height:30rem;
+    overflow: hidden;
+}
+
+.ExpansionButton{
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 2rem;
+    left: calc(50% - 5rem);
+    opacity: 80%;
+}
+
+.PostContainer .PostText.Expanded{
+    max-Height:none;
+}
+
+.PostContainer .PostText img{
+    max-width:100%;
 }
 
 .DarkMode .PostContainer .PostText blockquote{
@@ -392,7 +419,7 @@ body.DarkMode{
     border-radius:5px;
     height:15rem;
     padding:5px;
-    overflow:scroll
+    overflow:wrap;
 }
 
 .DarkMode .HoverProfile .bio{
@@ -570,4 +597,80 @@ body.DarkMode{
 .LinkPreview .remove:hover{
     color:rgb(255, 143, 143);
     text-shadow:0px 0px 2px  rgb(255, 143, 143);
+}
+
+.UploadImage{
+    position: absolute;
+    padding:1rem;
+    z-index: 3;
+    width:40rem;
+    height:40rem;
+    border-radius: 1rem;
+
+}
+
+.DarkMode .UploadImage{
+    background-color: var(--DarkModeSecondary);
+    border: 1px solid var(--DarkModeHighLight);
+}
+
+.LightMode .UploadImage{
+    background-color: var(--LightModePrimary);
+    border: 1px solid var(--lightModeHighLight);
+}
+
+.UploadImage .Images{
+    width:100%;
+    height:25rem;
+    overflow-y: scroll;
+}
+
+.UploadImage .Images #UploadedImages{
+    list-style: none;
+}
+
+.UploadImage .Images #UploadedImages img{
+    margin-top: 4px;
+    margin-left: 4px;
+}
+.DarkMode .UploadImage .Images #UploadedImages li{
+    margin:0;
+}
+
+.DarkMode .UploadImage .Images #UploadedImages li{
+    border-top:1px solid var(--DarkModeHighLight)
+}
+
+.LightMode .UploadImage .Images #UploadedImages li{
+    border-top:1px solid var(--lightModeHighLight)
+}
+
+.UploadImage .Images #UploadedImages button{
+    margin-right: 1rem;
+    margin-top: 25px;
+    float:right
+}
+
+.DarkMode .UploadImage .Images{
+    background-color: var(--DarkModeTertiary);
+}
+
+.LightMode .UploadImage .Images{
+    background-color: var(--lightModeTertiary);
+}
+
+.UploadImage #Title{
+    width:50%;
+    float:left;
+}
+
+.UploadImage #Close{
+    width:10%;
+    float: right;
+    cursor: pointer;
+    text-align: right;
+}
+
+.UploadImage #Close:hover{
+    color:rgb(252, 135, 135);
 }
