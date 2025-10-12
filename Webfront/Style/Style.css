@@ -674,3 +674,22 @@ body.DarkMode{
 .UploadImage #Close:hover{
     color:rgb(252, 135, 135);
 }
+
+.CreateInviteLink{
+    padding-bottom: 1rem;
+    width:100%;
+    height:3rem;
+}
+
+.CreateInviteLink input{
+    width:80%;
+    height:3rem;
+}
+
+.CreateInviteLink button{
+    margin:0 !important;
+}
+
+.UserSettings li:has(.CreateInviteLink){
+    height:5rem;
+} 

@@ -21,7 +21,7 @@
     </script>
     <title>New Post</title>
 </head>
-<iframe  name="dummyframe" id="dummyframe" hidden onchange="PopulateImagesInSelection()"></iframe>
+<iframe  name="dummyframe" id="dummyframe" hidden></iframe>
 <body class="LightMode" id="body">
      <div class="MainTitle">
         <h1 id="Title" style = "font-family: Consolas;"></h1>
@@ -36,10 +36,10 @@
                 <h5 id="Title">Draft Images</h5>
                 <h5 id="Close" onclick="ToggleImageUpload()">X</h5>
             </div>
-            <form id="UploadImageForm" method="post" enctype="multipart/form-data" target="dummyframe">
+            <form id="UploadImageForm" method="post" enctype="multipart/form-data" target="dummyframe"  onsubmit="setTimeout(PopulateImagesInSelection,500)">
                 <input name="Image" id="ImageUpload" type="file" accept="image/*" required>
                 <input name="PostID" id="PostID" value="" hidden>
-                <button type="submit" >Upload</button>
+                <button type="submit">Upload</button>
             </form>
             <div class="Images" >
                 <ul id="UploadedImages">
@@ -165,10 +165,13 @@
 
         document.getElementById("UploadImageForm").reset()
 
+        //set draft id
+       document.getElementById("PostID").value=$Session.DraftID
+
         GetImages().then(Imgs =>{
             var html = ""
             Imgs.forEach(Img => {
-                html += `<li><img src="http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImageThumbnail?ImgUrl=${Img}"><button onclick="GetImageEmbed('${Img}')">Copy Embed</button></li>`
+                html += `<li><img src="http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImageThumbnail?ImgUrl=${Img}"><input value="![](http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImage?ImgUrl=${Img})" readonly><button onclick="AddImage('${Img}')">Add</button></li>`
             });
 
             document.getElementById("UploadedImages").innerHTML = html
@@ -179,13 +182,22 @@
             const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImagesinPost?PostID=${$Session.DraftID}`)
             return response.json()
         }
+    }  
+
+    function AddImage(Img){
+        document.getElementById("Editor").value += `![](http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImage?ImgUrl=${Img})`
+        updateMD()
     }
 
     function GetImageEmbed(Img){
         
         //close image upload
         ToggleImageUpload()
-        navigator.clipboard.writeText(`![](http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImage?ImgUrl=${Img})`)
+        navigator.clipboard.writeText(`![](http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImage?ImgUrl=${Img})`).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
     }
 
     function SaveDraftAsPost(){
@@ -294,6 +306,17 @@
             (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
         );
     }
+
+    //store mouse position
+    $MousePos = {x:0,y:0}
+    document.addEventListener('mousedown', function(event) {
+        $MousePos.x = event.clientX
+        $MousePos.y = event.clientY
+        console.log()
+        if(document.elementFromPoint($MousePos.x, $MousePos.y) == document.getElementById(`Editor`)){
+            document.getElementById("UploadImage").hidden = true
+        }        
+    });
 
 </script>
 

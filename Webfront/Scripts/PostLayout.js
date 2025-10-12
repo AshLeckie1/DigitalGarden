@@ -24,15 +24,15 @@ function CreatePost(post){
     <div class='PostContainer' data-UserDataId='${PostID}'>
         <div class='PostInfo'>
             <span class='UserDetails'>
-                <img class='UserIcon' src='http://localhost:3000/GetUserPfp?UserID=${PostData.Author}'> 
-                <span class="PostUsername" onmouseover="ShowUserPopup('${PostID}','${PostData.ID}')" id="Username${PostData.ID}" onmouseout="HideUserPopup('${PostID}')">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
+                <img class='UserIcon' src='http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${PostData.Author}' onclick="window.location.href='user.html?user=${post.Username}'"> 
+                <span class="PostUsername" onclick="window.location.href='user.html?user=${post.Username}'" onmouseover="ShowUserPopup('${PostID}','${PostData.ID}')" id="Username${PostData.ID}" onmouseout="HideUserPopup('${PostID}')">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
             <span class='PostDate'>
                 ${formattedDate}
             </span>
             <div class="HoverProfile" id="${PostID}" onmouseover="IsMouseInElement('${PostID}',true)" onmouseout="IsMouseInElement('${PostID}',false); HideUserPopup('${PostID}')" data-is-mouse-in=false hidden>
                 <div class="row ProfileTitle">
-                    <img class='UserIcon' src='http://localhost:3000/GetUserPfp?UserID=${PostData.Author}'> 
-                    <span class="Alias">${PostUserData.Alias}</span>
+                    <img class='UserIcon' onclick="window.location.href='user.html?user=${post.Username}'" src='http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${PostData.Author}'> 
+                    <span class="Alias" onclick="window.location.href='user.html?user=${post.Username}'" >${PostUserData.Alias}</span>
                     <span class="Subtext">${PostUserData.Subtext}</spans>
                 </div>
                 <div class="row">

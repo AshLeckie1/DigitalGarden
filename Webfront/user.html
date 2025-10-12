@@ -25,14 +25,21 @@
         <h1 id="Title"></h1>
         <div id="UserSession"></div>
     </div>
+   
     <div class="container MainBody" > 
         <div class="Row">
-            <div class="twelve columns">
+            <div class="twelve columns UserSettings">
                 <div class="UserDetails">
                     <img id="UserIcon" class='UserIcon' src='Style/Images/DefaultUserProfile.png'>
                     <h2 id="Alias"></h2>
                 </div>
             </div>   
+        </div>
+         <div class="MainNav" id="MainNav">
+            <h3 onclick="location.href='NewPost.html'" id="NavNewPost">New Post</h3>
+            <h3 id="NavIndex" onclick="location.href='index.html'">Homepage</h3>
+            <h3 id="NavTags">Tags</h3>
+            
         </div>
         <div class="Row">
             <div class="twelve columns">
@@ -45,7 +52,9 @@
 <script>
 
     $session = {
-        postPos:0
+        postPos:0,
+        UserID:""
+
     }
 
     $(document).ready(function() {
@@ -61,10 +70,10 @@
 
         if(new URL(window.location.href).searchParams.get("user") != null){
             //get user ID
-            var UserID = new URL(window.location.href).searchParams.get("user")
+            $session.UserID = new URL(window.location.href).searchParams.get("user")
 
             //get feed
-            GetFeed(0,UserID)
+            GetFeed(0)
         }else{
             alert("User not found!")
             window.location.href = "index.html"
@@ -73,12 +82,12 @@
         
     })
 
-    function GetFeed(pos,UserID){
-        PostGetFeed(pos,UserID).then(feed => {
+    function GetFeed(pos){
+        PostGetFeed(pos).then(feed => {
             console.log(feed)
 
             document.getElementById('Alias').innerHTML = feed.userInfo.Alias
-            document.getElementById("UserIcon").src = `http://localhost:3000/GetUserPfp?UserID=${feed.userID}`
+            document.getElementById("UserIcon").src = `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${feed.userID}`
 
             try{
                 document.getElementById("NoPostDiv").remove()
@@ -118,7 +127,7 @@
             return response.json()
         }
 
-        async function PostGetFeed(pos,UserID ) {
+        async function PostGetFeed(pos) {
             const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetFeedByUser`, {
                 headers: {
                     'Accept': 'application/json',
@@ -127,7 +136,7 @@
                 method: "POST",
                 body: JSON.stringify({
                     pos : pos,
-                    UserID : UserID
+                    UserID : $session.UserID 
                 })
             });
 

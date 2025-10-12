@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Document</title>
@@ -37,8 +37,9 @@
                     <!-- User Visible Form -->
                     <div>
                         <label>User Icon</label>
-                        <input name="UserIcon" id="NewIcon" type="file" accept="image/*"><p>Image should be a 1 to 1 ratio</p>
+                        
                         <img src="Style/Images/DefaultUserProfile.png" class="NewIcon" id="PrevIcon">
+                        <input name="UserIcon" id="NewIcon" type="file" accept="image/*">
                         
                     </div>
                     <div>
@@ -105,13 +106,14 @@
         e.preventDefault();
         var fd = new FormData($(this)[0]);
         $.ajax({
-            url: 'http://localhost:3000/UserModification',
+            url: `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/UserModification`,
             data: fd,
             processData: false,
             contentType: false,
             type: 'POST',
             success: function(data){
                 console.log(data);
+                alert("Changes Saved!")
             }
         });
     });
@@ -126,7 +128,7 @@
         //set form action
         document.getElementById("UserDetailsForm").action=`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserDetails`
         document.getElementById("UserIDinput").value = GetUserSession()
-        document.getElementById("PrevIcon").src = `http://localhost:3000/GetUserPfp?SessionID=${GetUserSession()}`
+        document.getElementById("PrevIcon").src = `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?SessionID=${GetUserSession()}`
         // check login
         checkLogin()
 
@@ -143,8 +145,15 @@
             if(["She/Her","He/Him","They/Them"].includes(result.UserData.ProNouns)){
                 document.getElementById('Pronouns').value = result.UserData.ProNouns
             }else{
-                document.getElementById('Pronouns').value = "Other"
-                document.getElementById('OptionalPronoun').value = result.UserData.ProNouns
+                if(result.UserData.ProNouns != ""){
+                    document.getElementById('Pronouns').value = "Other"
+                    document.getElementById('OptionalPronoun').value = result.UserData.ProNouns
+                    $("#OptionalPronounCont").show()
+                }
+
+                //else its most likely a new user leave blank
+
+                
             }
 
             if(result.UserData.Links.length > 0){

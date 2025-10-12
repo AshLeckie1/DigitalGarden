@@ -22,7 +22,7 @@ async function checkLogin(){
            //document.cookie=`sessionLogin = ${json.SessionID};` 
    
             document.getElementById("UserSession").innerHTML = `
-            <img class="UserIcon" onclick="window.location.href='Settings.html';" src='http://localhost:3000/GetUserPfp?UserID=${json.UserID}'>  
+            <img class="UserIcon" onclick="window.location.href='Settings.html';" src='http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${json.UserID}'>  
             `
             if(document.getElementById("NavUserAccount")){
                 $("#NavUserAccount").click(function (){location.href=`user.html?user=${json.Username}`})
@@ -40,6 +40,8 @@ async function checkLogin(){
             if(document.getElementById("NavNewPost")){
                 document.getElementById("NavNewPost").remove()
                 document.getElementById("NavUserAccount").remove()
+                document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
+
             }
             return false
         }
@@ -51,11 +53,11 @@ async function checkLogin(){
 
          //check if there is nav
         if(document.getElementById("NavNewPost")){
+            document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
             document.getElementById("NavNewPost").remove()
             document.getElementById("NavUserAccount").remove()
-            document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
+            
         }
-
 
         return false
     }

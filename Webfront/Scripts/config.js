@@ -1,4 +1,4 @@
 const CONFIG = {
-    nodeserver:"localhost",
+    nodeserver:"192.168.1.97",
     nodeport:"3000"
 }

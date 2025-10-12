@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Document</title>
@@ -43,6 +43,13 @@
                     <li class="link" onclick="window.location.href='UserDetails.html'">
                         Edit User Profile
                     </li>
+                    <li>
+                        Create Invite Link
+                        <div class="CreateInviteLink">
+                            <input id="InviteLink" readonly>
+                            <button onclick="CreateShareLink()">Create Link</button>
+                        </div>
+                    </li>
                 </ul>
                 <hr>
                 <ul>
@@ -60,7 +67,7 @@
         e.preventDefault();
         var fd = new FormData($(this)[0]);
         $.ajax({
-            url: 'http://localhost:3000/UserModification',
+            url: `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/UserModification`,
             data: fd,
             processData: false,
             contentType: false,
@@ -85,7 +92,7 @@
             //fill in user details
             document.getElementById('Alias').innerHTML = result.UserData.Alias
             document.getElementById('UsernameDisplay').innerHTML = result.Username
-            document.getElementById("UserIcon").src = `http://localhost:3000/GetUserPfp?SessionID=${GetUserSession()}`
+            document.getElementById("UserIcon").src = `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?SessionID=${GetUserSession()}`
         });
 
 
@@ -104,5 +111,34 @@
             return response.json()
         }
     })
+
+    function CreateShareLink(){
+
+        async function getLink(){
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/CreateInvite?SessionID=${GetUserSession()}`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "GET"
+            })
+
+            return response.json()
+        }
+        
+
+        getLink().then(result => {
+            if(!result.error){
+                document.getElementById("InviteLink").value = result.InviteLink
+            }
+            else{
+                alert(result.msg)
+            }
+        })
+
+        
+
+    }
+
 </script>
 </html>
