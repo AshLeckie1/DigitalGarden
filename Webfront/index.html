@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title>Digital Garden</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="Scripts/FlippyTextReader.js"></script>
@@ -25,16 +25,21 @@
         <h1 id="Title"></h1>
         <div id="UserSession"></div>
     </div>
+    <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
+    </div>
     <div class="container MainBody" > 
-        <div class="Row">
+        <!-- <div class="Row">
             <div class="twelve columns">
                 <div class="MainNav" id="MainNav">
                     <h3 onclick="location.href='NewPost.html'" id="NavNewPost">New Post</h3>
-                    <h3 id="NavUserAccount">User Account</h3>
+                    <h3 id="NavUserAccount">Profile</h3>
                     <h3 id="NavTags">Tags</h3>
                 </div>
             </div>   
-        </div>
+        </div> -->
         <div class="Row">
             <div class="twelve columns">
                 <div id="Feed">
@@ -62,7 +67,26 @@
 
         //Get Feed
         GetFeed(0)
+
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
+
     })
+
+    $(window).resize(function() {
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
+    });
 
     function GetFeed(pos){
         PostGetFeed(pos).then(feed => {

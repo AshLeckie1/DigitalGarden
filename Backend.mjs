@@ -709,10 +709,15 @@ app.post('/GetDrafts', (req,res) => {
         SqlQuery(sql).then(result => {
 
             var posts = result.map(e=>{
-                var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
-                let converter = new showdown.Converter(),
-                Posthtml = converter.makeHtml(postText.toString());
-                e["PostHtml"] = Posthtml
+                if(fs.existsSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)){
+                    var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
+                    let converter = new showdown.Converter(),
+                    Posthtml = converter.makeHtml(postText.toString());
+                    e["PostHtml"] = Posthtml
+                }else{
+                     e["PostHtml"] = ""
+                }
+                
 
                 return e
 
@@ -863,9 +868,6 @@ app.post('/SetUserBackground',FileUpload.single("BackgroundImage"),(req,res)=>{
     }else{
         res.send({"error":true,"msg":"Missing File"})
     }
-
-    
-
 });
 
 app.get('/GetUserBackground',(req,res) => {

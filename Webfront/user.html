@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="Scripts/FlippyTextReader.js"></script>
@@ -25,17 +25,21 @@
         <h1 id="Title"></h1>
         <div id="UserSession"></div>
     </div>
-   
+   <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
+    </div>
     <div class="container MainBody" id="MainBody" > 
-        <div class="MainNav" id="MainNav">
+        <!-- <div class="MainNav" id="MainNav">
             <h3 onclick="location.href='NewPost.html'" id="NavNewPost">New Post</h3>
             <h3 id="NavIndex" onclick="location.href='index.html'">Homepage</h3>
             <h3 id="NavTags">Tags</h3>
-        </div>
+        </div> -->
         <div id="EditUserPage" hidden>
-            <form method="post"  enctype="multipart/form-data" id="SetUserBackgroundForm">
+            <form method="post"  enctype="multipart/form-data" id="SetUserBackgroundForm" >
                 <h4>Edit Page</h4>
-                <h4 class="close">✕</h4>
+                <h4 class="close" onclick="ToggleImageUpload()">✕</h4>
                 <label>Background Image</label>    
                 <input type="file" name="BackgroundImage" id="BackgroundImage">
                 <input value="" name="SessionID" id="EditPageSessionID" hidden>
@@ -74,9 +78,43 @@
 
     }
 
+    $('#SetUserBackgroundForm').submit(function (e) {
+        e.preventDefault();
+        var fd = new FormData($(this)[0]);
+        $.ajax({
+            url: `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/SetUserBackground`,
+            data: fd,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(data){
+                console.log(data);
+                alert("Changes Saved!")
+                window.location.reload()
+            }
+        });
+    });
+
+    $(window).resize(function() {
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
+    });
+
+
     $(document).ready(function() {
         
-       
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
 
         //set site title
         TitleLoop()
@@ -111,7 +149,7 @@
                     if(UserDetails.Username == $session.UserID){
                     document.getElementById("WhereTheEditButtonGoes").innerHTML += `<button onclick="ToggleImageUpload()">Edit</button>`
 
-                    document.getElementById("SetUserBackgroundForm").action=`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/SetUserBackground`
+                    //document.getElementById("SetUserBackgroundForm").action=`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/SetUserBackground`
                     document.getElementById('EditPageSessionID').value = GetUserSession()
                 } 
                 })
@@ -145,6 +183,7 @@
         PostGetFeed(pos).then(feed => {
             console.log(feed)
 
+            document.title = `${feed.userInfo.Alias} - Digital Garden`
             document.getElementById('Alias').innerHTML = feed.userInfo.Alias
             document.getElementById("UserIcon").src = `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${feed.userID}`
             document.getElementById('bio').innerHTML = feed.userInfo.Bio

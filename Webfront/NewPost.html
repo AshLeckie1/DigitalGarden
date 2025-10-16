@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>New Post - Digital Garden</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
@@ -26,6 +27,11 @@
      <div class="MainTitle">
         <h1 id="Title" style = "font-family: Consolas;"></h1>
         <div id="UserSession"></div>
+    </div>
+    <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
     </div>
     <div class="container MainBody"> 
         <div class="PageBackButton" >
@@ -88,6 +94,16 @@
     });
     }
 
+    $(window).resize(function() {
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
+    });
+
     $(document).ready(function() {
         //check login
         checkLogin().then(result => {
@@ -95,6 +111,14 @@
                 window.location.href = "/"
             }
         })        
+
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
         
 
         console.log(window.location.href)

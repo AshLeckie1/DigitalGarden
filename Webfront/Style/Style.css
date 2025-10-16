@@ -37,7 +37,6 @@ body.DarkMode{
 }
 
 .MainBody{
-   
     height:100%;
     padding-bottom: 5rem;
 }
@@ -770,4 +769,78 @@ body.DarkMode{
     margin-top:1rem;
     margin-right: 1rem;
     float:right;
+    
+}
+
+#EditUserPage{
+    position:absolute;
+    z-index: 3;
+    border-radius: 15px;
+    padding:2rem;
+}
+
+#EditUserPage h4{
+    max-width:40%;
+    display: inline;
+}
+
+#EditUserPage .close{
+    float: right;
+    text-align: right;
+    cursor: pointer;
+}
+
+#EditUserPage .close:hover{
+    color:rgb(255, 143, 143)
+}
+
+.DarkMode #EditUserPage{
+    background-color: var(--DarkModeTertiary);
+    
+}
+
+.LightMode #EditUserPage{
+    background-color: var(--lightModeTertiary);
+}
+
+.SideNav{
+    position:fixed;
+    width:20rem;
+    padding-top: 1rem;
+    padding-left: 1rem;
+}
+
+
+.SideNav li{
+    font-size: large;
+    list-style: none;
+    padding:0.5rem;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 25px;
+}
+
+.SideNav #logout{
+    color:rgb(255, 147, 147);
+}
+
+.DarkMode .SideNav li{
+    background-color: var(--DarkModeSecondary);
+    
+}
+
+.LightMode .SideNav li{
+    background-color: var(--lightModeSecondary);
+    
+}
+
+.DarkMode .SideNav li:hover{
+    background-color: var(--DarkModeTertiary);
+    font-weight: bolder;
+    
+}
+
+.LightMode .SideNav li:hover{
+    background-color: var(--lightModeTertiary);
+    font-weight: bolder;
 }

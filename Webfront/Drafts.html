@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title>Drafts - Digital Garden</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="Scripts/FlippyTextReader.js"></script>
@@ -25,7 +25,11 @@
        <h1 id="Title"></h1>
         <div id="UserSession"></div>
     </div>
-   
+   <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
+    </div>
     <div class="container MainBody" > 
         <div class="Row">
             <div class="twelve columns UserSettings">
@@ -34,11 +38,11 @@
                 </div>
             </div>   
         </div>
-         <div class="MainNav" id="MainNav">
+         <!-- <div class="MainNav" id="MainNav">
             <h3 onclick="location.href='NewPost.html'" id="NavNewPost">New Post</h3>
             <h3 id="NavIndex" onclick="location.href='index.html'">Homepage</h3>
             <h3 id="NavTags">Tags</h3>
-        </div>
+        </div> -->
         <div class="Row">
             <div class="twelve columns">
                 <div id="Feed">
@@ -76,6 +80,16 @@
         
     })
 
+    $(window).resize(function() {
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
+    });
+    
     function GetFeed(pos){
         PostGetFeed(pos).then(feed => {
             console.log(feed)

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title>Settings - Digital Garden</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="Scripts/FlippyTextReader.js"></script>
@@ -23,6 +23,11 @@
         <h1 id="Title"></h1>
         
         <div id="UserSession"></div>
+    </div>
+    <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
     </div>
     <div class="container MainBody" > 
         <div class="Row">
@@ -85,6 +90,17 @@
         UserID:""
     }
 
+
+    $(window).resize(function() {
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
+    });
+
     $(document).ready(function() {
         // check login
         checkLogin().then(result => {
@@ -93,7 +109,14 @@
             }
         })        
         
-
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
+        
         //get user details
        
         GetUserDetails(GetUserSession()).then(result => {

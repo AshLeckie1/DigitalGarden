@@ -29,6 +29,16 @@ async function checkLogin(){
                 }
             }catch(e){}
 
+            var html = `
+                    <li onclick="window.location.href='/'">Home</li>
+                    <li onclick="window.location.href='/'">Tags</li>
+                    <li onclick="window.location.href='/newPost.html'">Post</li>
+                    <li onclick="window.location.href='/user.html?ID=${json.Username}'">Profile</li>
+                    <li onclick="window.location.href='Settings.html'">Settings</li>
+                    <li id="logout" onclick="ClearLogin()">Logout</li>
+                `
+            document.getElementById("SideNavUL").innerHTML = html
+
             return true
                 
         }
@@ -44,6 +54,10 @@ async function checkLogin(){
                     document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
 
                 }
+
+                
+
+
             }catch(e){}
 
             return false
@@ -62,6 +76,13 @@ async function checkLogin(){
                 document.getElementById("NavUserAccount").remove()
                 
             }
+
+            var html = `
+                    <li onclick="window.location.href='/'">Home</li>
+                    <li onclick="window.location.href='/'">Tags</li>
+                    <li onclick="window.location.href='/Login.html'">Login</li>
+                `
+        document.getElementById("SideNavUL").innerHTML = html
         }catch(e){}
         return false
     }

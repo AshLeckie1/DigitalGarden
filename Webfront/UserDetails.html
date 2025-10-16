@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title>User Details - Digital Garden</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="Scripts/FlippyTextReader.js"></script>
@@ -22,6 +22,11 @@
     <div class="MainTitle">
         <h1 id="Title"></h1>
         <div id="UserSession"></div>
+    </div>
+    <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
     </div>
     <div class="container MainBody" > 
         <div class="Row">
@@ -123,10 +128,28 @@
         UserIconBuffer:""
     }
 
+    $(window).resize(function() {
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
+    });
+
     $(document).ready(function() {
 
+        var screenWidth = $(document).width();;
+        if(screenWidth < 1390){
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
+            
+        }else{
+            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
+        }
+
         //set form action
-        document.getElementById("UserDetailsForm").action=`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserDetails`
+        //document.getElementById("UserDetailsForm").action=`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserDetails`
         document.getElementById("UserIDinput").value = GetUserSession()
         document.getElementById("PrevIcon").src = `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?SessionID=${GetUserSession()}`
         // check login
