@@ -29,7 +29,8 @@
     </div>
     <div class="container MainBody"> 
         <div class="PageBackButton" >
-            <span onclick="window.history.go(-1);">⬅ Post Editor</span>
+            <span onclick="window.location.href='/';">Cancel</span>
+            <button onclick="SaveDraftAsPost()" id="PostButton">post</button>
         </div>
         <div class="UploadImage" id="UploadImage" hidden>
             <div>
@@ -37,7 +38,7 @@
                 <h5 id="Close" onclick="ToggleImageUpload()">X</h5>
             </div>
             <form id="UploadImageForm" method="post" enctype="multipart/form-data" target="dummyframe"  onsubmit="setTimeout(PopulateImagesInSelection,500)">
-                <input name="Image" id="ImageUpload" type="file" accept="image/*" required>
+                <input name="Image" id="ImageUpload" type="file" accept="image/png, image/jpeg, image/jpg" required>
                 <input name="PostID" id="PostID" value="" hidden>
                 <button type="submit">Upload</button>
             </form>
@@ -49,11 +50,11 @@
         </div>
         <div class="Row">
             <div class="six columns">
-                <h2>Editor</h2>
+                <h2 style="margin-left:20px">Editor</h2>
                 <ul class="PostEditor">
                     <li><span id="saveStatus"></span></li>
-                    <li><button onclick="ToggleImageUpload()">Add Image</button></li>
-                    <li><button onclick="SaveDraftAsPost()">post</button></li>
+                    <li><button onclick="ToggleImageUpload()">Images</button></li>
+
                 </ul>
                 <textarea id="Editor"></textarea>
             </div>
@@ -89,9 +90,12 @@
 
     $(document).ready(function() {
         //check login
-        checkLogin().then(result =>{
-            if(!result){window.location.href= "index.html"}
-        })
+        checkLogin().then(result => {
+            if(!result){
+                window.location.href = "/"
+            }
+        })        
+        
 
         console.log(window.location.href)
         try{
@@ -171,7 +175,7 @@
         GetImages().then(Imgs =>{
             var html = ""
             Imgs.forEach(Img => {
-                html += `<li><img src="http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImageThumbnail?ImgUrl=${Img}"><input value="![](http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImage?ImgUrl=${Img})" readonly><button onclick="AddImage('${Img}')">Add</button></li>`
+                html += `<li><img src="http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImageThumbnail?ImgUrl=${Img}"><button onclick="AddImage('${Img}')">Add</button></li>`
             });
 
             document.getElementById("UploadedImages").innerHTML = html
@@ -202,15 +206,19 @@
 
     function SaveDraftAsPost(){
         
+        document.getElementById("PostButton").disabled = true
+
         UpdateDraft()
 
         PostDraft($Session.DraftID).then(result =>{
             if(!result.error){
                 alert("Post Made!")
+
                 location.href = `index.html`
             }
             else{
                 alert("Something went wrong!")
+                document.getElementById("PostButton").disabled = false
             }
         })  
     }

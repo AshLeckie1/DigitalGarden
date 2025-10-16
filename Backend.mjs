@@ -149,7 +149,7 @@ app.post('/NewUser', (req,res) => {
         const allPromise = Promise.all([SqlQuery(sqlInviteKey),SqlQuery(sqlExistingUser)])
         allPromise.then(result  =>{
             
-            const InviteKey = result[0]
+            const InviteKeyRes = result[0]
             const ExistingUsers = result[1][0]
 
             if(ExistingUsers.users > 0){
@@ -158,11 +158,11 @@ app.post('/NewUser', (req,res) => {
                 return;
             }
 
-            if(InviteKey.length > 0){
+            if(InviteKeyRes[0].ID == InviteKey){
                 //encrypt password
                 var encrypted = encrypt(Password);
                 //add user record to DB
-                var sql = `INSERT INTO users (ID, Username, UserData, Passkey) VALUES ((SELECT UUID() AS ID), '${Username}', '${UserData}', '${JSON.stringify(encrypted)}');`
+                var sql = `INSERT INTO users (ID, Username, UserData, Passkey, InviteKey) VALUES ((SELECT UUID() AS ID), '${Username}', '${UserData}', '${JSON.stringify(encrypted)}' ,'${InviteKeyRes[0].ID}');`
                 SqlQuery(sql).then(result =>{
                     // TODO validate result
                     if(result.affectedRows > 0){
@@ -264,6 +264,27 @@ app.post("/Login",(req,res) => {
 
     }
 });
+
+app.get('/CreateInvite',(req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.query == null) {
+        res.status(400).send({"error":true, msg:"Missing query"});
+        return;
+    }
+
+    var User = IsUserSessionValid(req.query.SessionID)
+    if(User.login){
+        var Key = uuidv4()
+        var sql = `INSERT INTO DigitalGarden.invite_tokens (ID,Experation,CreatedBy)VALUES('${Key}',NOW() + INTERVAL 3 DAY,'${User.UserID}')`
+        SqlQuery(sql).then(result => {
+            
+            res.send({"error":false,"InviteLink":`http://${CONFIG.NodeServer}/Register.html?key=${Key}`})
+        })
+
+    }else{
+        res.status(403).send({"error":true,"msg":"User Session is not valid!"})
+    }
+})
 
 app.post('/ActiveSessions',(req,res) =>{
     res.set('Access-Control-Allow-Origin', '*');
@@ -563,20 +584,21 @@ app.post('/DeletePost',(req,res) =>{
     
     if(!User.login){
         res.status(403).send({"error":true,"msg":"User session not valid"})
-    }
-
-    var sql = `DELETE FROM DigitalGarden.posts WHERE UserID = '${User.UserID}' AND ID = '${req.body.PostID}'`
-    SqlQuery(sql).then(result =>{
-        if(result.affectedRows > 0){
-            //file was removed from DB
-            //delete folder from server
-            fs.rmSync(`${__dirname}\\data\\POSTS\\${PostID}`, { recursive: true, force: true });
-            res.status(200).send({"error":false,"msg":"Post Deleted"})
-        }else{
-            res.status(500).send({"error":true,"msg":"Either post missing or User session is incorrect"})
-        }
-    })
-
+        return;
+    }else{
+        var PostID = req.body.PostID
+        var sql = `DELETE FROM DigitalGarden.posts WHERE UserID = '${User.UserID}' AND ID = '${PostID}'`
+        SqlQuery(sql).then(result =>{
+            if(!result.hasOwnProperty("errno")){
+                //file was removed from DB
+                //delete folder from server
+                fs.rmSync(`${__dirname}\\data\\POSTS\\${PostID}`, { recursive: true, force: true });
+                res.status(200).send({"error":false,"msg":"Post Deleted"})
+            }else{
+                res.status(500).send({"error":true,"msg":"Either post missing or User session is incorrect","result":result})
+            }
+        })
+    }   
 })
 
 app.post('/GetFeed', (req,res) => {
@@ -591,7 +613,7 @@ app.post('/GetFeed', (req,res) => {
         pos = 0
     }
 
-    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
     SqlQuery(sql).then(result => {
 
         result = result.map(e=>{
@@ -624,42 +646,103 @@ app.post('/GetFeedByUser', (req,res) => {
     if(pos == undefined){
         pos = 0
     }
-
-    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID and users.Username = '${req.body.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
-    SqlQuery(sql).then(result => {
-
-        var posts = result.map(e=>{
-            var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
-            let converter = new showdown.Converter(),
-            Posthtml = converter.makeHtml(postText.toString());
-            e["PostHtml"] = Posthtml
-
-            return e
-
-        })
-
-        var sql = `SELECT Username, ID, UserData FROM DigitalGarden.users WHERE Username = '${req.body.UserID}'`
-
-        SqlQuery(sql).then(result => {
-            //should only be one result so no need to worry about potentially sending the data twice
-            var data = result[0]
-
-
-            res.send(
-            {
-                userID:result[0].userID,
-                userInfo:JSON.parse(data.UserData),
-                posts:posts,
-                PostGetLimit:CONFIG.PostGetLimit
-            }
-        )
-        })
-
-
         
-    })
+    try{
+        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID and users.Username = '${req.body.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+        SqlQuery(sql).then(result => {
+
+            var posts = result.map(e=>{
+                var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
+                let converter = new showdown.Converter(),
+                Posthtml = converter.makeHtml(postText.toString());
+                e["PostHtml"] = Posthtml
+
+                return e
+
+            })
+
+            var sql = `SELECT Username, ID, UserData FROM DigitalGarden.users WHERE Username = '${req.body.UserID}'`
+
+            SqlQuery(sql).then(result => {
+                //should only be one result so no need to worry about potentially sending the data twice
+                var data = result[0]
+
+                if(data != undefined){
+                    res.send(
+                    {
+                        userID:data.ID,
+                        userInfo:JSON.parse(data.UserData),
+                        posts:posts,
+                        PostGetLimit:CONFIG.PostGetLimit
+                    })
+                }else{
+                     res.status(500).send({"error":true,"msg":"Something went wrong!"})
+                }
+            })
+        })
+    }catch(err){
+        res.status(500).send({"error":true,"msg":err})
+    }
+})
+
+app.post('/GetDrafts', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var pos = req.body.pos
+    if(pos == undefined){
+        pos = 0
+    }
+
+    var user = IsUserSessionValid(req.body.SessionID)
+    console.log(user)
+    if(!user.login){
+        res.status(403).send({"error":true,"msg":"User Session is not valid!"})
+        return;
+    }
+        
+    try{
+        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "DRAFT" AND users.ID = posts.UserID and users.ID = '${user.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+        SqlQuery(sql).then(result => {
+
+            var posts = result.map(e=>{
+                var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
+                let converter = new showdown.Converter(),
+                Posthtml = converter.makeHtml(postText.toString());
+                e["PostHtml"] = Posthtml
+
+                return e
+
+            })
+
+            var sql = `SELECT Username, ID, UserData FROM DigitalGarden.users WHERE ID = '${user.UserID}'`
+
+            SqlQuery(sql).then(result => {
+                //should only be one result so no need to worry about potentially sending the data twice
+                var data = result[0]
+
+                if(data != undefined){
+                    res.send(
+                    {
+                        userID:data.ID,
+                        userInfo:JSON.parse(data.UserData),
+                        posts:posts,
+                        PostGetLimit:CONFIG.PostGetLimit
+                    })
+                }else{
+                     res.status(500).send({"error":true,"msg":"Something went wrong!"})
+                }
+            })
+        })
+    }catch(err){
+        res.status(500).send({"error":true,"msg":err})
+    }
 
 })
+
 
 
 
@@ -751,7 +834,81 @@ app.post('/UserModification',FileUpload.single("UserIcon"),(req,res)=>{
     var sql = `UPDATE digitalgarden.users SET UserData = '${JSON.stringify(UserData)}' WHERE ID = '${UserID.UserID}'`
     SqlQuery(sql)
 
+    res.send({"error":false,"msg":"User profile updated"})
+
 });
+
+
+app.post('/SetUserBackground',FileUpload.single("BackgroundImage"),(req,res)=>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+
+    var UserID = IsUserSessionValid(req.body.SessionID)
+    //save user icon to server if on is attached
+    console.log(req.file)
+    if(req.file != undefined){
+        if (!fs.existsSync(`${__dirname}/data/UserIcons/${UserID.UserID}`)){
+            fs.mkdirSync(`${__dirname}/data/UserIcons/${UserID.UserID}`);
+        }
+        try{
+            ProcessImage(req.file,`${__dirname}/data/UserIcons/${UserID.UserID}`,"UserBackground")
+
+            res.send({"error":false,"msg":"User Background updated"})
+        }catch(err){
+             res.send({"error":true,"msg":err})
+        }       
+    }else{
+        res.send({"error":true,"msg":"Missing File"})
+    }
+
+    
+
+});
+
+app.get('/GetUserBackground',(req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.query == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+
+    if(req.query.SessionID){
+        var user = IsUserSessionValid(req.query.SessionID)
+        //check that user icon exists else send default
+        if (fs.existsSync(`${__dirname}/data/UserIcons/${user.UserID}/UserBackground.png`)){
+            res.sendFile(`${__dirname}/data/UserIcons/${user.UserID}/UserBackground.png`)
+        }else
+        {
+            res.status(404)
+        }
+    }
+    else if(req.query.UserID){
+        var UserID = req.query.UserID
+        if (fs.existsSync(`${__dirname}/data/UserIcons/${UserID}/UserBackground.png`)){
+            res.sendFile(`${__dirname}/data/UserIcons/${UserID}/UserBackground.png`)
+        }else
+        {
+            res.status(404)
+        }
+    }else if(req.query.Username){
+
+        var sql = `SELECT ID FROM digitalgarden.users WHERE Username = '${req.query.Username}'`
+        SqlQuery(sql).then(result => {
+            if(result.length > 0){
+                res.sendFile(`${__dirname}/data/UserIcons/${result[0].ID}/UserBackground.png`)
+            }else{
+                res.status(404)
+            }
+           
+        })
+
+    }else{
+        res.status(404)
+    }
+})
 
 app.get('/GetUserPfp',(req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -782,8 +939,6 @@ app.get('/GetUserPfp',(req,res) => {
         res.sendFile(`${__dirname}/Webfront/Style/Images/DefaultUserProfile.png`)
 
     }
-
-
 })
 
 app.post('/AddImageToPost',FileUpload.single("Image"),(req,res) => {
@@ -795,6 +950,12 @@ app.post('/AddImageToPost',FileUpload.single("Image"),(req,res) => {
 
     try{
         var PostID = req.body.PostID
+        console.log(PostID)
+        if(PostID == undefined || PostID == ""){
+            res.status(402).send({"error":true,"msg":"Missing Post ID"})
+            return
+        }
+
         if(req.file != undefined){
             if (!fs.existsSync(`${__dirname}/data/POSTS/${PostID}/Images`)){
                 fs.mkdirSync(`${__dirname}/data/POSTS/${PostID}/Images`);
@@ -838,20 +999,25 @@ app.get('/GetImageThumbnail',(req,res) =>{
 
     try{
         var FilePath = `${__dirname}\\${req.query.ImgUrl}`
-        CreateThumb(FilePath).then(thumb => {
-            console.log(thumb)
-            res.send(thumb)
-        })
+        console.log(FilePath)
+        if(fs.existsSync(FilePath)){
+            CreateThumb(FilePath).then(thumb => {
+                console.log(thumb)
+                res.send(thumb)
+            })
+        }else{
+            res.status(404).send({"error":true,"msg":"File Not Found!"})
+        }
         
+        async function CreateThumb(FilePath) {
+            var options = {height:100,withMetaData:true}
+            return await imageThumbnail(FilePath,options)
+        }
 
     }catch(err){
         res.status(500).send({"error":true,"msg":err})
     }
 
-    async function CreateThumb(FilePath) {
-        var options = {height:100,withMetaData:true}
-        return await imageThumbnail(FilePath,options)
-    }
 })
 
 app.get('/GetImage',(req,res) =>{
@@ -912,6 +1078,8 @@ function ProcessImage(File,TargetDropOff,NewName){
         }
     )  
 }
+
+
 
 function IsUserSessionValid(LoginSession){
     var result = $UserSessions.find(obj => {

@@ -20,45 +20,49 @@ async function checkLogin(){
         if(json.login){
            //set new sessionID
            //document.cookie=`sessionLogin = ${json.SessionID};` 
-   
-            document.getElementById("UserSession").innerHTML = `
-            <img class="UserIcon" onclick="window.location.href='Settings.html';" src='http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${json.UserID}'>  
-            `
-            if(document.getElementById("NavUserAccount")){
-                $("#NavUserAccount").click(function (){location.href=`user.html?user=${json.Username}`})
-            }
-
+            try{
+                document.getElementById("UserSession").innerHTML = `
+                <img class="UserIcon" onclick="window.location.href='Settings.html';" src='http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${json.UserID}'>  
+                `
+                if(document.getElementById("NavUserAccount")){
+                    $("#NavUserAccount").click(function (){location.href=`user.html?ID=${json.Username}`})
+                }
+            }catch(e){}
 
             return true
                 
         }
         else{
+            try{
+                //location.href="login.html"
+                document.getElementById("UserSession").innerHTML = "<a href='Login.html'>[ Login ]</a>"
+
+                //check if there is nav
+                if(document.getElementById("NavNewPost")){
+                    document.getElementById("NavNewPost").remove()
+                    document.getElementById("NavUserAccount").remove()
+                    document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
+
+                }
+            }catch(e){}
+
+            return false
+        }
+    
+    }else{
+        try{
+            //user is not logged in
             //location.href="login.html"
             document.getElementById("UserSession").innerHTML = "<a href='Login.html'>[ Login ]</a>"
 
             //check if there is nav
             if(document.getElementById("NavNewPost")){
+                document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
                 document.getElementById("NavNewPost").remove()
                 document.getElementById("NavUserAccount").remove()
-                document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
-
+                
             }
-            return false
-        }
-    
-    }else{
-        //user is not logged in
-        //location.href="login.html"
-        document.getElementById("UserSession").innerHTML = "<a href='Login.html'>[ Login ]</a>"
-
-         //check if there is nav
-        if(document.getElementById("NavNewPost")){
-            document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
-            document.getElementById("NavNewPost").remove()
-            document.getElementById("NavUserAccount").remove()
-            
-        }
-
+        }catch(e){}
         return false
     }
 }

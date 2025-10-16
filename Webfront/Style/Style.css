@@ -100,6 +100,7 @@ body.DarkMode{
     border-radius: 25px;
     object-fit: cover;
     overflow:hidden;
+    cursor: pointer;
 }
 
 .UserIcon:hover{
@@ -402,8 +403,20 @@ body.DarkMode{
 
 
 .HoverProfile .ProfileTitle .Alias{
+    cursor: pointer;
     font-size: x-large;
 }
+
+.DarkMode .HoverProfile .ProfileTitle .Alias:hover{
+    color:var(--DarkModeHighLight);
+    text-decoration: underline;
+}
+
+.LightMode .HoverProfile .ProfileTitle .Alias:hover{
+    color:var(--lightModeHighLight);
+    text-decoration: underline;
+}
+
 
 .DarkMode .HoverProfile .ProfileTitle .Subtext{
     color:var(--DarkModeHighLight)
@@ -582,12 +595,27 @@ body.DarkMode{
     padding-bottom:2rem;
 }
 
+.PageBackButton span{
+    margin-left: 20px;
+    margin-top: 5px;
+
+}
+
+.PageBackButton button{
+    margin-right: 20px;
+    margin-top: 5px;
+    float:right;
+
+}
+
 .DarkMode .PageBackButton:hover{
-    text-shadow:0px 0px 2px var(--DarkModeFont);
+    color: var(--DarkModeHighLight);
+    text-shadow:0px 0px 2px var(--DarkModeHighLight);
 }
 
 .LightMode .PageBackButton:hover{
-    text-shadow:0px 0px 2px var(--lightModeFont);
+    color: var(--lightModeHighLight);
+    text-shadow:0px 0px 2px var(--lightModeHighLight);
 }
 
 #TestLink{
@@ -693,3 +721,53 @@ body.DarkMode{
 .UserSettings li:has(.CreateInviteLink){
     height:5rem;
 } 
+
+.UserDetails a{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.DarkMode .UserPageDetails{
+    background-color: var(--DarkModeSecondary);
+}
+
+.LightMode .UserPageDetails{
+    margin-top:5px;
+    background-color: var(--LightModePrimary);
+    border:var(--lightModeHighLight) 1px solid;
+
+}
+.UserPageDetails{
+    margin-top: 1rem;;
+    border-radius: 20px;
+    height:200px;
+}
+
+.UserPageDetails .columns{
+    height:150px;
+}
+
+.UserPageDetails #Alias{
+    margin:0 !important;
+}
+
+.UserPageDetails .UserIcon{
+    padding:15px;
+    width:102px !important;
+    height:102px !important;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+}
+
+.UserPageDetails .LinkPreview{
+    height:4rem !important;
+    margin-left: 2rem;
+    margin-right: 2rem;
+
+}
+
+.UserPageDetails #WhereTheEditButtonGoes button{
+    margin-top:1rem;
+    margin-right: 1rem;
+    float:right;
+}

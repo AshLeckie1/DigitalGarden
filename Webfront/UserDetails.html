@@ -130,7 +130,12 @@
         document.getElementById("UserIDinput").value = GetUserSession()
         document.getElementById("PrevIcon").src = `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?SessionID=${GetUserSession()}`
         // check login
-        checkLogin()
+        checkLogin().then(result => {
+            if(!result){
+                window.location.href = "/"
+            }
+        })        
+        
 
         //get user details
        

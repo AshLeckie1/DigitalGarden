@@ -43,6 +43,9 @@
                     <li class="link" onclick="window.location.href='UserDetails.html'">
                         Edit User Profile
                     </li>
+                    <li class="link" onclick="window.location.href='Drafts.html'">
+                        Drafts
+                    </li>
                     <li>
                         Create Invite Link
                         <div class="CreateInviteLink">
@@ -84,7 +87,12 @@
 
     $(document).ready(function() {
         // check login
-        checkLogin()
+        checkLogin().then(result => {
+            if(!result){
+                window.location.href = "/"
+            }
+        })        
+        
 
         //get user details
        
