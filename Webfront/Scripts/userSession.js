@@ -28,16 +28,9 @@ async function checkLogin(){
                     $("#NavUserAccount").click(function (){location.href=`user.html?ID=${json.Username}`})
                 }
             }catch(e){}
-
-            var html = `
-                    <li onclick="window.location.href='/'">Home</li>
-                    <li onclick="window.location.href='/'">Tags</li>
-                    <li onclick="window.location.href='/newPost.html'">Post</li>
-                    <li onclick="window.location.href='/user.html?ID=${json.Username}'">Profile</li>
-                    <li onclick="window.location.href='Settings.html'">Settings</li>
-                    <li id="logout" onclick="ClearLogin()">Logout</li>
-                `
-            document.getElementById("SideNavUL").innerHTML = html
+            
+            //set nav to logged user
+            CreateNav(json.Username)
 
             return true
                 
@@ -47,19 +40,10 @@ async function checkLogin(){
                 //location.href="login.html"
                 document.getElementById("UserSession").innerHTML = "<a href='Login.html'>[ Login ]</a>"
 
-                //check if there is nav
-                if(document.getElementById("NavNewPost")){
-                    document.getElementById("NavNewPost").remove()
-                    document.getElementById("NavUserAccount").remove()
-                    document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
-
-                }
-
-                
-
+                //Set nav to login
 
             }catch(e){}
-
+            CreateNav(false)
             return false
         }
     
@@ -69,20 +53,9 @@ async function checkLogin(){
             //location.href="login.html"
             document.getElementById("UserSession").innerHTML = "<a href='Login.html'>[ Login ]</a>"
 
-            //check if there is nav
-            if(document.getElementById("NavNewPost")){
-                document.getElementById("MainNav").innerHTML += ` <h3 onclick="location.href='login.html'" id="NavLogin">Login</h3>`
-                document.getElementById("NavNewPost").remove()
-                document.getElementById("NavUserAccount").remove()
-                
-            }
+            //set nav to login
+            CreateNav(false)
 
-            var html = `
-                    <li onclick="window.location.href='/'">Home</li>
-                    <li onclick="window.location.href='/'">Tags</li>
-                    <li onclick="window.location.href='/Login.html'">Login</li>
-                `
-        document.getElementById("SideNavUL").innerHTML = html
         }catch(e){}
         return false
     }

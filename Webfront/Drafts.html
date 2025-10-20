@@ -17,6 +17,7 @@
     <script src="Scripts/userPopup.js"></script>
     <script src="Scripts/DraftLayout.js"></script>
     <script src="Scripts/LightDarkMode.js"></script>
+    <script src="Scripts/NavControlls.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SH20RAJ/ShowdownCSS@main/showdown.css">
 </head>
@@ -74,21 +75,8 @@
             setTimeout(TitleLoop,10000)
         }
         
-        
         GetFeed(0)
-
-        
     })
-
-    $(window).resize(function() {
-        var screenWidth = $(document).width();;
-        if(screenWidth < 1390){
-            document.getElementsByClassName("MainBody")[0].style = "margin-right:1rem; margin-left:22rem;"
-            
-        }else{
-            document.getElementsByClassName("MainBody")[0].style = "margin-right:auto; margin-left:auto;"
-        }
-    });
     
     function GetFeed(pos){
         PostGetFeed(pos).then(feed => {

@@ -16,6 +16,9 @@ body{
     background-color: black;
     height:100%;
     margin: 0;
+    min-width: 1000px;
+    overflow: scroll;
+
 }
 
 .DarkMode hr{
@@ -39,6 +42,7 @@ body.DarkMode{
 .MainBody{
     height:100%;
     padding-bottom: 5rem;
+
 }
 
 /* INdex Page */
@@ -804,14 +808,20 @@ body.DarkMode{
 }
 
 .SideNav{
-    position:fixed;
-    width:20rem;
+    position:sticky;
+    top:0;
+    float: left;
+    width:fit-content;
     padding-top: 1rem;
     padding-left: 1rem;
 }
 
+.SideNav ul{
+    width:20rem;
+}
 
 .SideNav li{
+
     font-size: large;
     list-style: none;
     padding:0.5rem;
