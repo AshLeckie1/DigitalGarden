@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>var AdminSite = true;</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiseRiver - Admin</title>
+    <link rel="icon" type="image/x-icon" href="/images/icon.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/css/Style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="scripts/AddminNavigation.js"></script>
+    <script src="scripts/userSession.js"></script>
+    <script src="scripts/ProcessFileTracker.js"></script>
+</head>
+
+<body>
+    <!-- NAV -->
+    <div id="JSWarning">
+        <h1>This website uses Javascript, please load into a js compatible browser such as Edge or Chrome</h1>
+    </div>
+    <div class="nav admin">
+        <div class="logoContainer">
+            <img alt="Moray Council Logo" src="http://interchange.moray.gov.uk/int_images/image_108872.png">
+        </div>
+        <h1><span id="wise">wise</span>river<span id="admin">admin</span></h1>
+        <p id="LoggedUserName"></p>
+    </div>
+    <div class="OuterBody">
+    <div class="SideNav">
+        <ul>
+    
+        </ul>
+
+    </div>
+    <!-- Main Body -->
+    <div class="MainBody">
+        <div class="InformationBox">
+            <div class="cont" id="UserSessions">
+                <h2>Users</h2> 
+                <button id="SaveChanges" onclick="SubmitChanges()" disabled>Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="footer">
+        <hr>
+        <p id="ICTServ">2024 ICT Services</p>
+        <p id="DesignedBy">Designed by Ash Leckie</p>
+    </div>
+</body>
+<footer>
+
+</footer>
+
+</html>
+<script>
+
+    $(document).ready(function() {
+        //check login
+        checkLogin().then(result => {
+            if(!result){
+                window.location.href = "/login.html"
+            }
+        }) 
+    });
+
+
+    //remove warning banner
+    document.getElementById("JSWarning").innerHTML = null;
+    var $Userchanges = []
+
+    ParallelFunctions().then(result => {
+
+        var users = result[0]
+        var groups = result[1]
+
+        var html;
+        if(users.length == 0){
+            html = "<p>No Users Found</p>"
+
+        }
+        else{
+            html = "<div id='table-wrapper'><div id='table-scroll'><table><thead><tr><th>Username</th><th>Group</th><tr></thead><tbody>"
+                users.forEach(User => {
+
+                var selection = groups.map(group =>{
+                    if(group.trim() == User.Group.trim()){
+                        return `<option selected>${group}</option>`
+                    }else{
+                        return `<option >${group}</option>`
+                    }
+                }).toString()
+
+                html += `<tr>
+                    <td>
+                        ${User.Username}
+                    </td>
+                    <td>
+                        <select class="UserPermission" id="${User.ID}" onchange="UserChange({selectValue:${(JSON.stringify(User)).replaceAll('"',"'")},value:this.value,ID:'${User.ID}',Username:'${User.Username}'})">${selection}</select>    
+                    </td>
+                </tr>`
+            
+            });
+
+            html += "</tbody></table></div></div>"
+        }
+
+        document.getElementById('UserSessions').innerHTML += html
+    });
+
+    function UserChange(Change){    
+
+        if(Change.selectValue.Group.trim() == "ADMIN" && Change.value.trim() !="ADMIN" ){
+            if(!confirm(`Are you sure you want to Remove ${Change.Username.split('@')[0]} as an Admin?`)){
+                document.getElementById(Change.ID).value="ADMIN"
+                return
+            }
+        }else if(Change.selectValue.Group.trim() != "ADMIN" && Change.value.trim() =="ADMIN" ){
+            if(!confirm(`Are you sure you want to Add ${Change.Username.split('@')[0]} as an Admin?`)){
+                document.getElementById(Change.ID).value= Change.selectValue.Group.trim()
+                return
+            }
+        }
+
+        var match = false
+        $Userchanges =  $Userchanges.map((user)=>{
+            if(user.ID == Change.ID){
+                match = true
+                var temp = {
+                    value:Change.value,
+                    ID:Change.ID
+                }
+
+                return temp
+            }
+            else{
+                return user
+            }
+        })
+
+        if(!match){
+            $Userchanges.push(Change)
+        }
+
+        //unlock save button 
+        document.getElementById("SaveChanges").removeAttribute("disabled");
+    }   
+
+    function SubmitChanges(){
+        //check that there is still an admin 
+        var adminCount = Array.prototype.slice.call(document.getElementsByClassName("UserPermission")).filter((x) => {if(x.value.trim() == "ADMIN"){return x}}).length
+        if(adminCount  < 1){
+            alert("You need at least one admin account!")
+            return
+        }
+
+        //send user changes to server
+        UpdateUsers().then(result => {
+            if(result.error){
+                alert(`Something went wrong! ${result.msg}`)
+            }else{
+                alert("Changes Made!")
+                location.relaod()
+            }
+        });
+
+    }
+    async function UpdateUsers(){
+        const response = await fetch(`http://mvs337:3000/UpdateUserGroups`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({"Changes":$Userchanges,"AdminSessionID":GetUserSession()})
+        });
+
+        return response.json()
+    }
+
+    async function ParallelFunctions(){
+        const [result1, result2] = await Promise.all([GetUsers(), GetGroups()]);
+        return [result1, result2]
+    }
+
+    async function GetUsers(){
+        const response = await fetch(`http://mvs337:3000/GetUsers`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({"AdminSessionID":GetUserSession()})
+        });
+
+        return response.json()
+    }
+
+    async function GetGroups(){
+        const response = await fetch(`http://mvs337:3000/GetUserGroups`);
+        return await response.json()
+    }
+
+</script>

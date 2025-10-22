@@ -24,7 +24,7 @@ function SetNavPosition(){
         
     }else{
         var MarginRight = Math.floor((screenWidth - parseInt(MainBodyStyle.width.replace("px","")))/2)
-        MainBody.style = `float:right; margin-right:${MarginRight}px;`
+        MainBody.style = ` margin-right:${MarginRight}px;`
         SideNav.style = `margin-left:calc(${MainBodyStyle.marginRight} - 22rem) !important;`
     }
 }

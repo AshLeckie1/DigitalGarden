@@ -1,6 +1,6 @@
 function CreatePost(post){
     var PostUserData = JSON.parse(post.UserData)
-    var PostData = JSON.parse(post.PostData.replace("-","/"))
+    var PostData = JSON.parse(post.PostData)
 
     var PostID = PostData.ID.split('-')[PostData.ID.split('-').length - 1]
     var date = new Date(post.posted) 
@@ -21,7 +21,7 @@ function CreatePost(post){
     });
     
     var Post = `
-    <div class='PostContainer' data-UserDataId='${PostID}'>
+    <div class='PostContainer' data-UserDataId='${PostID}' onclick="GoToPost('${PostData.ID}','${PostID}')">
         <div class='PostInfo'>
             <span class='UserDetails'>
                 <img class='UserIcon' src='http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${PostData.Author}' onclick="window.location.href='user.html?ID=${post.Username}'"> 
@@ -51,7 +51,7 @@ function CreatePost(post){
         <div class="PostText" id="${PostID}_Textarea">
             ${post.PostHtml}   
         </div>
-        <button class="ExpansionButton" id="${PostID}_Expand" onclick="Expand('${PostID}')">Expand</button>
+        <button class="ExpansionButton" id="${PostID}_Expand">Expand</button>
     </div>
     `
     setTimeout(()=>{isPostNotOverflown(PostID)},200)
@@ -70,5 +70,14 @@ function isPostNotOverflown(elementID) {
     if(!(element.scrollHeight > element.clientHeight)){
         //remove expand button
         document.getElementById(`${elementID}_Expand`).remove()
+    }
+}
+
+function GoToPost(FullPostID,PostID){
+    if(document.elementFromPoint($MousePos.x, $MousePos.y) != document.getElementById(`${PostID}_Expand`)){
+        window.location.href = `post.html?ID=${FullPostID}`
+    }
+    else{
+        Expand(PostID)
     }
 }

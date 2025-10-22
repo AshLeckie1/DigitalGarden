@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>var AdminSite = true;</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigitalGarden - Admin</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/css/Style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="scripts/AddminNavigation.js"></script>
+    <script src="scripts/userSession.js"></script>
+    <script src="Scripts/config.js"></script>
+</head>
+
+<body>
+    <!-- NAV -->
+    <div id="JSWarning">
+        <h1>This website uses Javascript, please load into a js compatible browser such as Edge or Chrome</h1>
+    </div>
+    <div class="nav admin">
+
+        <h1>DigitalGarden<span id="admin">admin</span></h1>
+        <p id="LoggedUserName"></p>
+    </div>
+    <div class="OuterBody">
+    <div class="SideNav">
+        <ul>
+    
+        </ul>
+
+    </div>
+    <!-- Main Body -->
+    <div class="MainBody">
+        <h2>Welcome Message</h2>
+        <textarea id="WelcomeMessage" maxlength="225" style ="width: 40rem;
+        height: 5rem;
+        padding: 5px;
+        border: 1px solid;
+        resize: none;"></textarea>
+        <br>
+        <button onclick="UpdateWelcomeMessage()">Update</button>
+
+        <div class="ServiceStatus">
+            <h2>Service Status</h2>
+            <table id="ServiceStatus">
+                <tr><th>Service</th><td><img id="WiseServiceStatus" src="https://media.tenor.com/_62bXB8gnzoAAAAi/loading.gif"></td></tr>
+                <tr><th>Version</th><td><span id = "VersionNo"></span></td></tr>
+                <tr><th>Last Boot</th><td><span id="LastBoot"></span></td></tr>
+                <tr><th>Uptime</th><td><span id="Uptime"></span></td></tr>
+            </table>
+        </div>
+
+        <div class = "AdminFunctions">
+            <h2>Admin Functions</h2>
+            <table>
+                <tr>
+                    <td>
+                        <button onclick="restartService()">Restart Service</button>
+                    </td>
+                    <td>
+                        <p>warning, will log out all users</p>
+                    </td>
+                </tr>
+                
+            </table>
+                    
+        </div>
+    </div>
+</div>
+    <div class="footer">
+        <hr>
+        <p id="ICTServ">2024 ICT Services</p>
+        <p id="DesignedBy">Designed by Ash Leckie</p>
+    </div>
+</body>
+<footer>
+
+</footer>
+
+</html>
+<script>
+    //remove warning banner
+    document.getElementById("JSWarning").innerHTML = null;
+
+    $(document).ready(function() {
+        //check login
+        checkLogin().then(result => {
+            if(!result){
+                window.location.href = "/login.html"
+            }
+        }) 
+    });
+
+
+    CheckStatus().then(result =>{
+        if(result){
+            document.getElementById("WiseServiceStatus").src = "images/check.png"
+        }
+        else{
+            document.getElementById("WiseServiceStatus").src = "images/redCross.png"
+        }
+    });
+
+
+    GetUptime().then(result =>{
+        var date = new Date(result.lastBoot)
+        var formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth()).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+                    
+        document.getElementById("LastBoot").innerHTML = formattedDate
+
+        document.getElementById("Uptime").innerHTML = msToTime(result.uptime)
+
+        function msToTime(s) {
+            var day = 8.64e+7
+            var days = 0
+            while(s > day){
+                days ++
+                s = s - day
+            }
+
+            var hour = 3.6e+6
+            var hours = 0 
+            while(s > hour){
+                hours ++
+                s = s- hour
+            }
+
+            var min = 60000
+            var mins = 0
+            while (s > min){
+                mins ++
+                s = s - min
+            }
+
+            var sec = 1000
+            var secs = 0
+            while(s > sec){
+                secs ++
+                s = s - sec
+            }
+
+            if(days > 1){
+                return `${days} Days, ${hours} Hours, ${mins} Minutes`
+            }else if( hours > 1){
+                return `${hours} Hours, ${mins} Minutes`
+            }
+            else{
+                return `${mins} Minutes, ${secs} Seconds`
+            }
+
+
+        }
+    })
+
+    GetWelcomeMessage().then(result =>{
+        document.getElementById("WelcomeMessage").innerHTML = result
+    })
+
+
+    async function UpdateWelcomeMessage(){
+        var message =  document.getElementById("WelcomeMessage").value
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/ModifyWelcomeMessage`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({"AdminSessionID":GetUserSession(),"text":message})
+        });
+    }
+
+    async function GetWelcomeMessage() {
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/WelcomeMessage`,{ signal: AbortSignal.timeout(5000) });
+        console.log(response)
+        return await response.text()
+    }
+
+    async function CheckStatus() {
+        try{
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/Status`,{ signal: AbortSignal.timeout(5000) });
+            if (!response.ok) {
+                console.log(`Response status: ${response.status}`);
+            }
+            return await response
+        }
+        catch{
+            
+            return false
+        }
+    }
+
+
+    async function GetUptime() {
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/Uptime`,{ signal: AbortSignal.timeout(5000) });
+        return await response.json()
+    }
+
+    async function SendRestart(){
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/Restart`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({"AdminSessionID":GetUserSession()})
+        });
+
+        return await response.json()
+    }
+
+    function restartService(){
+        SendRestart().then(result =>{
+            if(result.success){
+                alert("Service Restarted")
+                location.reload()
+            }else{
+                alert("there was an issue")
+            }
+        });
+    }
+
+</script>

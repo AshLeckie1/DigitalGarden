@@ -18,8 +18,6 @@ function IsMouseInElement(element, state){
     document.getElementById(element).dataset.isMouseIn = state
 }
 
-
-
 $MousePos = {x:0,y:0}
 
 //store mouse position

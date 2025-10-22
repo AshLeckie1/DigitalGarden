@@ -1,0 +1,1324 @@
+/* Standard Page Style */
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.grayscale {
+    filter: grayscale(100%);
+}
+
+/* Navigation */
+
+.nav {
+    height: 5rem;
+    width: 100%;
+    background-color: #7ea6e0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.nav.admin {
+    background-color: #f8cecc;
+}
+
+.logoContainer {
+    height: 5rem;
+    width: 10rem;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.nav img {
+    margin-top: -7.5rem;
+    margin-left: -8.5rem;
+    height: 26rem;
+    mix-blend-mode: multiply;
+}
+
+.nav #wise {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.nav #admin {
+    font-size: small;
+}
+
+.nav h1 {
+    color: white;
+    font-weight: lighter;
+    width: fit-content;
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+    margin: 0;
+}
+
+.OuterBody {
+    position: relative;
+    min-height: 100%;
+    width:100%;
+    /* height:fit-content; */
+    display: table; 
+    overflow:visible; 
+}
+
+.SideNav {
+    display: table-cell;
+    width: 10rem;
+    background-color: #e6e6e6;
+    /* height: 100%; */
+    float: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom:0;
+    /* min-height: 900px; */
+    /* display: inline-block; */
+    /* display: inline-block; */
+    /* white-space: none; */
+}
+
+.SideNav ul {
+    margin: 0;
+    padding: 0;
+}
+
+.SideNav li {
+    list-style: none;
+    border-bottom: 1px black solid;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.SideNav li:hover {
+    background-color: #9eb7db;
+    color: white;
+    font-weight: bold;
+}
+
+.SideNav li.selected {
+    background-color: #9eb7db;
+    color: white;
+    font-weight: bold;
+}
+
+
+/* Main body content */
+
+.MainBody {
+    display: table-cell;
+    min-width: 60rem;
+    min-height:100%;
+    float: left;
+    margin-left: 11rem;
+    margin-top: 2rem;
+    /* position: absolute; */
+    /* top: 0; */
+    /* left: 10rem; */
+    
+}
+
+.FilePreview {
+    width: 20%;
+    min-width: 350px;
+    display: inline-block;
+    float: left;
+}
+
+.FilePreview p {
+    display: inline;
+    color: gray;
+}
+
+.FilePreview button {
+    display: inline;
+}
+
+.FilePreview iframe {
+    margin-top:0;
+    width: 90%;
+    height: 30rem;
+}
+
+.IframeControll{
+    width:100%;
+    background-color:#3b3b3b; 
+    margin-bottom: 0;   
+    width: 90%;
+    border-top: #9a9a9a 2px solid ;
+    border-left: #9a9a9a 2px solid ;
+
+}
+
+.IframeControll #SelectedFileDisplay{
+    color:white;
+    padding-left:1rem;
+    margin-top:0.5rem;
+}
+
+.IframeControll h2{
+    margin-bottom: 0;
+}
+
+.IframeControll img{
+    height:2rem;
+}
+
+.IframeControll .Row1{
+    padding-top:0.5rem;
+}
+.IframeControll .Row2{
+    display: flex;
+    justify-content: space-between;
+}
+.IframeControll .Row2 div{
+    display: inline;
+    padding-left:1rem;
+    padding-right:1rem;
+    padding-top: 0.5rem;
+    color:white;
+    cursor: pointer;
+}
+
+.IframeControll .disabled{
+    color:dimgrey !important;
+}
+
+.DocumentOptions {
+    width: 45%;
+    display: inline-block;
+    min-width: 600px;
+    float: left;
+}
+
+.DocumentOptions div {
+    width: 45%;
+    float: left;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.DocumentOptions #Preset div {
+    width: 100%;
+    margin-left: 2rem;
+}
+
+.DocumentOptions label,
+.DocumentOptions input {
+    display: block;
+    width: 90%;
+    min-width: 10rem;
+    height: 2rem;
+}
+
+.DocumentOptions label {
+    font-weight: bolder;
+}
+
+.DocumentOptions #Preset,
+.DocumentOptions #ManualOptions {
+    background-color: #f2f2f2;
+    width: 100%;
+    min-width: 10rem;
+    border: 0.5rem;
+}
+
+#Preset a {
+    color: blue;
+    text-decoration: none;
+}
+
+#Preset a:hover {
+    color: darkblue;
+    font-weight: bold;
+}
+
+.DocumentOptions button {
+    float: right;
+    background-color: #7ea6e0;
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.DocumentOptions button:hover {
+    background-color: #475f83;
+}
+
+
+/* Footer */
+
+.footer {
+    width: 100%;
+    color: gray;
+    float: left;
+
+    /* position: absolute;
+    bottom: 0; */
+}
+
+.footer #ICTServ {
+    float: left;
+    margin-left: 1rem;
+}
+
+.footer #DesignedBy {
+    float: right;
+    margin-right: 1rem;
+}
+
+
+/* Overlays */
+#LoadingWindow{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10rem;
+    margin-inline: auto;
+    /* Style */
+    width: 15rem;
+    height: 15rem;
+    background-color: white;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    z-index: 3;
+    border-color: lightgray;
+    border: 1px solid;
+    align-content:center;
+}
+
+#LoadingWindow img{
+    width:60%;
+    padding-left:10%;
+}
+
+
+#LoadingWindow p{
+    padding-left:10%;
+}
+
+.DialogueBox {
+    /* positioning */
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10rem;
+    margin-inline: auto;
+    /* Style */
+    width: 58rem;
+    height: 32rem;
+    background-color: white;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    z-index: 3;
+    border-color: lightgray;
+    border: 1px solid;
+}
+
+.DialogueBox div {
+    margin: 0.5rem;
+}
+
+.DialogueBox #FileList {
+    border: 1px solid;
+    height: 20rem;
+    padding: 0;
+    overflow-y: scroll;
+    width:37rem;
+    margin-bottom: 0;
+}
+
+.DialogueBox #FileList li {
+    list-style: none;
+    height: 2rem;
+    padding-left: 1rem;
+    vertical-align: middle;
+    background: lightgray;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+.DialogueBox #FileList li:nth-child(odd) {
+    background: white;
+}
+
+.DialogueBox #FileList li.selected {
+    background-color: #7ea6e0;
+    font-weight: bold;
+}
+
+.DialogueBox #FileList li:hover {
+    background-color: #7ea6e0;
+}
+
+.DialogueBox #FileSelect button {
+    float: right;
+    background-color: #7ea6e0;
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.DialogueBox #FileSelect button:hover {
+    background-color: #475f83;
+}
+
+.DialogueBox #FileSelect p {
+    width: 30rem;
+    display: inline;
+    margin-left: 1rem;
+}
+
+.DialogueBox .close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.3;
+}
+
+.close:hover {
+    opacity: 1;
+}
+
+.close:before,
+.close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: black;
+}
+
+.close:before {
+    transform: rotate(45deg);
+}
+
+.close:after {
+    transform: rotate(-45deg);
+}
+
+#BackgroundBlur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(94, 97, 94, 0.3);
+}
+
+#FileList #name {
+    float: left;
+}
+
+#FileList #lastModified {
+    float: right;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+#FileList #size {
+    float: right;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.SiteSelection{
+    width:100rem;
+}
+
+.SiteSelection div{
+    display: inline-block;
+    max-width:31rem;
+    
+}
+
+#SiteReview{
+    list-style: none;
+    width:90%;
+    background:#dbdbdb;
+    height:20rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border: 1px gray solid;
+    padding: 0;
+    margin-left:5%;
+}
+
+#SiteReview .RemoveItem:hover{
+    color:red;
+    cursor: pointer;
+}
+
+#SiteReview li:nth-child(odd) {
+    background: white;
+}
+
+#SiteReview li{
+    width:100%;
+    height:1.3rem;
+    padding-top: 0.2rem;
+    padding-left: 0.5rem;
+}
+
+#SiteReview li span{
+    float:right;
+    padding-right:2rem;
+}
+
+#SiteReview li .Title{
+    float: left !important;
+}
+
+#SiteReview .ParentSiteTitle{
+    width:30%;
+}
+
+#SiteReview .Action{
+    width:10%;
+}
+
+#LoadingBar{
+    margin-top:0.5rem;
+    width:40rem;
+    height:1.5rem;
+    border: 2px rgb(1, 160, 14) solid;
+    background-color: rgb(219, 218, 218);
+    border-radius: 5px;
+    overflow:hidden;
+}
+
+#LoadingBar #BarProgress{
+    width:0;
+    height:1.5rem;
+    background-color:hwb(145 48% 4%);
+
+    
+}
+
+#LoadingBar #ProgressText{
+    margin-top: -1.4rem;
+    align-content: center;
+    text-align: center;
+}
+
+.SiteSearchResults {
+    height: 30rem;
+    width: 20rem;
+    list-style: none;
+    border: 2px solid gray;
+    overflow-y: scroll;
+}
+
+.SiteSelectionControlls{
+    width:4rem;
+    height:30rem;
+    position: relative;
+
+}
+.SiteSelectionControlls div{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width:4rem;
+}
+
+.SiteSelectionControlls button{
+    display: block;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    width:3rem;
+    margin-top: 5px;
+    
+}
+
+.SiteSearchResults .selected{
+    background-color: #7ea6e0 !important;
+}
+
+.SiteSelection #root{
+    padding-left: 5px !important;
+}
+
+.SiteSearchResults ul {
+    border-left: 1px solid gray;
+    list-style: none;
+    padding-left: 1rem;
+}
+
+#root .Logged{
+    visibility: hidden;
+    height: 0;
+    
+}
+
+.loadingGif {
+    height: 2rem;
+}
+
+.SiteSearchResults .SiteMapEntity span:hover {
+    text-decoration: underline;
+    font-weight: bold;
+    color: #9cdcf2;
+}
+
+.SiteSearchResults li {
+    cursor: pointer;
+    border-top: 1px solid gray;
+}
+
+/* .SiteSearchResults ul li:nth-child(odd) {
+    background: white;
+} */
+
+.SiteSearchResults input {
+    /* float: right; */
+    padding-right: 0.5rem;
+}
+
+.TopSiteSearch input {
+    width: 30rem;
+    height: 2rem;
+    margin-right: 0;
+}
+
+.TopSiteSearch button {
+    height: 2rem;
+    margin-left: 0;
+}
+
+#ContentTypeColumns {
+    list-style: none;
+    max-height: 40rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#ContentTypeColumns li {
+    margin-bottom: 0.5rem;
+    width: 45% !important;
+    float: left;
+}
+
+#ContentTypeColumns label {
+    width: 50rem !important;
+}
+
+#ContentTypeColumns select {
+    margin-bottom: 0.5rem;
+    width: 92% !important;
+    float: left;
+    height: 2rem;
+    margin-bottom: 0;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.missing {
+    border: 1px red solid;
+}
+
+#ScannerData div {
+    display: inline-block;
+    width: 13rem;
+    height: 2rem;
+
+}
+
+#ScannerData div label,
+#ScannerData div select {
+    float: left
+}
+
+#CustomPresetData div {
+    display: inline-block;
+    width: 13rem;
+    height: 2rem;
+
+}
+
+#CustomPresetData div label,
+#CustomPresetData div select {
+    float: left
+}
+
+#PresetSelection {
+    width: 35rem;
+}
+
+:root {
+    --ContentTypeTableWidth: 60rem;
+}
+
+#ContentTypeTable {
+    width: var(--ContentTypeTableWidth);
+
+}
+
+#ContentTypeTableHeaders {
+    border: 1px solid gray;
+    height: 2rem;
+    width: var(--ContentTypeTableWidth);
+
+}
+
+.ContentTypeTableDiv {
+    border: 1px solid gray;
+    width: var(--ContentTypeTableWidth);
+    height: 30rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+}
+
+#ContentTypeTableHeaders th {
+    background-color: #9eb7db;
+    text-align: left;
+    padding-left: 5px;
+}
+
+#ContentTypeTable tr {
+    height: 2rem;
+
+}
+
+#ContentTypeTable td {
+    padding-left: 5px;
+    background-color: lightgray;
+}
+
+.ContentTypeEditRemv {
+    width: calc((var(--ContentTypeTableWidth)/16)*2);
+    overflow: hidden;
+}
+
+.ContentTypeEditRemv a {
+    color: dodgerblue;
+
+}
+
+.ContentTypeEditRemv a:hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+
+}
+
+.ContentTypeContType {
+    width: calc((var(--ContentTypeTableWidth)/16)*2);
+    overflow: hidden;
+}
+
+.ContentTypeLocal {
+    width: calc((var(--ContentTypeTableWidth)/16)*9);
+    overflow: hidden;
+}
+
+.ContentTypeName {
+    width: calc((var(--ContentTypeTableWidth)/16)*3);
+    overflow: hidden;
+}
+
+#scannedImages {
+    width: 60rem;
+    max-width: 60rem;
+    background-color:#b3b3b3;
+    height: 28rem;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.ScannedImage {
+    border: 1px solid black;
+    box-shadow: 5px 3px 3px gray;
+    background-color: white;
+    width: 14rem;
+    aspect-ratio: 2/3;
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-top: 1rem;
+    margin-left:0.5rem;
+
+}
+
+.ScannedImage .pdfEmbed {
+    width: 100%;
+}
+
+.ScannedImage .pdfEmbed img {
+    margin-left: 5px;
+    margin-right: auto;
+    height: 20rem;
+    aspect-ratio: 2/3;
+}
+
+.Flipped {
+    transform: rotate(180deg);
+}
+
+.ScannedImage .ControlElements {
+    float: left;
+    width: 100%;
+    align-items: center;
+    height: 50px;
+    padding-bottom: 10px;
+}
+
+.ScannedImage .ControlElements .Container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+
+}
+
+.ScannedImage .ControlElements img {
+    height: 48px;
+    width: 48px;
+    cursor: pointer;
+}
+
+.ScannedImage embed {
+    width: 100%;
+    height: 88%;
+}
+
+/* .scanningOptions{
+    height:4rem;
+} */
+.scanningOptions  .ScanningOptionsInputs {
+    display: inline-block;
+    width: 10rem;
+    height:3.5rem;
+
+}
+
+.scanningOptions .ScanningOptionsInputs input,
+.scanningOptions .ScanningOptionsInputs label {
+    display: block;
+    width: 95%;
+    height: 1.5rem;
+
+}
+.scanningOptions .checkbox{
+    height:0px;
+}
+
+.scanningOptions .checkbox label{
+    margin-left: 2rem;
+}
+
+.scanningOptions .checkbox input
+{
+    margin-top:-28.09px !important;
+}
+
+.scanningOptions .ScanningOptionsInputs input[type="checkbox"]{
+    display: block;
+    width:1.5rem;
+    margin:0;
+}
+
+
+.scanningOptions .ScanningOptionsInputs select {
+
+    width: 95%;
+    height: 1.5rem;
+}
+
+.scanningOptions .Row{
+    margin-bottom: 0.5rem;
+}
+
+.scanningOptions button {
+
+    Height: 2rem;
+    /* Width: 6rem; */
+    background-color: #58d68d;
+    border: #28b463 2px solid;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+    display: inline;
+
+}
+
+.scanningOptions #DocumentName{
+    width: 25rem ;
+    height: 1.5rem;
+}
+
+.scanningOptions .Wide{
+    width: 26rem !important;
+}
+.scanningOptions button:hover {
+    /* font-weight: bold; */
+    background-color: #0df36d;
+}
+
+#ScanningSession {
+    margin-top: 0;
+    color: gray;
+}
+
+#ScanningSession span:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#ScannersSelectionBox {
+    position: inherit;
+    height: 5rem;
+    overflow-y: scroll;
+    width: 5rem;
+    border: 1px solid black;
+    box-shadow: 5px 3px 3px gray;
+    display: inline-block !important;
+}
+
+#ScannersSelectionBox span {
+    width: 5rem;
+    display: inline;
+
+}
+
+#PCSearchResult li {
+    list-style: none;
+    text-align: left;
+}
+
+#PCSearchResult img {
+    height: 1rem;
+}
+
+#scannerList {
+    list-style: none;
+}
+
+#WiseServiceStatus {
+    height: 1rem;
+}
+
+.HelpfulLinks li {
+    list-style: none;
+    text-decoration: none;
+    display: inline;
+    border-right: 1px solid gray;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.HelpfulLinks a {
+    text-decoration: none;
+}
+
+.HelpfulLinks li:hover {
+    background-color: #9eb7db;
+}
+
+.HelpfulLinks ul {
+    padding: 0;
+}
+
+.NotifContainer P {
+    width: 40rem;
+    min-height: 5rem;
+    padding: 5px;
+    border: 1px solid;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.ServiceStatus h2 {
+    margin-bottom: 0;
+}
+
+.ServiceStatus p {
+    margin: 0 !important;
+    width: 10rem;
+}
+
+.ServiceStatus p img {
+    float: right;
+}
+
+.ServiceStatus p span {
+    float: right;
+}
+
+.InformationBox .cont {
+    display: inline-block;
+    width: 35rem;
+    height: 20rem;
+    padding: 1rem;
+
+}
+
+#table-wrapper {
+    position: relative;
+}
+
+#table-scroll {
+    height: 15rem;
+    overflow: auto;
+    margin-top: 20px;
+}
+
+#table-wrapper table {
+    width: 100%;
+
+}
+
+#table-wrapper table * {
+    /* background:yellow; */
+    color: black;
+}
+
+#table-wrapper table thead th .text {
+    position: absolute;
+    top: -20px;
+    z-index: 2;
+    height: 20px;
+    width: 35%;
+    border: 1px solid red;
+}
+
+.InformationBox table tr:nth-child(odd) {
+    background: #e6e6e6;
+}
+
+.InformationBox table th {
+    background: #b3b3b3;
+}
+
+.InformationBox a {
+    text-decoration: none;
+}
+
+.InformationBox tr:hover {
+    background-color: #9eb7db !important;
+}
+
+.InformationBox td {
+    cursor: pointer;
+}
+
+.sessionRemove {
+    height: 22px;
+}
+
+.sessionRemove:hover {
+    height: 22px;
+    filter: hue-rotate(-30deg)
+}
+
+.Console {
+    background-color: #1f1f1f;
+
+    width: 100%;
+    border: #919191 solid 1px;
+    border-radius: 25px;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.ConsoleNav {
+    width: 100%;
+
+}
+
+.ConsoleNav ul {
+    margin-bottom: 8px;
+}
+
+.ConsoleNav li {
+    background-color: #454545;
+    display: inline;
+    font-weight: 600;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border: #919191 solid 2px;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+
+}
+
+.ConsoleView p{
+    display: inline;
+}
+.ConsoleView details{
+    display: inline;
+}
+
+.ConsoleNav li.selected {
+    border: #ffd70a solid 2px !important;
+}
+
+.ConsoleNav li:hover {
+    font-weight: bold;
+    border: #ffd70a solid 2px !important;
+    background-color: #919191;
+}
+
+.ConsoleView {
+    width: 80rem;
+    border: #919191 solid 2px;
+
+    border-radius: 0 0 25px 25px;
+}
+
+.ConsoleView #FormSelection {
+    width: 30rem;
+    background-color: #454545;
+    border: #919191 solid 2px;
+    border-radius: 5px;
+    color: white;
+}
+
+.ConsoleView #textArea {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-wrap: normal;
+    height: 40rem !important;
+    padding: 0.5rem;
+    padding-bottom: 5rem;
+
+}
+
+.ConsoleHiddenElementButton{
+    color:lightblue;
+    cursor: pointer;
+}
+
+.ConsoleHiddenElementButton:hover{
+    color:blue;
+}
+
+.ConsoleHiddenElement{
+    background-color: #393e44;
+    padding:0.5rem;
+    border-radius: 5px;
+    border: 2px lightskyblue solid;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: #529949;
+}
+
+.lightblue {
+    color: #39a7f1;
+}
+
+.yellow {
+    color: #ffd70a;
+}
+
+.ConsoleView .index {
+    color: #68cefe;
+}
+
+.SelectFolder::before {
+    content: url(/images/folder.png);
+}
+
+.LoginContainer {
+    position: absolute;
+    top: 5rem;
+    left: 50%;
+    width: 20rem;
+    padding-bottom: 2rem;
+    border: #919191 solid 1px;
+    border-radius: 5px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+
+.LoginContainer h2 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+}
+
+.LoginContainer .SubContainer {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 2rem;
+
+}
+
+.LoginContainer .StayLogged {
+    margin-left: 1rem;
+    margin-top: 2rem;
+}
+
+.LoginContainer .SubContainer input {
+    height: 2rem;
+}
+
+.LoginContainer .SubContainer input,
+.LoginContainer .SubContainer label {
+    display: block;
+    width: 18rem;
+
+    box-sizing: border-box;
+}
+
+.LoginContainer .StayLogged input,
+.LoginContainer .StayLogged label {
+    display: inline-block;
+}
+
+.LoginContainer button {
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    width: 18rem;
+    height: 2rem;
+    box-sizing: border-box;
+}
+
+.LoginContainer #ErrorMessage {
+    color:red;
+    margin-left:1rem;
+    margin-right:1rem;
+}
+
+#LoggedUserName{
+    float:right;
+    color:white;
+    text-align: right;
+    padding-right: 1rem;
+}
+
+#LoggedUserName a{
+    text-decoration: none;
+    color:white;
+}
+
+#logout{
+    cursor: pointer;
+}
+
+#LoggedUserName a:hover{
+    color:red;
+}
+
+#UserSessions{
+    width:60rem !important;
+}
+
+[hidden] { display: none !important; }
+
+.Logged{
+    background-color: #58d68d;
+}
+
+.ServiceStatus th{
+    text-align: left;
+    padding-right: 1rem;
+}
+
+.SubHeader{
+    background-color: #9eb7db !important;
+}
+
+#ProcessedFilesPopup{
+    position: absolute;
+    top:5rem;
+    right:0;
+    z-index: 3;
+    border: 1px solid black;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border-radius: 5px;
+    background-color: white;
+}
+
+#ProcessedFilesPopup h3{
+    padding-left:1rem;
+}
+
+#ProcessedFilesPopup ul{
+    list-style: none;
+    padding-left:1rem;
+    height:15rem;
+    width:30rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#ProcessedFilesPopup li{
+    padding: 0.2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+#ProcessedFilesPopup li:nth-child(odd) {
+    background: #e6e6e6;
+
+}
+
+#ProcessedFilesPopup img{
+    float:right;
+    height:22px;
+    width:22px;
+    padding-right: 1rem;
+}   
+
+#ProcessedFilesPopup img .close:hover{
+
+}
+
+#ProcessedFilesPopup .ProcessFileNav{
+    margin-top: 0.5rem;
+}
+
+#ProcessedFilesPopup .ProcessFileNav img{
+    float:right;
+    height:22px;
+    width:22px;
+    padding-right: 1rem;
+    cursor: pointer;
+}
+
+#ProcessedFilesPopup h3{
+    width:20rem;
+    display: inline;
+}
+
+#ProcessFilesQueueIcon{
+    cursor: pointer;
+}
+
+.statusIcon{
+    height:1rem;
+}

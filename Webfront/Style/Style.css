@@ -7,7 +7,7 @@
 
     --LightModePrimary:white;
     --lightModeSecondary:#e4e5f1;
-    --lightModeTertiary:#a09d9d;
+    --lightModeTertiary:#dadada;
     --LightModeFont:black;
     --lightModeHighLight:#3598fc;
 }
@@ -18,6 +18,7 @@ body{
     margin: 0;
     min-width: 1000px;
     overflow: scroll;
+    overflow-x: hidden;
 
 }
 
@@ -42,7 +43,6 @@ body.DarkMode{
 .MainBody{
     height:100%;
     padding-bottom: 5rem;
-
 }
 
 /* INdex Page */
@@ -92,12 +92,9 @@ body.DarkMode{
     margin-bottom: 10;
     margin-left: 10px;
     font-family: 'Courier New', Courier, monospace;
-
-
 }
 
 .UserIcon{
-
     height:50px;
     width: 50px;
     border-radius: 25px;
@@ -108,7 +105,6 @@ body.DarkMode{
 
 .UserIcon:hover{
     filter: brightness(50%);
-     
 }
 
 #UserSession{
@@ -133,6 +129,46 @@ body.DarkMode{
     cursor: pointer;
 }
 
+
+.Announcements #WelcomeMessage{
+    border-radius: 20px;
+    margin:5px;
+    padding-left:5%;
+    padding-right:5%;
+    padding-top:2rem;
+    padding-bottom:2rem;
+    max-height:30rem;
+    overflow: hidden;
+}
+
+.Announcements{
+    position:relative;
+    border-radius: 20px;
+    margin-top:5px;
+    padding:5px;
+}
+
+.LightMode .Announcements{
+    background-color: var(--LightModePrimary);
+    border: var(--lightModeHighLight) solid 1px;
+    box-sizing: border-box;
+}
+
+.DarkMode .Announcements{
+    background-color: var(--DarkModeSecondary);
+}
+
+.LightMode .Announcements #WelcomeMessage{
+    border: var(--lightModeHighLight) solid 1px;
+    box-sizing: border-box;
+}
+
+.DarkMode .Announcements #WelcomeMessage{
+    border: var(--DarkModeHighLight) solid 1px;
+    background-color: var(--DarkModeTertiary);
+    box-sizing: border-box;
+}
+
 .PostContainer{
     position:relative;
     border-radius: 20px;
@@ -149,6 +185,23 @@ body.DarkMode{
 .DarkMode .PostContainer{
     background-color: var(--DarkModeSecondary);
 }
+
+.DarkMode .PostContainer:hover{
+    background-color: var(--DarkModeTertiary)
+}
+
+.LightMode .PostContainer{
+    background-color: var(--lightModeTertiary);
+}
+
+.DarkMode .PostContainer.SinglePost:hover{
+    background-color: var(--DarkModeSecondary) !important;
+}   
+
+.LightMode .PostContainer.SinglePost:hover{
+    background-color: var(--LightModePrimary) !important;
+}   
+
 
 .PostContainer .PostDate{
     margin-top: 15px;
@@ -836,12 +889,10 @@ body.DarkMode{
 
 .DarkMode .SideNav li{
     background-color: var(--DarkModeSecondary);
-    
 }
 
 .LightMode .SideNav li{
     background-color: var(--lightModeSecondary);
-    
 }
 
 .DarkMode .SideNav li:hover{

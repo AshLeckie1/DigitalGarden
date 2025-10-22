@@ -34,7 +34,12 @@
     <div class="container MainBody"> 
         <div class="Row">
             <div class="twelve columns">
-                <div id="Feed">
+                <div class="Announcements">
+                    <h2>Announcements</h2>
+                    <div class="PostText" id="WelcomeMessage">    
+                    </div>
+                </div>
+                <div id="Feed">                    
                 </div>
             </div>            
         </div>
@@ -56,11 +61,21 @@
             TriggerChange("Title")
             setTimeout(TitleLoop,10000)
         }
-
+        GetWelcomeMessage()
         //Get Feed
         GetFeed(0)
 
     })
+
+    GetWelcomeMessage().then(result =>{
+        document.getElementById("WelcomeMessage").innerHTML = result
+    })
+
+    async function GetWelcomeMessage() {
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/WelcomeMessage`,{ signal: AbortSignal.timeout(5000) });
+        console.log(response)
+        return await response.text()
+    }
 
     function GetFeed(pos){
         PostGetFeed(pos).then(feed => {

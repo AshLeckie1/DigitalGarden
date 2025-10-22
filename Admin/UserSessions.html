@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>var AdminSite = true;</script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiseRiver - Admin</title>
+    <link rel="icon" type="image/x-icon" href="/images/icon.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/css/Style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="scripts/AddminNavigation.js"></script>
+    <script src="scripts/userSession.js"></script>
+    <script src="scripts/ProcessFileTracker.js"></script>
+</head>
+
+<body>
+    <!-- NAV -->
+    <div id="JSWarning">
+        <h1>This website uses Javascript, please load into a js compatible browser such as Edge or Chrome</h1>
+    </div>
+    <div class="nav admin">
+        <div class="logoContainer">
+            <img alt="Moray Council Logo" src="http://interchange.moray.gov.uk/int_images/image_108872.png">
+        </div>
+        <h1><span id="wise">wise</span>river<span id="admin">admin</span></h1>
+        <p id="LoggedUserName"></p>
+    </div>
+    <div class="OuterBody">
+    <div class="SideNav">
+        <ul>
+    
+        </ul>
+
+    </div>
+    <!-- Main Body -->
+    <div class="MainBody">
+        <div class="InformationBox">
+            <div class="cont" id="UserSessions">
+                <h2>User Sessions</h2> 
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="footer">
+        <hr>
+        <p id="ICTServ">2024 ICT Services</p>
+        <p id="DesignedBy">Designed by Ash Leckie</p>
+    </div>
+</body>
+<footer>
+
+</footer>
+
+</html>
+<script>
+    
+    $(document).ready(function() {
+        //check login
+        checkLogin().then(result => {
+            if(!result){
+                window.location.href = "/login.html"
+            }
+        }) 
+    });
+    
+    //remove warning banner
+    document.getElementById("JSWarning").innerHTML = null;
+    PopulateActiveSessions()
+
+
+
+    async function GetUserSessions() {
+        const response = await fetch(`http://mvs337:3000/ActiveSessions`,{ 
+            signal: AbortSignal.timeout(5000),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({"AdminSessionID":GetUserSession()})
+        });
+        return await response.json()
+    }
+
+    async function removeSession(SessionID){
+        const response = await fetch(`http://mvs337:3000/CloseUserSession`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({"AdminSessionID":GetUserSession(),"SessionID":SessionID})
+        });
+
+        
+        location.reload()
+    }
+
+    function PopulateActiveSessions(){
+        GetUserSessions().then(result =>{
+
+            //document.getElementById('ScanningSessions').innerHTML = ""
+
+            console.log(result)
+            var html;
+            if(result.length == 0){
+                html = "<p>No Sessions Found</p>"
+
+            }
+            else{
+                html = "<div id='table-wrapper'><div id='table-scroll'><table><thead><tr><th>Username</th><th>Session Started</th><th>Last Active</th><th>Stay Logged</th><th>Group</th><th></th><tr></thead><tbody>"
+                result.forEach(session => {
+                    try{
+                        var temp = session.sessionStart
+                        var date = new Date(`${temp.split(" ")[0].split("-")[2]}-${temp.split(" ")[0].split("-")[1]}-${temp.split(" ")[0].split("-")[0]} ${temp.split(" ")[1]}`)
+                        var SessionStartFormattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() +1 ).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                        
+                        temp = session.LastActive
+                        var date = new Date(`${temp.split(" ")[0].split("-")[2]}-${temp.split(" ")[0].split("-")[1]}-${temp.split(" ")[0].split("-")[0]} ${temp.split(" ")[1]}`)
+                        var LastActiveFormattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() +1).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                        
+
+                        html += `<tr>
+                            <td>
+                                ${session.Username}
+                            </td>
+                            <td>
+                                ${SessionStartFormattedDate}
+                            </td>
+                            <td>
+                                ${LastActiveFormattedDate}
+                            </td>
+                            <td>
+                                ${session.StayLoggedIn} 
+                            </td>
+                            <td>
+                                ${session.Group}    
+                            </td>
+                            <td>
+                                <img src="images/icons8-cross-48.png" title="Remove Session" class="sessionRemove" onclick='removeSession("${session.SessionID}")'>   
+                            </td>
+                        </tr>`
+                    }catch(e){
+                        //session is null, will clear out on next restart
+                    }
+                });
+
+                html += "</tbody></table></div></div>"
+            }
+
+            document.getElementById('UserSessions').innerHTML += html
+        });
+    }
+
+
+</script>

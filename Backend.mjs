@@ -61,6 +61,8 @@ await SQLConnection.query("SELECT 1").then(result =>{
     }
 })
 
+//set boot time
+var BootTime = Date.now()
 
 var $UserSessions = []
 //{Username:{User},SessionStart:{DateTime},SessionID={GUID}}
@@ -116,9 +118,46 @@ function PurgeEmptyDrafts(){
     setTimeout(PurgeEmptyDrafts,3600000)
 }
 
-
-
 // Requests
+
+app.get('/Uptime',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+
+    var now = Date.now()
+    var timeDif = now - BootTime
+    res.send({uptime:timeDif,lastBoot:BootTime}) 
+});
+
+app.post('/Restart',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+
+    
+    var AdminSessionID = req.body.AdminSessionID
+    if(AdminSessionID == undefined){
+        res.send({"success":false,"error":"No User Session sent"})
+    }
+
+    //check user is an admin
+    var user = IsUserSessionValid(AdminSessionID)
+
+    if(user.Group == "ADMIN"){
+        //terminate script
+        log(`[Server Manager] Restart Called by ${user.Username}`,"Service")
+
+        setTimeout(process.exit(),2000)
+
+        res.send({"success":true})
+        
+    }else{
+        res.send({"success":false,"error":"User Not an admin"})
+    }
+});
+
+app.get('/Status',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    res.send(true)
+});
+
 
 app.post('/NewUser', (req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -243,13 +282,13 @@ app.post("/Login",(req,res) => {
                 // login user
                 var sessionID = uuidv4()
                 var sessionStart = Date.now()
-                var SessionVar = {ID:UserData.ID,Username:UserData.Username,SessionStart:sessionStart,SessionID:sessionID}
+                var SessionVar = {ID:UserData.ID,Username:UserData.Username,SessionStart:sessionStart,SessionID:sessionID,Permission:UserData.Permission}
 
                 $UserSessions.push(SessionVar)
 
                 log(`[INFO] User ${UserData.Username} logged in successfully`,"Service")
 
-                res.status(200).send({"error":false,"loginSession":{Username:UserData.Username,SessionStart:sessionStart,SessionID:sessionID}})
+                res.status(200).send({"error":false,"loginSession":{Username:UserData.Username,SessionStart:sessionStart,SessionID:sessionID,Permission:UserData.Permission}})
 
 
 
@@ -307,6 +346,66 @@ app.post('/ActiveSessions',(req,res) =>{
         res.status(500).send({error:true,msg:err})
     }
 });
+
+app.get('/WelcomeMessage', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    
+    var WelcomeFile = `${__dirname}\\data\\WelcomeMessage.txt`
+
+    if(!fs.existsSync(WelcomeFile)){
+        fs.writeFile(WelcomeFile,CONFIG.Default_Welcome_Message, err => {
+            if (err) {
+                log(`${formattedDate} [ERROR] Writing Welcome Message File: ${err}`, "service");
+            }
+        });
+    }
+
+    //read pos file
+    fs.readFile(WelcomeFile, 'utf8', (err, data) => {
+        if (err) {
+            log(`[ERROR] Error reading file: ${err}`, "service");
+            return;
+        }
+        res.send(data)
+    })
+})
+
+app.post('/ModifyWelcomeMessage', (req,res) => {
+
+    res.set('Access-Control-Allow-Origin', '*');
+    
+    try{
+        var AdminSessionID = req.body.AdminSessionID
+        var adminAccount = IsUserSessionValid(AdminSessionID)
+        
+        //check user is an admin
+        if(adminAccount.Group == "ADMIN"){
+
+            var WelcomeFile = `${__dirname}\\data\\WelcomeMessage.txt`
+            var message = req.body.text
+
+            fs.writeFile(WelcomeFile,message, err => {
+                if (err) {
+                    console.log(`${formattedDate} [ERROR] ${err}`);
+                    res.status(500).send({error:true,msg:err})
+                }else{
+                    res.send({error:false})
+                }
+            });
+
+        }else{
+
+            log(`[ERROR] /ModifyWelcomeMessage insufficient privileges`, "service")
+            res.status(500).send({error:true,msg:"User not an admin"})
+        }
+    }catch(err){
+
+        log(`[ERROR] /ModifyWelcomeMessage`, "service", JSON.stringify(err))
+        res.status(500).send({error:true,msg:err})
+    }
+
+
+})  
 
 app.post('/NewDraft',(req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -472,7 +571,7 @@ app.post('/GetPost', (req,res) => {
     var UserSessionID = req.body.SessionID
 
     //get post from database
-    var sql = `SELECT * FROM DigitalGarden.posts WHERE ID = '${PostID}'`
+    var sql = `SELECT posts.*, users.UserData, users.Username FROM DigitalGarden.posts, DigitalGarden.users WHERE posts.ID = '${PostID}' AND posts.UserID = users.ID`
     SqlQuery(sql).then(result =>{
         
         // Result validation
@@ -503,8 +602,12 @@ app.post('/GetPost', (req,res) => {
 
                     //send post data
                     res.status(200).send({
+                        posted:result[0].Posted,
+                        Username:result[0].Username,
+                        UserData:result[0].UserData,
                         PostData:result[0].PostData,
                         PostText:Posthtml,
+                        PostHtml:Posthtml,
                         Stage:result[0].Stage
                     })
 
@@ -717,8 +820,6 @@ app.post('/GetDrafts', (req,res) => {
                 }else{
                      e["PostHtml"] = ""
                 }
-                
-
                 return e
 
             })
@@ -1128,7 +1229,7 @@ function IsUserSessionValid(LoginSession){
         })
 
         //send confirmation
-        return {"login":true,"Username":result.Username,"UserID":result.ID}
+        return {"login":true,"Username":result.Username,"UserID":result.ID,"Permission":result.Permission}
         
     }else{
         return {"login":false,"error":"No User Session Found"}
