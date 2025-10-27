@@ -1,0 +1,61 @@
+.MultiTagInput_DIV{
+    display: inline-flex;
+    flex-wrap: wrap;
+    width:414px;
+    min-height:4rem;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: white;
+    color:black;
+    margin-left:23px;
+}
+
+.MultiTagInput_DIV:has(> .MultiTagInput_UserInput:focus){
+    outline: 1px solid black;
+}
+
+.MultiTagInput_UserInput{
+    
+    width:auto;
+    border:0;
+    background-color: none;
+    flex-grow: 1;
+    min-width: 10rem;
+    float:right;
+    border-radius: 11px;
+    margin: 0 !important;
+}
+
+.MultiTagInput_DIV .Tag{
+    margin-top: 5px;
+    margin-bottom:2px;
+    padding-bottom:2px;
+    height:2rem;
+    float: left;
+    vertical-align: middle;
+    padding-right: 5px;
+    padding-left:5px;
+    border:1px solid lightgray;
+    border-radius: 10px;
+}
+
+.MultiTagInput_DIV .Tag span{
+    height:2rem;
+    display:table-cell;
+    vertical-align:middle;
+}
+
+.MultiTagInput_DIV .Tag .close{
+    cursor:pointer;
+    padding-left:2px;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+.MultiTagInput_DIV .Tag .close:hover{
+    color:rgb(255, 152, 152);
+}
+
+.MultiTagInput_UserInput:focus{
+    border:0;
+    outline: none;
+}

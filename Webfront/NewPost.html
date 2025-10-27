@@ -8,12 +8,14 @@
     <link href="Style/Skeleton/normalize.css" rel="stylessheet">
     <link href="Style/Style.css" rel = "stylesheet">
     <link href="Style/NewPost.css" rel = "stylesheet">
+    <link href="Style/MultiTagInput.css" rel="stylesheet">
     <script src="Scripts/userSession.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="Scripts/config.js"></script>
     <script src="Scripts/LightDarkMode.js"></script>
     <script src="Scripts/NavControlls.js"></script>
+    <script src="Scripts/MultiTagInput.js"></script>
     
     <script type="module">
         WebComponents.waitFor(() => {
@@ -64,7 +66,11 @@
                     <li><button onclick="ToggleImageUpload()">Images</button></li>
 
                 </ul>
+                <div id="PostTags">
+
+                </div>
                 <textarea id="Editor"></textarea>
+                
             </div>
             <div class="six columns">
                 <h2>Preview</h2>
@@ -72,15 +78,26 @@
                     <zero-md style="padding-bottom: 10rem;">
                     </zero-md>
                 </div>
+                <div id="TagPreview">
+
+                </div>
             </div>            
         </div>
     </div>
 </body>
+<footer>
+    <hr>
+    <p>Digital Garden</p>
+    <p>Developed By Ash Leckie</p>
+    <p>No Generative AI was used in the creation of this website, Keep Programming in Human Hands, Fuck AI, Vote Green</p>
+</footer>
 <script>
 
     $Session = {
         DraftID:""
     }
+    
+    InitializeMultiTagInput("PostTags","Tags...")
 
     var Editor = document.getElementById('Editor');
     if (Editor.addEventListener) {
@@ -239,7 +256,8 @@
             method: "POST",
             body: JSON.stringify({
                 PostID : PostID,
-                SessionID : GetUserSession()
+                SessionID : GetUserSession(),
+                Tags:MultiTagValue("PostTags")
             })
         });
 

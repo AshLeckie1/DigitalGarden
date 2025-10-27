@@ -2,10 +2,16 @@
 // set nav position on page load
 $(document).ready(function() {
     SetNavPosition()
+    
+    var body =  document.getElementsByTagName("body")[0]
+    if(body.clientHeight < $(document).height()){
+        body.style = `min-height:${$(document).height()}px !important;`
+
+    }
 })
 
 // set nav position on resize 
- $(window).resize(function() {
+$(window).resize(function() {
     SetNavPosition()
 })
 

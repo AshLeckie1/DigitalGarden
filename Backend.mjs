@@ -289,9 +289,6 @@ app.post("/Login",(req,res) => {
                 log(`[INFO] User ${UserData.Username} logged in successfully`,"Service")
 
                 res.status(200).send({"error":false,"loginSession":{Username:UserData.Username,SessionStart:sessionStart,SessionID:sessionID,Permission:UserData.Permission}})
-
-
-
             }else{
                 // password is incorrect
                 log(`[INFO] User ${UserData.Username}failed to login`,"Service")
@@ -631,11 +628,12 @@ app.post('/PostDraft', (req,res) =>{
     
     var PostID = req.body.PostID
     var UserSessionID = req.body.SessionID
+    var PostTags = req.body.Tags
 
     //get post from database
     var sql = `SELECT * FROM DigitalGarden.posts WHERE ID = '${PostID}'`
     SqlQuery(sql).then(result =>{
-        try{
+        //try{
             if(result[0].ID != undefined){
 
                 //if the post is a draft the only user that should be able to access it is the user who owns the post
@@ -654,8 +652,33 @@ app.post('/PostDraft', (req,res) =>{
                     }
                 }
 
+                //get Search Data from MD string
+                var postText = fs.readFileSync(`${__dirname}/data/POSTS/${PostID}/post.md`)
+                var SearchData = []
+                console.log(postText)
+                postText.toString().split(" ").forEach(Text => {
+                    Text = Text.toUpperCase().split('').map(function(char){
+                        if (/[a-zA-Z0-9]/.test(char)) {
+                            return char;
+                        } 
+                    }).join('')
+
+                    console.log(Text)
+
+                    if(!SearchData.includes(Text)){
+                        SearchData.push(Text)
+                    }                
+                })
+
+                if(PostTags != []){
+                    PostTags.forEach(element => {
+                        var TagSql = `INSERT INTO DigitalGarden.tags (id,name) SELECT '${uuidv4()}',UPPER('${element}') WHERE NOT EXISTS(SELECT 1 FROM DigitalGarden.tags WHERE UPPER(name) = UPPER('${element}')) `
+                        SqlQuery(TagSql)
+                    });
+                }
+
                 //change post stage to POST
-                var sql = `UPDATE DigitalGarden.posts SET Stage = "LIVE", Posted = NOW() WHERE ID = "${PostID}"`
+                var sql = `UPDATE DigitalGarden.posts SET Stage = 'LIVE', Posted = NOW(), Tags = '${JSON.stringify(PostTags)}', SearchData = '${JSON.stringify(SearchData)}' WHERE ID = '${PostID}'`
                 SqlQuery(sql).then(result =>{ 
                     if(result.affectedRows > 0){
                         res.status(200).send({"error":false,msg:"Message updated to post"})
@@ -664,14 +687,10 @@ app.post('/PostDraft', (req,res) =>{
                         res.status(500).send({"error":true,msg:JSON.stringify(result)})
                     }
                 })
-
-                // move post directory to LIVE
-
-
             }
-        }catch(err){
-            res.status(500).send({"error":true,"msg":"Cannot get post from database","result":result,"Err":err})
-        }
+        // }catch(err){
+        //     res.status(500).send({"error":true,"msg":"Cannot get post from database","result":result,"Err":err})
+        // }
     });
 });
 
@@ -716,7 +735,7 @@ app.post('/GetFeed', (req,res) => {
         pos = 0
     }
 
-    var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+    var sql = `SELECT posts.ID, posts.PostData, posts.Tags, posts.Stage, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
     SqlQuery(sql).then(result => {
 
         result = result.map(e=>{
@@ -751,7 +770,7 @@ app.post('/GetFeedByUser', (req,res) => {
     }
         
     try{
-        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID and users.Username = '${req.body.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID and users.Username = '${req.body.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
         SqlQuery(sql).then(result => {
 
             var posts = result.map(e=>{
@@ -782,6 +801,45 @@ app.post('/GetFeedByUser', (req,res) => {
                      res.status(500).send({"error":true,"msg":"Something went wrong!"})
                 }
             })
+        })
+    }catch(err){
+        res.status(500).send({"error":true,"msg":err})
+    }
+})
+
+
+app.post('/GetFeedByTag', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var pos = req.body.pos
+    if(pos == undefined){
+        pos = 0
+    }
+        
+    try{
+        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND WHERE UPPER(Tags) LIKE UPPER('%"${req.body.Tag}"%'); ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+        SqlQuery(sql).then(result => {
+
+            var posts = result.map(e=>{
+                var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
+                let converter = new showdown.Converter(),
+                Posthtml = converter.makeHtml(postText.toString());
+                e["PostHtml"] = Posthtml
+
+                return e
+
+            })
+
+            res.send(
+            {
+                posts:posts,
+                PostGetLimit:CONFIG.PostGetLimit
+            })
+
         })
     }catch(err){
         res.status(500).send({"error":true,"msg":err})

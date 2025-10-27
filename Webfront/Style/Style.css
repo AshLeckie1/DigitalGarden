@@ -11,10 +11,13 @@
     --LightModeFont:black;
     --lightModeHighLight:#3598fc;
 }
+html{
+    min-height:100%;
+}
 
 body{
     background-color: black;
-    height:100%;
+    min-height:100%;
     margin: 0;
     min-width: 1000px;
     overflow: scroll;
@@ -176,6 +179,16 @@ body.DarkMode{
     padding:5px;
 }
 
+.PostContainer .Tags{
+    margin:5px;
+    
+}
+
+.PostContainer .Tags a:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .LightMode .PostContainer{
     background-color: var(--LightModePrimary);
     border: var(--lightModeHighLight) solid 1px;
@@ -191,7 +204,7 @@ body.DarkMode{
 }
 
 .LightMode .PostContainer{
-    background-color: var(--lightModeTertiary);
+    background-color: var(--LightModePrimary);
 }
 
 .DarkMode .PostContainer.SinglePost:hover{
@@ -222,8 +235,8 @@ body.DarkMode{
 
 .ExpansionButton{
     position: absolute;
-    bottom: 0;
-    margin-bottom: 2rem;
+    top: 32rem;
+
     left: calc(50% - 5rem);
     opacity: 80%;
 }
@@ -904,4 +917,14 @@ body.DarkMode{
 .LightMode .SideNav li:hover{
     background-color: var(--lightModeTertiary);
     font-weight: bolder;
+}
+
+footer{
+    align-items: center;
+}
+
+footer p{
+    margin: auto;
+    text-align: center;
+    color:gray;
 }

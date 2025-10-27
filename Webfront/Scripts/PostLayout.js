@@ -19,7 +19,20 @@ function CreatePost(post){
                 </div>
         </div>`
     });
+
+    try{
+        var TagsArray =  JSON.parse(post.Tags)
+        TagsArray = TagsArray.map(function(e){
+            return `<a class="postTag">#${e}</a>`
+        })
+        var Tags = TagsArray.join(" ")
+        
+    }catch{
+        var Tags = ""
+    }
     
+
+
     var Post = `
     <div class='PostContainer' data-UserDataId='${PostID}' onclick="GoToPost('${PostData.ID}','${PostID}')">
         <div class='PostInfo'>
@@ -48,10 +61,15 @@ function CreatePost(post){
                 </div>
             </div>
         </div>
+        <button class="ExpansionButton" id="${PostID}_Expand">Expand</button>
         <div class="PostText" id="${PostID}_Textarea">
             ${post.PostHtml}   
         </div>
-        <button class="ExpansionButton" id="${PostID}_Expand">Expand</button>
+        
+        <div class="Tags">
+            ${Tags}
+        </div>
+        
     </div>
     `
     setTimeout(()=>{isPostNotOverflown(PostID)},200)
