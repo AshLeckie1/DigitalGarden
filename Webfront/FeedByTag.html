@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Digital Garden</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Scripts/FlippyTextReader.js"></script>
+    <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
+    <link href="Style/Skeleton/normalize.css" rel="stylessheet">
+    <link href="Style/Style.css" rel = "stylesheet">
+    <link href="Style/IconStyles.css" rel = "stylesheet">
+
+    <script src="Scripts/userSession.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="Scripts/config.js"></script>
+    <script src="Scripts/userPopup.js"></script>
+    <script src="Scripts/PostLayout.js"></script>
+    <script src="Scripts/LightDarkMode.js"></script>
+    <script src="Scripts/NavControlls.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SH20RAJ/ShowdownCSS@main/showdown.css">
+</head>
+<body class="LightMode" id="body">
+    <div class="MainTitle">
+        <h1 id="Title"></h1>
+        <div id="UserSession"></div>
+    </div>
+    <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
+    </div>
+    <div class="container MainBody"> 
+        <div class="Row">
+            <div class="twelve columns">
+                <div id="Feed">                    
+                </div>
+            </div>            
+        </div>
+    </div>
+</body>
+<footer id="footer"></footer>
+<script>
+
+    $session = {
+        postPos:0
+    }
+
+    $(document).ready(function() {
+        // check login
+        checkLogin()
+        $("#footer").load("footer.html");
+        //set site title
+        TitleLoop()
+        function TitleLoop(){
+            TriggerChange("Title")
+            setTimeout(TitleLoop,10000)
+        }
+       
+        //Get Feed
+        if(new URL(window.location.href).searchParams.get("tag") != null){
+            var tag = new URL(window.location.href).searchParams.get("tag")
+            GetFeed(0,tag)
+        
+        }
+
+    })
+
+    function GetFeed(pos,tag){
+        PostGetFeed(pos,tag).then(feed => {
+            console.log(feed)
+
+            try{
+                document.getElementById("NoPostDiv").remove()
+            }catch{}
+            
+
+            if(feed.posts.length == 0){
+                document.getElementById("Feed").innerHTML += `<dir class='NoPosts' id='NoPostDiv'><div><span>No posts found :( <br></span><br><button onclick='GetFeed(${$session.postPos})'>Refresh</button></div></div>`
+            }
+
+            feed.posts.forEach(post => {
+                    document.getElementById("Feed").innerHTML += CreatePost(post)  
+                    
+            });
+
+            $session.postPos = $session.postPos + feed.posts.length
+
+            if(feed.posts.length > 0){
+                document.getElementById("Feed").innerHTML += `<dir class='NoPosts' id='NoPostDiv'><button onclick='GetFeed(${$session.postPos})'>Get More Posts</button></div></div>`
+                
+            }
+
+        })
+        
+        async function GetPost(PostID) {
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetPost`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    PostID : PostID,
+                })
+            });
+
+            return response.json()
+        }
+
+        async function PostGetFeed(pos,tag) {
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetFeedByTag`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    pos : pos,
+                    Tag : tag
+                    
+                })
+            });
+
+            return response.json()
+        }
+    }
+
+    function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+        );
+    }
+
+</script>
+</html>

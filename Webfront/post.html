@@ -40,11 +40,7 @@
         </div>
     </div>
 </body>
-<footer>
-    <hr>
-    <p>Digital Garden</p>
-    <p>Developed By Ash Leckie</p>
-    <p>No Generative AI was used in the creation of this website, Keep Programming in Human Hands, Fuck AI, Vote Green</p>
+<footer id="footer">
 </footer>
 <script>
 
@@ -55,7 +51,8 @@
     $(document).ready(function() {
         // check login
         checkLogin()
-
+        $("#footer").load("footer.html");
+        
         //set site title
         TitleLoop()
         function TitleLoop(){

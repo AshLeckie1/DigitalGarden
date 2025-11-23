@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Digital Garden</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Scripts/FlippyTextReader.js"></script>
+    <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
+    <link href="Style/Skeleton/normalize.css" rel="stylessheet">
+    <link href="Style/Style.css" rel = "stylesheet">
+    <link href="Style/IconStyles.css" rel = "stylesheet">
+
+    <script src="Scripts/userSession.js"></script>
+     <script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="Scripts/config.js"></script>
+    <script src="Scripts/userPopup.js"></script>
+    <script src="Scripts/LightDarkMode.js"></script>
+    <script src="Scripts/NavControlls.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SH20RAJ/ShowdownCSS@main/showdown.css">
+</head>
+<body class="LightMode" id="body">
+    <div class="MainTitle">
+        <h1 id="Title"></h1>
+        <div id="UserSession"></div>
+    </div>
+    <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
+    </div>
+    <div class="container MainBody"> 
+        <div class="Row">
+            <div class="twelve columns">
+                <h1 id="the-digital-garden">The Digital Garden</h1>
+                <blockquote>
+                <p>Website developed and Hosted by Ash Leckie</p>
+                </blockquote>
+                <h2 id="about">About</h2>
+                <h2 id="code-of-conduct">Code of Conduct</h2>
+                <h2 id="Do-not-share-user-information">1. Do not share user information</h2>
+                <ul>
+                    <li>Do not share the information be it personal or web related without the explicit consent from said person.</li>
+                    <li>Only share information that is already in the public domain</li>
+                    <li>Any sharing of personal information, such as another persons home address, will end with the termination of your account.</li>
+                </ul>
+                <h2 id="Adult-Content">2. Adult Content</h2>
+                <ul>
+                    <li>Sexually explicit material, pornography, is not to be posted or linked to on this site.</li>
+                    <li>Artistic content may be posted/linked to however it would be advised to check with a Administrator.</li>
+                </ul>
+                <h2 id="Use-of-AI-Content">3. Use of AI content</h2>
+                <ul>
+                    <li>Any use of AI content must be made known in any post containing AI content.</li>
+                    <li>If AI content is not labeled it could be removed or edited by an Administrator to Label the AI content being used</li>
+                </ul>
+                <h2 id="Be-Respectful">4. Be Respectful</h2>
+                <ul>
+                    <li>Never publish material that is obscene, racist, sexist, pornographic, sexually exploitative, or in any other way discriminatory, threatening or harassing, personally offensive, defamatory, or illegal.</li>
+                    <li>Infringing on this will get your account removed.</li>
+                </ul>
+                <h2 id="use-of-copywrite-material">5. Use of Copyright material</h2>
+                <ul>
+                    <li>You may link to Copyright material, however to avoid issues you will have to disclose the Copyright of the linked material</li>
+                    <li>Do not upload Copyrighted material to the site without the express permission from the Copyright holder</li>
+                </ul>
+                <h2 id="Personal-Responcibility">6. Personal Responsibility</h2>
+                <ul>
+                    <li>By joining This Digital Garden you are responsible for what you post.</li>
+                    <li>Any breaches of the above rules may lead to your account being locked out either Temporarily or Permanently</li>
+                    <li>In most instances we wont need to take action in locking user accounts, this is not a dictatorship. However depending on the severity and past history this may be the result.</li>
+                </ul>
+
+                <h2 id="use-of-ai">Use of AI</h2>
+                <p>No Generative AI was used in the making of this site.</p>
+                <p>AI is a danger to thw world at large, from misinformation to environmental AI is a threat to our future.
+                AI is a misinformation machine, it will agree with you and give you false information to make you happy. It does not care or have morality, the cooperations that have created these public access LLMs have done so not for the benefit of mankind but purely for profit.</p>
+                <p>AI datacenters consume upwards of Five Million Gallons of water daily<a href="https://www.tomshardware.com/tech-industry/explosive-ai-buildout-brings-into-question-water-supply-concerns-exploring-how-data-centers-could-curb-water-demands" target="_blank">*</a>, this water comes from the fresh water drinking supply, 80% of the water is evaporated during the process of cooling. The leftover water is then dumped into rivers or sewer systems that are old and under rated.
+                The water used to cool an AI datacenter is less then the water used in generating the electricity for said datacenter.
+                AI is pushing for a 165% increase in power demand for datacenters<a href="https://www.goldmansachs.com/insights/articles/ai-to-drive-165-increase-in-data-center-power-demand-by-2030" target="_blank">*</a></p>
+
+            </div>            
+        </div>
+    </div>
+</body>
+<footer id="footer">
+</footer>
+<script>
+     $(document).ready(function() {
+        // check login
+        checkLogin()
+        $("#footer").load("footer.html");
+    });
+</script>
+
+</html>

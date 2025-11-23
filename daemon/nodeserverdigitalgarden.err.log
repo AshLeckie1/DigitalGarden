@@ -1,0 +1,82 @@
+TypeError: Cannot read properties of undefined (reading 'ID')
+    at file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:1072:27
+    at Layer.handleRequest (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\layer.js:152:17)
+    at next (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\route.js:117:3)
+    at handle (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\layer.js:152:17)
+    at C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:295:15
+    at processParams (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:582:12)
+    at next (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:291:5)
+    at C:\inetpub\wwwroot\DigitalGarden\node_modules\body-parser\lib\read.js:132:5
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+TypeError: Cannot read properties of undefined (reading 'ID')
+    at file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:1233:27
+    at Layer.handleRequest (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\layer.js:152:17)
+    at next (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\route.js:117:3)
+    at handle (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\layer.js:152:17)
+    at C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:295:15
+    at processParams (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:582:12)
+    at next (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:291:5)
+    at C:\inetpub\wwwroot\DigitalGarden\node_modules\body-parser\lib\read.js:132:5
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+Error: ENOENT: no such file or directory, stat 'C:\inetpub\wwwroot\DigitalGarden\data\UserIcons\786d49b5-be7a-11f0-999b-000c298d25c1\UserBackground.png'
+TypeError: Cannot read properties of undefined (reading 'ID')
+    at file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:1233:27
+    at Layer.handleRequest (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\layer.js:152:17)
+    at next (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\route.js:117:3)
+    at handle (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\layer.js:152:17)
+    at C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:295:15
+    at processParams (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:582:12)
+    at next (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:291:5)
+    at C:\inetpub\wwwroot\DigitalGarden\node_modules\body-parser\lib\read.js:132:5
+TypeError: Cannot read properties of undefined (reading 'ID')
+    at file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:1263:27
+    at Layer.handleRequest (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\layer.js:152:17)
+    at next (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\route.js:117:3)
+    at handle (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\lib\layer.js:152:17)
+    at C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:295:15
+    at processParams (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:582:12)
+    at next (C:\inetpub\wwwroot\DigitalGarden\node_modules\router\index.js:291:5)
+    at C:\inetpub\wwwroot\DigitalGarden\node_modules\body-parser\lib\read.js:132:5
+file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:1680
+    switch(logType.toUpperCase()){
+                   ^
+
+TypeError: Cannot read properties of undefined (reading 'toUpperCase')
+    at log (file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:1680:20)
+    at file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:381:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+Node.js v22.20.0
+file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:1680
+    switch(logType.toUpperCase()){
+                   ^
+
+TypeError: Cannot read properties of undefined (reading 'toUpperCase')
+    at log (file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:1680:20)
+    at file:///C:/inetpub/wwwroot/DigitalGarden/Backend.mjs:381:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+Node.js v22.20.0

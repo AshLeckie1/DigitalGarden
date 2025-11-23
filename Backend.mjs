@@ -13,6 +13,8 @@ import showdown from "showdown";
 import multer from "multer";
 import { Jimp } from "jimp";
 import imageThumbnail from "image-thumbnail"
+import nodemailer from "nodemailer"
+import { Session } from "node:inspector/promises";
 
 const FileUpload = multer({ dest: 'data/TempUploads/' })
 
@@ -164,7 +166,7 @@ app.post('/NewUser', (req,res) => {
     
     if (req.body == null) {
         // if post is missing body
-        res.status(400).send({"error":true,msg:"missing POST body!"});
+        res.status(400).send({error:true,msg:"missing POST body!"});
         return;
     }
     
@@ -174,6 +176,7 @@ app.post('/NewUser', (req,res) => {
         var Username = req.body.username
         var Password = req.body.password
         var InviteKey = req.body.InviteKey
+        var Email = req.body.email
         var UserData = `{
             "Alias":"${Username}",
             "Subtext":"",
@@ -193,7 +196,7 @@ app.post('/NewUser', (req,res) => {
 
             if(ExistingUsers.users > 0){
                 //there is already an existing user with this username
-                res.status(400).send({"error":true,msg:`The username ${Username} is already taken!`})
+                res.status(400).send({error:true,msg:`The username ${Username} is already taken!`})
                 return;
             }
 
@@ -201,7 +204,7 @@ app.post('/NewUser', (req,res) => {
                 //encrypt password
                 var encrypted = encrypt(Password);
                 //add user record to DB
-                var sql = `INSERT INTO users (ID, Username, UserData, Passkey, InviteKey) VALUES ((SELECT UUID() AS ID), '${Username}', '${UserData}', '${JSON.stringify(encrypted)}' ,'${InviteKeyRes[0].ID}');`
+                var sql = `INSERT INTO users (ID, Username, Email, UserData, Passkey, InviteKey) VALUES ((SELECT UUID() AS ID), '${Username}', '${Email}' ,'${UserData}', '${JSON.stringify(encrypted)}' ,'${InviteKeyRes[0].ID}');`
                 SqlQuery(sql).then(result =>{
                     // TODO validate result
                     if(result.affectedRows > 0){
@@ -211,7 +214,7 @@ app.post('/NewUser', (req,res) => {
                     }else{
                         var tracker = uuidv4()
                         log(`[ERROR] [${tracker}] There was a SQL error adding user - ${JSON.stringify(result, null, 2)}`,"Service");
-                        res.status(500).send({"error":true,"msg":"There was an issue adding a user to the DB","tracker":tracker})
+                        res.status(500).send({error:true,"msg":"There was an issue adding a user to the DB","tracker":tracker})
                     }
                     
                     
@@ -219,22 +222,22 @@ app.post('/NewUser', (req,res) => {
                     //there was an issue adding the user
                     var tracker = uuidv4()
                     log(`[ERROR] [${tracker}] Cannot adding user to DB- ${JSON.stringify(err, null, 2)}`,"Service");
-                    res.status(500).send({"error":true,"msg":"There was an issue adding a user to the DB","tracker":tracker})
+                    res.status(500).send({error:true,"msg":"There was an issue adding a user to the DB","tracker":tracker})
                 });
                 
             }else{
                 //key is invalid or has expired
-                res.status(401).send({"error":true,"msg":"Invite key is invalid or has expired!"})
+                res.status(401).send({error:true,"msg":"Invite key is invalid or has expired!"})
             }
         }).catch(err => {
             //there was a server error getting the invite key
             var tracker = uuidv4()
             log(`[ERROR] [${tracker}] Cannot get invite key from DB - ${JSON.stringify(err, null, 2)}`,"Service");
-            res.status(500).send({"error":true,"msg":"Cannot get invite key from DB","tracker":tracker})
+            res.status(500).send({error:true,"msg":"Invite key missing or Invalid!","tracker":tracker})
         });
         
     }catch(err){
-        res.status(500).send({"error":true,"msg":err})
+        res.status(500).send({error:true,"msg":err})
         return;
     }
 
@@ -243,7 +246,7 @@ app.post('/NewUser', (req,res) => {
 app.post("/Login",(req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body == null) {
-        res.status(400).send({"error":true, msg:"Missing query"});
+        res.status(400).send({error:true, msg:"Missing query"});
         return;
     }
 
@@ -251,7 +254,7 @@ app.post("/Login",(req,res) => {
     var Password = req.body.password
 
     if(Username ==  undefined || Password ==  undefined){
-        res.status(400).send({"error":true,"msg":"Missing username or password!"})
+        res.status(400).send({error:true,"msg":"Missing username or password!"})
     }
 
     try{
@@ -260,7 +263,7 @@ app.post("/Login",(req,res) => {
 
             if(result.length == 0){
                 // user not found
-                res.status(401).send({"error":true,"msg":"Username or password is incorrect"})
+                res.status(401).send({error:true,"msg":"Username or password is incorrect"})
                 return;
             }
 
@@ -292,7 +295,7 @@ app.post("/Login",(req,res) => {
             }else{
                 // password is incorrect
                 log(`[INFO] User ${UserData.Username}failed to login`,"Service")
-                res.status(401).send({"error":true,"msg":"Username or password is incorrect"})
+                res.status(401).send({error:true,"msg":"Username or password is incorrect"})
             }
         })
 
@@ -301,10 +304,171 @@ app.post("/Login",(req,res) => {
     }
 });
 
+// Changing Password
+var passwordChangeRequests = []
+
+app.post('/ChangePassword',(req,res)=>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({error:true, msg:"Missing query"});
+        return;
+    }
+
+    var SessionID = req.body.sessionID
+    var NewPassword = req.body.NewPassword
+    var Session = IsUserSessionValid(SessionID)
+    if(Session.login){
+        var EncryptedPass = encrypt(NewPassword)
+
+        var sql = `UPDATE DigitalGarden.users SET PassKey = '${JSON.stringify(EncryptedPass)}' WHERE ID = '${Session.UserID}'`
+        SqlQuery(sql).then(result =>{
+            //add error monitoring...
+
+            //remove password request
+            RemoveRequest(Request.id)
+            function RemoveRequest(id){
+                passwordChangeRequests = passwordChangeRequests.filter((e)=>{
+                    if(e.id != id){
+                        return e
+                    }
+                })
+            }
+            //Send result
+            res.status(200).send({error:false,msg:"Password Reset!"})
+        });
+    }else{
+        res.status(403).send({error:true,msg:"User Session not valid"})
+    }
+});
+
+app.post('/RequestPasswordChange',(req,res)=>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({error:true, msg:"Missing query"});
+        return;
+    }
+
+    //get users details
+    var username = req.body.username
+    var sql = `SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = UPPER('${username}')`
+    SqlQuery(sql).then(result => {
+        //check that user is valid
+        if(result.length > 0){
+            log(`[INFO] Creating Password Change request code for ${result[0].Username}`,"service")
+            //create change request
+            var request = {
+                id:uuidv4(),
+                userName:result[0].Username,
+                UserID:result[0].ID
+            }
+
+            //add request to request list
+            passwordChangeRequests.push(request)
+            
+            //set timeout to remove from list
+            //request will be removed in an hour
+            setTimeout(function(){ RemoveRequest(request.id) },3600000)
+            function RemoveRequest(id){
+                passwordChangeRequests = passwordChangeRequests.filter((e)=>{
+                    if(e.id != id){
+                        return e
+                    }
+                })
+            }
+
+            //send user the request ID via email
+            const transporter = nodemailer.createTransport({
+                service:'gmail',
+                auth:{
+                    type: 'OAuth2',
+                    user: CONFIG.GmailUser, // Your Gmail email address
+                    clientId: CONFIG.GmailClientID, // OAuth 2.0 client ID
+                    clientSecret: CONFIG.GmailClientSecret, // OAuth 2.0 client secret
+                    refreshToken: CONFIG.GmailRefreshToken // OAuth 2.0 refresh token
+                }
+            })
+
+            const mailOptions = {
+                from: CONFIG.GmailUser, 
+                to: result[0].Email, 
+                subject: "Digital Garden Password Reset", 
+                text: `You have requested a password reset. \nIf you did not request this please change your password. \n\nRequest Code: ${request.id.split("-")[0]} \n\n\n regards,\nTheDigitalGarden`,
+            };
+
+            // Send the email
+            transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                log(`[ERROR] Unable to send user ${request.Username} Password reset email, err: ${error}`, "service");
+                res.status(500).send({error:true,msg:"Recovery Code could not be sent"})
+            } else {
+                log(`[INFO] Password Reset email sent: ${info.response} `,"service" );
+
+                //respond to browser confirming request has been made
+                res.status(200).send({error:false})
+            }
+            });
+
+           
+            
+
+        }else{ 
+            log(`[INFO] Failed attempt at creating password change code for user "${username}", account not found`,"service")
+            //username does not exist
+            res.status(400).send({error:true,msg:"Username not found!"})
+        }
+
+    });
+});
+
+app.post('/ChangeForgottenPassword',(req,res)=>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({error:true, msg:"Missing query"});
+        return;
+    }
+    
+    var SecurityCode = req.body.SecurityCode
+    var NewPassword = req.body.Password
+
+    //search for password request
+    var Request = passwordChangeRequests.map((e) =>{
+        if(e.id.split("-")[0] == SecurityCode){
+            return e
+        }       
+    })[0]
+
+    if(Request == null){
+        //code is invalid, send error
+        res.status(403).send({error:true, msg:"Security Code not valid!"})
+    }else{
+        //code is valid, set user password.
+        var EncryptedPass = encrypt(NewPassword)
+
+        var sql = `UPDATE DigitalGarden.users SET PassKey = '${JSON.stringify(EncryptedPass)}' WHERE ID = '${Request.UserID}'`
+        SqlQuery(sql).then(result =>{
+            //add error monitoring...
+
+            //remove password request
+            RemoveRequest(Request.id)
+            function RemoveRequest(id){
+                passwordChangeRequests = passwordChangeRequests.filter((e)=>{
+                    if(e.id != id){
+                        return e
+                    }
+                })
+            }
+
+            //Send result
+            res.status(200).send({error:false,msg:"Password Reset!"})
+        });
+    }
+});
+
+
 app.get('/CreateInvite',(req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.query == null) {
-        res.status(400).send({"error":true, msg:"Missing query"});
+        res.status(400).send({error:true, msg:"Missing query"});
         return;
     }
 
@@ -318,7 +482,7 @@ app.get('/CreateInvite',(req,res) => {
         })
 
     }else{
-        res.status(403).send({"error":true,"msg":"User Session is not valid!"})
+        res.status(403).send({error:true,"msg":"User Session is not valid!"})
     }
 })
 
@@ -407,7 +571,7 @@ app.post('/ModifyWelcomeMessage', (req,res) => {
 app.post('/NewDraft',(req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body == null) {
-        res.status(400).send({"error":true, msg:"Missing query"});
+        res.status(400).send({error:true, msg:"Missing query"});
         return;
     }
     
@@ -418,7 +582,7 @@ app.post('/NewDraft',(req,res) => {
     var userSession = IsUserSessionValid(req.body.SessionID)
     //if login is invalid 
     if(!userSession.login){
-        res.status(401).send({"error":true,"msg":userSession.error})
+        res.status(401).send({error:true,"msg":userSession.error})
         return
     }
 
@@ -427,7 +591,7 @@ app.post('/NewDraft',(req,res) => {
         //check value is a guid
         const regex = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
         if(!regex.test(DraftID)){
-            res.status(400).send({"error":true,msg:"Draft ID is not a valid GUID"})
+            res.status(400).send({error:true,msg:"Draft ID is not a valid GUID"})
         }
 
         // TODO check that GUID isn't already in use
@@ -452,7 +616,7 @@ app.post('/NewDraft',(req,res) => {
             res.status(200).send(Draft)
         }else{
             // there was an error
-            res.status(500).send({"error":true,msg:result})
+            res.status(500).send({error:true,msg:result})
         }
     });
 
@@ -484,7 +648,7 @@ app.post('/ModifyDraft', (req,res) =>{
     var userSession = IsUserSessionValid(SessionID)
     //if login is invalid 
     if(!userSession.login){
-        res.status(401).send({"error":true,"msg":userSession.error})
+        res.status(401).send({error:true,"msg":userSession.error})
         return
     }
 
@@ -498,7 +662,7 @@ app.post('/ModifyDraft', (req,res) =>{
         //no post found
         if(result.length == 0){
             //no post exists with given ID
-            res.status(404).send({"error":true,"msg":"Post not found!"})
+            res.status(404).send({error:true,"msg":"Post not found!"})
         }
 
         // check that user is the one who created the draft
@@ -527,13 +691,13 @@ app.post('/ModifyDraft', (req,res) =>{
             }
             else{
                 // post cannot be modified
-                res.status(403).send({"error":true, "msg":"Post is no longer modifiable!"})
+                res.status(403).send({error:true, "msg":"Post is no longer modifiable!"})
             }
         }
         else{
             //user is not valid
             log(`[ERROR] an attempt was made by ${JSON.stringify(userSession)} to modify a draft that they do not own. Draft ID ${PostID}`,"status")
-            res.status(403).send({"error":true,"msg":"You do not have permissions to edit this post"})
+            res.status(403).send({error:true,"msg":"You do not have permissions to edit this post"})
         }
     })
         
@@ -580,14 +744,14 @@ app.post('/GetPost', (req,res) => {
                 
                 if(UserSessionID == undefined && result[0].Stage == "DRAFT"){
                     log(`[INFO] Attempt made to access draft ${result[0].ID} by unknown user`,"service")
-                    res.status(403).send({"error":true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                    res.status(403).send({error:true,"msg":"You do not have access to this draft, this access attempt has been logged"})
                 }else{
                     //check if logged user has access to draft
                     var userSession = IsUserSessionValid(UserSessionID)
                     if(userSession.UserID != result[0].UserID && result[0].Stage == "DRAFT"){
                         //refuse request if logged user is not the owner of the draft
                         log(`[INFO] Attempt made to access draft ${result[0].ID} by ${userSession.Username}`,"service")
-                        res.status(403).send({"error":true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                        res.status(403).send({error:true,"msg":"You do not have access to this draft, this access attempt has been logged"})
                     }
                 }
 
@@ -605,16 +769,79 @@ app.post('/GetPost', (req,res) => {
                         PostData:result[0].PostData,
                         PostText:Posthtml,
                         PostHtml:Posthtml,
+                        Tags:result[0].Tags,
                         Stage:result[0].Stage
                     })
 
                 }catch(err){
-                    res.status(500).send({"error":true,"msg":"Cannot Read post md file","result":err})
+                    res.status(500).send({error:true,"msg":"Cannot Read post md file","result":err})
                 }
                 
             }
         }catch(err){
-            res.status(500).send({"error":true,"msg":"Cannot get post from database","result":result,"Err":err})
+            res.status(500).send({error:true,"msg":"Cannot get post from database","result":result,"Err":err})
+        }
+    });
+})
+
+
+app.post('/GetDraft', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var PostID = req.body.PostID
+    var UserSessionID = req.body.SessionID
+
+    //get post from database
+    var sql = `SELECT posts.*, users.UserData, users.Username FROM DigitalGarden.posts, DigitalGarden.users WHERE posts.ID = '${PostID}' AND posts.UserID = users.ID`
+    SqlQuery(sql).then(result =>{
+        
+        // Result validation
+        try{
+            if(result[0].ID != undefined){
+
+                //if the post is a draft the only user that should be able to access it is the user who owns the post
+                // if the user is a guest and not logged in they wont have access to any drafts anyway.
+                
+                if(UserSessionID == undefined && result[0].Stage == "DRAFT"){
+                    log(`[INFO] Attempt made to access draft ${result[0].ID} by unknown user`,"service")
+                    res.status(403).send({error:true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                }else{
+                    //check if logged user has access to draft
+                    var userSession = IsUserSessionValid(UserSessionID)
+                    if(userSession.UserID != result[0].UserID && result[0].Stage == "DRAFT"){
+                        //refuse request if logged user is not the owner of the draft
+                        log(`[INFO] Attempt made to access draft ${result[0].ID} by ${userSession.Username}`,"service")
+                        res.status(403).send({error:true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                    }
+                }
+
+                //read post MD
+                try{
+                    var postText = fs.readFileSync(`${__dirname}\\data\\POSTS\\${PostID}\\post.md`)
+
+                    //send post data
+                    res.status(200).send({
+                        posted:result[0].Posted,
+                        Username:result[0].Username,
+                        UserData:result[0].UserData,
+                        PostData:result[0].PostData,
+                        PostText:postText.toString(),
+                        PostHtml:postText.toString(),
+                        Tags:result[0].Tags,
+                        Stage:result[0].Stage
+                    })
+
+                }catch(err){
+                    res.status(500).send({error:true,"msg":"Cannot Read post md file","result":err})
+                }
+                
+            }
+        }catch(err){
+            res.status(500).send({error:true,"msg":"Cannot get post from database","result":result,"Err":err})
         }
     });
 })
@@ -633,7 +860,7 @@ app.post('/PostDraft', (req,res) =>{
     //get post from database
     var sql = `SELECT * FROM DigitalGarden.posts WHERE ID = '${PostID}'`
     SqlQuery(sql).then(result =>{
-        //try{
+        try{
             if(result[0].ID != undefined){
 
                 //if the post is a draft the only user that should be able to access it is the user who owns the post
@@ -641,14 +868,14 @@ app.post('/PostDraft', (req,res) =>{
                 
                 if(UserSessionID == undefined && result[0].Stage == "DRAFT"){
                     log(`[INFO] Attempt made to access draft ${result[0].ID} by unknown user`,"service")
-                    res.status(403).send({"error":true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                    res.status(403).send({error:true,"msg":"You do not have access to this draft, this access attempt has been logged"})
                 }else{
                     //check if logged user has access to draft
                     var userSession = IsUserSessionValid(UserSessionID)
                     if(userSession.UserID != result[0].UserID && result[0].Stage == "DRAFT"){
                         //refuse request if logged user is not the owner of the draft
                         log(`[INFO] Attempt made to access draft ${result[0].ID} by ${userSession.Username}`,"service")
-                        res.status(403).send({"error":true,"msg":"You do not have access to this draft, this access attempt has been logged"})
+                        res.status(403).send({error:true,"msg":"You do not have access to this draft, this access attempt has been logged"})
                     }
                 }
 
@@ -671,8 +898,18 @@ app.post('/PostDraft', (req,res) =>{
                 })
 
                 if(PostTags != []){
+                    //Remove Duplicate Tags
+                    var PostTagsFiltered = []
+                    PostTags.forEach(e=>{
+                        if(!PostTagsFiltered.includes(e)){
+                            PostTagsFiltered.push(e)
+                        }
+                    })
+
+                    PostTags = PostTagsFiltered
+
                     PostTags.forEach(element => {
-                        var TagSql = `INSERT INTO DigitalGarden.tags (id,name) SELECT '${uuidv4()}',UPPER('${element}') WHERE NOT EXISTS(SELECT 1 FROM DigitalGarden.tags WHERE UPPER(name) = UPPER('${element}')) `
+                        var TagSql = `INSERT INTO DigitalGarden.tags (id,name,posts) SELECT '${uuidv4()}',UPPER('${element}'),0 WHERE NOT EXISTS(SELECT 1 FROM DigitalGarden.tags WHERE UPPER(name) = UPPER('${element}')); SET @TagID = (SELECT id FROM DigitalGarden.tags WHERE UPPER(name) = UPPER('${element}')); UPDATE DigitalGarden.tags SET posts = posts + 1 WHERE id = @TagID`
                         SqlQuery(TagSql)
                     });
                 }
@@ -684,13 +921,13 @@ app.post('/PostDraft', (req,res) =>{
                         res.status(200).send({"error":false,msg:"Message updated to post"})
                     }
                     else{
-                        res.status(500).send({"error":true,msg:JSON.stringify(result)})
+                        res.status(500).send({error:true,msg:JSON.stringify(result)})
                     }
                 })
             }
-        // }catch(err){
-        //     res.status(500).send({"error":true,"msg":"Cannot get post from database","result":result,"Err":err})
-        // }
+        }catch(err){
+            res.status(500).send({error:true,"msg":"Cannot get post from database","result":result,"Err":err})
+        }
     });
 });
 
@@ -705,7 +942,7 @@ app.post('/DeletePost',(req,res) =>{
     var User = IsUserSessionValid(req.body.SessionID)
     
     if(!User.login){
-        res.status(403).send({"error":true,"msg":"User session not valid"})
+        res.status(403).send({error:true,"msg":"User session not valid"})
         return;
     }else{
         var PostID = req.body.PostID
@@ -717,7 +954,7 @@ app.post('/DeletePost',(req,res) =>{
                 fs.rmSync(`${__dirname}\\data\\POSTS\\${PostID}`, { recursive: true, force: true });
                 res.status(200).send({"error":false,"msg":"Post Deleted"})
             }else{
-                res.status(500).send({"error":true,"msg":"Either post missing or User session is incorrect","result":result})
+                res.status(500).send({error:true,"msg":"Either post missing or User session is incorrect","result":result})
             }
         })
     }   
@@ -798,12 +1035,12 @@ app.post('/GetFeedByUser', (req,res) => {
                         PostGetLimit:CONFIG.PostGetLimit
                     })
                 }else{
-                     res.status(500).send({"error":true,"msg":"Something went wrong!"})
+                     res.status(500).send({error:true,"msg":"Something went wrong!"})
                 }
             })
         })
     }catch(err){
-        res.status(500).send({"error":true,"msg":err})
+        res.status(500).send({error:true,"msg":err})
     }
 })
 
@@ -821,7 +1058,7 @@ app.post('/GetFeedByTag', (req,res) => {
     }
         
     try{
-        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND WHERE UPPER(Tags) LIKE UPPER('%"${req.body.Tag}"%'); ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = 'LIVE' AND users.ID = posts.UserID AND UPPER(Tags) LIKE UPPER('%"${req.body.Tag}"%') ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
         SqlQuery(sql).then(result => {
 
             var posts = result.map(e=>{
@@ -842,8 +1079,128 @@ app.post('/GetFeedByTag', (req,res) => {
 
         })
     }catch(err){
-        res.status(500).send({"error":true,"msg":err})
+        res.status(500).send({error:true,"msg":err})
     }
+})
+
+app.get('/GetTags',(req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.query == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    // position
+    if(req.query.pos){
+        var pos = req.query.pos
+    }else{
+        //assume 0
+        var pos = 0
+    }
+
+    var sql = `SELECT * FROM DigitalGarden.tags ORDER BY posts DESC LIMIT ${pos},${pos + 10}`
+    SqlQuery(sql).then(result => {
+
+        result = result.filter(function(e){
+            if(e.Posts == null){
+                e.Posts = 0
+            }
+            return e
+        });
+
+        res.status(200).send(result)
+    });
+
+
+});
+
+app.post('/SearchTags',(req,res)=>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var pos = req.body.pos
+    if(pos == undefined){
+        pos = 0
+    }
+    var Query = req.body.search
+
+    var sql = `SELECT * FROM DigitalGarden.tags WHERE Name LIKE UPPER('%${Query}%') ORDER BY posts DESC LIMIT ${pos},${pos + 10}`
+    SqlQuery(sql).then(result => {
+        
+        result = result.filter(function(e){
+            if(e.Posts == null){
+                e.Posts = 0
+            }
+            return e
+        });
+
+        res.status(200).send(result)
+    });
+
+
+});
+
+app.post('/SearchPosts', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var pos = req.body.pos
+    if(pos == undefined){
+        pos = 0
+    }
+    var Query = req.body.search.split(" ")
+
+    //search for posts with similar strings.
+    //the posts are ordered by score meaning how many matching strings are there?
+    var sql = `
+        SELECT 
+        ID,
+        SUM(PostPoint) AS Score
+        FROM 
+        (`
+
+        if(Query.length > 1){
+            Query.forEach((term,index) =>{
+                sql += `SELECT ID, 1 AS PostPoint FROM digitalgarden.posts WHERE UPPER(Tags) LIKE UPPER('%${term}%') OR SearchData LIKE UPPER('%${term}%') AND Stage = 'LIVE'\n`
+                if(index < Query.length -1 ){
+                    sql += `UNION ALL\n`
+                }
+            })
+        }else{
+            sql += `SELECT ID, 1 AS PostPoint FROM digitalgarden.posts WHERE UPPER(Tags) LIKE UPPER('%${Query[0]}%') OR SearchData LIKE UPPER('%${Query[0]}%') AND Stage = 'LIVE'\n`
+        }
+    sql += `)
+        AS X
+        GROUP BY ID
+        ORDER BY Score DESC
+        LIMIT ${pos},5`
+
+    SqlQuery(sql).then(async result =>{
+        
+        //get posts from ID
+        await Promise.all(
+            result.map(async(e) =>{
+                var postSql = `SELECT  posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM digitalgarden.posts, DigitalGarden.users WHERE posts.ID = '${e.ID}' AND users.ID = posts.UserID`
+                var post =  await SqlQuery(postSql)
+                post = post[0]
+
+                var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
+                let converter = new showdown.Converter(),
+                Posthtml = converter.makeHtml(postText.toString());
+                post["PostHtml"] = Posthtml
+                e["post"] = post
+                return e
+            })
+        )
+
+        res.status(200).send(result)
+    })
 })
 
 app.post('/GetDrafts', (req,res) => {
@@ -861,7 +1218,7 @@ app.post('/GetDrafts', (req,res) => {
     var user = IsUserSessionValid(req.body.SessionID)
     console.log(user)
     if(!user.login){
-        res.status(403).send({"error":true,"msg":"User Session is not valid!"})
+        res.status(403).send({error:true,"msg":"User Session is not valid!"})
         return;
     }
         
@@ -897,12 +1254,12 @@ app.post('/GetDrafts', (req,res) => {
                         PostGetLimit:CONFIG.PostGetLimit
                     })
                 }else{
-                     res.status(500).send({"error":true,"msg":"Something went wrong!"})
+                     res.status(500).send({error:true,"msg":"Something went wrong!"})
                 }
             })
         })
     }catch(err){
-        res.status(500).send({"error":true,"msg":err})
+        res.status(500).send({error:true,"msg":err})
     }
 
 })
@@ -957,6 +1314,36 @@ app.post('/GetUserDetails',(req,res) =>{
 
 });
 
+app.post('/GetUserDetailsForEditing',(req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+    
+    if(req.body.hasOwnProperty("SessionID")){
+        var temp = $UserSessions.find(obj => {
+            return obj.SessionID === req.body.SessionID
+        })
+        var UserID = temp.ID
+
+    }else{
+        res.status(405).send({error:true, msg:"missing user session ID"})
+    }
+    console.log(UserID)
+    
+    var sql = `SELECT Username, UserData, Email FROM DigitalGarden.users WHERE ID = '${UserID}'`
+
+    SqlQuery(sql).then(result => {
+        //should only be one result so no need to worry about potentially sending the data twice
+        var data = result[0]
+        data.UserData = JSON.parse(data.UserData)
+
+        res.status(200).send(data)
+    })
+
+});
+
 app.post('/UserModification',FileUpload.single("UserIcon"),(req,res)=>{
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body == null) {
@@ -995,7 +1382,7 @@ app.post('/UserModification',FileUpload.single("UserIcon"),(req,res)=>{
         "Bio":req.body.Bio
     }
 
-    var sql = `UPDATE digitalgarden.users SET UserData = '${JSON.stringify(UserData)}' WHERE ID = '${UserID.UserID}'`
+    var sql = `UPDATE digitalgarden.users SET UserData = '${JSON.stringify(UserData)}', Email = '${req.body.UserEmail}' WHERE ID = '${UserID.UserID}'`
     SqlQuery(sql)
 
     res.send({"error":false,"msg":"User profile updated"})
@@ -1022,10 +1409,10 @@ app.post('/SetUserBackground',FileUpload.single("BackgroundImage"),(req,res)=>{
 
             res.send({"error":false,"msg":"User Background updated"})
         }catch(err){
-             res.send({"error":true,"msg":err})
+             res.send({error:true,"msg":err})
         }       
     }else{
-        res.send({"error":true,"msg":"Missing File"})
+        res.send({error:true,"msg":"Missing File"})
     }
 });
 
@@ -1113,7 +1500,7 @@ app.post('/AddImageToPost',FileUpload.single("Image"),(req,res) => {
         var PostID = req.body.PostID
         console.log(PostID)
         if(PostID == undefined || PostID == ""){
-            res.status(402).send({"error":true,"msg":"Missing Post ID"})
+            res.status(402).send({error:true,"msg":"Missing Post ID"})
             return
         }
 
@@ -1124,10 +1511,10 @@ app.post('/AddImageToPost',FileUpload.single("Image"),(req,res) => {
             ProcessImage(req.file,`${__dirname}/data/POSTS/${PostID}/Images`,uuidv4())
             res.status(200).send({"error":false,"msg":"Img Uploaded"})
         }else{
-            res.status(400).send({"error":true,"msg":"Missing File!"})
+            res.status(400).send({error:true,"msg":"Missing File!"})
         }
     }catch(err){
-        res.status(500).send({"error":true,"msg":err})
+        res.status(500).send({error:true,"msg":err})
     }
 })
 
@@ -1147,7 +1534,7 @@ app.get('/GetImagesInPost',(req,res) =>{
         res.send(Images)
 
     }catch(err){
-        res.status(500).send({"error":true,"msg":err})
+        res.status(500).send({error:true,"msg":err})
     }
 })
 
@@ -1167,7 +1554,7 @@ app.get('/GetImageThumbnail',(req,res) =>{
                 res.send(thumb)
             })
         }else{
-            res.status(404).send({"error":true,"msg":"File Not Found!"})
+            res.status(404).send({error:true,"msg":"File Not Found!"})
         }
         
         async function CreateThumb(FilePath) {
@@ -1176,7 +1563,7 @@ app.get('/GetImageThumbnail',(req,res) =>{
         }
 
     }catch(err){
-        res.status(500).send({"error":true,"msg":err})
+        res.status(500).send({error:true,"msg":err})
     }
 
 })
@@ -1194,7 +1581,7 @@ app.get('/GetImage',(req,res) =>{
         
 
     }catch(err){
-        res.status(500).send({"error":true,"msg":err})
+        res.status(500).send({error:true,"msg":err})
     }
 
     async function CreateThumb(FilePath) {
@@ -1477,6 +1864,7 @@ function log(content, logType, StringDump) {
 
     }
 }
+
 
 function getDate() {
     const date = new Date();

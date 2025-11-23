@@ -13,6 +13,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.14.4",
     "mysql2-promise": "^0.1.4",
+    "nodemailer": "^7.0.10",
     "showdown": "^2.1.0",
     "sql": "^0.78.0",
     "zero-md": "^3.1.7"

@@ -40,7 +40,8 @@ function CreateNav(UserID){
     if(UserID){
         var html = `
             <li onclick="window.location.href='/'">Home</li>
-            <li onclick="window.location.href='/'">Tags</li>
+            <li onclick="window.location.href='/search.html'">Search</li>
+            <li onclick="window.location.href='/tags.html'">Tags</li>
             <li onclick="window.location.href='/newPost.html'">Post</li>
             <li onclick="window.location.href='/user.html?ID=${UserID}'">Profile</li>
             <li onclick="window.location.href='Settings.html'">Settings</li>
@@ -50,7 +51,9 @@ function CreateNav(UserID){
     }else{
         var html = `
             <li onclick="window.location.href='/'">Home</li>
-            <li onclick="window.location.href='/'">Tags</li>
+            <li onclick="window.location.href='/search.html'">Search</li>
+            <li onclick="window.location.href='/tags.html'">Tags</li>
+            <li onclick="ToggleDarkMode()">Light/Dark</li>
             <li onclick="window.location.href='/Login.html'">Login</li>
         `
         document.getElementById("SideNavUL").innerHTML = html

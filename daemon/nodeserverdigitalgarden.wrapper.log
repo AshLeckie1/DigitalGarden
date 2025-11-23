@@ -1,0 +1,206 @@
+2025-11-09 12:02:14 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-09 12:02:14 - Started 5980
+2025-11-09 12:08:12 - Stopping nodeserverdigitalgarden.exe
+2025-11-09 12:08:12 - ProcessKill 5980
+2025-11-09 12:08:13 - Found child process: 4412 Name: conhost.exe
+2025-11-09 12:08:13 - Found child process: 7736 Name: node.exe
+2025-11-09 12:08:13 - Stopping process 4412
+2025-11-09 12:08:13 - Send SIGINT 4412
+2025-11-09 12:08:13 - SIGINT to 4412 failed - Killing as fallback
+2025-11-09 12:08:13 - Stopping process 7736
+2025-11-09 12:08:13 - Send SIGINT 7736
+2025-11-09 12:08:13 - SIGINT to 7736 failed - Killing as fallback
+2025-11-09 12:08:13 - Stopping process 5980
+2025-11-09 12:08:13 - Send SIGINT 5980
+2025-11-09 12:08:13 - SIGINT to 5980 failed - Killing as fallback
+2025-11-09 12:08:13 - Finished nodeserverdigitalgarden.exe
+2025-11-09 12:08:14 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-09 12:08:14 - Started 1552
+2025-11-10 00:02:02 - Stopping nodeserverdigitalgarden.exe
+2025-11-10 00:02:02 - ProcessKill 1552
+2025-11-10 00:02:03 - Found child process: 3332 Name: conhost.exe
+2025-11-10 00:02:03 - Found child process: 5952 Name: node.exe
+2025-11-10 00:02:03 - Stopping process 3332
+2025-11-10 00:02:03 - Send SIGINT 3332
+2025-11-10 00:02:03 - SIGINT to 3332 failed - Killing as fallback
+2025-11-10 00:02:03 - Stopping process 5952
+2025-11-10 00:02:03 - Send SIGINT 5952
+2025-11-10 00:02:03 - SIGINT to 5952 failed - Killing as fallback
+2025-11-10 00:02:03 - Stopping process 1552
+2025-11-10 00:02:03 - Send SIGINT 1552
+2025-11-10 00:02:03 - SIGINT to 1552 failed - Killing as fallback
+2025-11-10 00:02:03 - Finished nodeserverdigitalgarden.exe
+2025-11-10 00:02:04 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-10 00:02:04 - Started 2248
+2025-11-10 00:24:43 - Stopping nodeserverdigitalgarden.exe
+2025-11-10 00:24:43 - ProcessKill 2248
+2025-11-10 00:24:43 - Found child process: 3352 Name: conhost.exe
+2025-11-10 00:24:43 - Found child process: 6496 Name: node.exe
+2025-11-10 00:24:43 - Stopping process 3352
+2025-11-10 00:24:43 - Send SIGINT 3352
+2025-11-10 00:24:43 - SIGINT to 3352 failed - Killing as fallback
+2025-11-10 00:24:43 - Stopping process 6496
+2025-11-10 00:24:43 - Send SIGINT 6496
+2025-11-10 00:24:43 - SIGINT to 6496 failed - Killing as fallback
+2025-11-10 00:24:43 - Stopping process 2248
+2025-11-10 00:24:43 - Send SIGINT 2248
+2025-11-10 00:24:43 - SIGINT to 2248 failed - Killing as fallback
+2025-11-10 00:24:43 - Finished nodeserverdigitalgarden.exe
+2025-11-10 00:24:44 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-10 00:24:44 - Started 1984
+2025-11-11 19:38:41 - Stopping nodeserverdigitalgarden.exe
+2025-11-11 19:38:41 - ProcessKill 1984
+2025-11-11 19:38:42 - Shutdown exception
+Message:A system shutdown is in progress. (Exception from HRESULT: 0x8007045B)
+Stacktrace:   at System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   at System.Management.ManagementScope.InitializeGuts(Object o)
+   at System.Management.ManagementScope.Initialize()
+   at System.Management.ManagementObjectSearcher.Initialize()
+   at System.Management.ManagementObjectSearcher.Get()
+   at winsw.WrapperService.GetChildPids(Int32 pid)
+   at winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   at winsw.WrapperService.StopIt()
+   at winsw.WrapperService.OnShutdown()
+2025-11-11 19:39:14 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-11 19:39:14 - Started 4052
+2025-11-15 13:21:47 - Stopping nodeserverdigitalgarden.exe
+2025-11-15 13:21:47 - ProcessKill 4052
+2025-11-15 13:21:47 - Shutdown exception
+Message:A system shutdown is in progress. (Exception from HRESULT: 0x8007045B)
+Stacktrace:   at System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   at System.Management.ManagementScope.InitializeGuts(Object o)
+   at System.Management.ManagementScope.Initialize()
+   at System.Management.ManagementObjectSearcher.Initialize()
+   at System.Management.ManagementObjectSearcher.Get()
+   at winsw.WrapperService.GetChildPids(Int32 pid)
+   at winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   at winsw.WrapperService.StopIt()
+   at winsw.WrapperService.OnShutdown()
+2025-11-15 13:22:07 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-15 13:22:07 - Started 4612
+2025-11-18 17:42:31 - Stopping nodeserverdigitalgarden.exe
+2025-11-18 17:42:31 - ProcessKill 4612
+2025-11-18 17:42:32 - Found child process: 4656 Name: conhost.exe
+2025-11-18 17:42:32 - Found child process: 5380 Name: node.exe
+2025-11-18 17:42:32 - Stopping process 4656
+2025-11-18 17:42:32 - Send SIGINT 4656
+2025-11-18 17:42:32 - SIGINT to 4656 failed - Killing as fallback
+2025-11-18 17:42:32 - Stopping process 5380
+2025-11-18 17:42:32 - Send SIGINT 5380
+2025-11-18 17:42:32 - SIGINT to 5380 failed - Killing as fallback
+2025-11-18 17:42:32 - Stopping process 4612
+2025-11-18 17:42:32 - Send SIGINT 4612
+2025-11-18 17:42:32 - SIGINT to 4612 failed - Killing as fallback
+2025-11-18 17:42:32 - Finished nodeserverdigitalgarden.exe
+2025-11-18 17:42:33 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-18 17:42:33 - Started 3568
+2025-11-18 18:13:06 - Stopping nodeserverdigitalgarden.exe
+2025-11-18 18:13:06 - ProcessKill 3568
+2025-11-18 18:13:06 - Found child process: 6340 Name: conhost.exe
+2025-11-18 18:13:06 - Found child process: 3324 Name: node.exe
+2025-11-18 18:13:06 - Stopping process 6340
+2025-11-18 18:13:06 - Send SIGINT 6340
+2025-11-18 18:13:06 - SIGINT to 6340 failed - Killing as fallback
+2025-11-18 18:13:07 - Stopping process 3324
+2025-11-18 18:13:07 - Send SIGINT 3324
+2025-11-18 18:13:07 - SIGINT to 3324 failed - Killing as fallback
+2025-11-18 18:13:07 - Stopping process 3568
+2025-11-18 18:13:07 - Send SIGINT 3568
+2025-11-18 18:13:07 - SIGINT to 3568 failed - Killing as fallback
+2025-11-18 18:13:07 - Finished nodeserverdigitalgarden.exe
+2025-11-18 18:13:08 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-18 18:13:08 - Started 3364
+2025-11-18 18:19:02 - Stopping nodeserverdigitalgarden.exe
+2025-11-18 18:19:02 - ProcessKill 3364
+2025-11-18 18:19:02 - Found child process: 6500 Name: conhost.exe
+2025-11-18 18:19:02 - Found child process: 1340 Name: node.exe
+2025-11-18 18:19:02 - Stopping process 6500
+2025-11-18 18:19:02 - Send SIGINT 6500
+2025-11-18 18:19:02 - SIGINT to 6500 failed - Killing as fallback
+2025-11-18 18:19:02 - Stopping process 1340
+2025-11-18 18:19:02 - Send SIGINT 1340
+2025-11-18 18:19:02 - SIGINT to 1340 failed - Killing as fallback
+2025-11-18 18:19:02 - Stopping process 3364
+2025-11-18 18:19:02 - Send SIGINT 3364
+2025-11-18 18:19:02 - SIGINT to 3364 failed - Killing as fallback
+2025-11-18 18:19:02 - Finished nodeserverdigitalgarden.exe
+2025-11-18 18:19:06 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-18 18:19:06 - Started 6724
+2025-11-18 18:30:02 - Stopping nodeserverdigitalgarden.exe
+2025-11-18 18:30:02 - ProcessKill 6724
+2025-11-18 18:30:02 - Found child process: 4288 Name: conhost.exe
+2025-11-18 18:30:02 - Found child process: 4264 Name: node.exe
+2025-11-18 18:30:02 - Stopping process 4288
+2025-11-18 18:30:02 - Send SIGINT 4288
+2025-11-18 18:30:02 - SIGINT to 4288 failed - Killing as fallback
+2025-11-18 18:30:02 - Stopping process 4264
+2025-11-18 18:30:02 - Send SIGINT 4264
+2025-11-18 18:30:02 - SIGINT to 4264 failed - Killing as fallback
+2025-11-18 18:30:02 - Stopping process 6724
+2025-11-18 18:30:02 - Send SIGINT 6724
+2025-11-18 18:30:02 - SIGINT to 6724 failed - Killing as fallback
+2025-11-18 18:30:02 - Finished nodeserverdigitalgarden.exe
+2025-11-18 18:30:03 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-18 18:30:03 - Started 7796
+2025-11-18 18:46:49 - Stopping nodeserverdigitalgarden.exe
+2025-11-18 18:46:49 - ProcessKill 7796
+2025-11-18 18:46:49 - Found child process: 6496 Name: conhost.exe
+2025-11-18 18:46:49 - Found child process: 4700 Name: node.exe
+2025-11-18 18:46:49 - Stopping process 6496
+2025-11-18 18:46:49 - Send SIGINT 6496
+2025-11-18 18:46:49 - SIGINT to 6496 failed - Killing as fallback
+2025-11-18 18:46:49 - Stopping process 4700
+2025-11-18 18:46:49 - Send SIGINT 4700
+2025-11-18 18:46:49 - SIGINT to 4700 failed - Killing as fallback
+2025-11-18 18:46:49 - Stopping process 7796
+2025-11-18 18:46:49 - Send SIGINT 7796
+2025-11-18 18:46:49 - SIGINT to 7796 failed - Killing as fallback
+2025-11-18 18:46:49 - Finished nodeserverdigitalgarden.exe
+2025-11-18 18:46:51 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-18 18:46:51 - Started 4924
+2025-11-18 18:53:44 - Stopping nodeserverdigitalgarden.exe
+2025-11-18 18:53:44 - ProcessKill 4924
+2025-11-18 18:53:44 - Found child process: 6012 Name: conhost.exe
+2025-11-18 18:53:44 - Found child process: 6900 Name: node.exe
+2025-11-18 18:53:44 - Stopping process 6012
+2025-11-18 18:53:44 - Send SIGINT 6012
+2025-11-18 18:53:44 - SIGINT to 6012 failed - Killing as fallback
+2025-11-18 18:53:44 - Stopping process 6900
+2025-11-18 18:53:44 - Send SIGINT 6900
+2025-11-18 18:53:44 - SIGINT to 6900 failed - Killing as fallback
+2025-11-18 18:53:44 - Stopping process 4924
+2025-11-18 18:53:44 - Send SIGINT 4924
+2025-11-18 18:53:44 - SIGINT to 4924 failed - Killing as fallback
+2025-11-18 18:53:44 - Finished nodeserverdigitalgarden.exe
+2025-11-22 15:07:22 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-22 15:07:22 - Started 4740
+2025-11-23 17:31:30 - Stopping nodeserverdigitalgarden.exe
+2025-11-23 17:31:30 - ProcessKill 4740
+2025-11-23 17:31:30 - Found child process: 5112 Name: conhost.exe
+2025-11-23 17:31:30 - Found child process: 6096 Name: node.exe
+2025-11-23 17:31:30 - Stopping process 5112
+2025-11-23 17:31:30 - Send SIGINT 5112
+2025-11-23 17:31:30 - SIGINT to 5112 failed - Killing as fallback
+2025-11-23 17:31:30 - Stopping process 6096
+2025-11-23 17:31:30 - Send SIGINT 6096
+2025-11-23 17:31:30 - SIGINT to 6096 failed - Killing as fallback
+2025-11-23 17:31:30 - Stopping process 4740
+2025-11-23 17:31:30 - Send SIGINT 4740
+2025-11-23 17:31:30 - SIGINT to 4740 failed - Killing as fallback
+2025-11-23 17:31:30 - Finished nodeserverdigitalgarden.exe
+2025-11-23 17:31:34 - Starting C:\Program Files\nodejs\node.exe  --harmony --max_old_space_size=4096 C:\Users\Administrator\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js --file C:\inetpub\wwwroot\DigitalGarden\Backend.mjs --scriptoptions= --log "NodeServer - DigitalGarden wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2025-11-23 17:31:34 - Started 1284
+2025-11-23 17:34:00 - Stopping nodeserverdigitalgarden.exe
+2025-11-23 17:34:00 - ProcessKill 1284
+2025-11-23 17:34:00 - Found child process: 4552 Name: conhost.exe
+2025-11-23 17:34:00 - Found child process: 6840 Name: node.exe
+2025-11-23 17:34:00 - Stopping process 4552
+2025-11-23 17:34:00 - Send SIGINT 4552
+2025-11-23 17:34:00 - SIGINT to 4552 failed - Killing as fallback
+2025-11-23 17:34:00 - Stopping process 6840
+2025-11-23 17:34:00 - Send SIGINT 6840
+2025-11-23 17:34:00 - SIGINT to 6840 failed - Killing as fallback
+2025-11-23 17:34:00 - Stopping process 1284
+2025-11-23 17:34:00 - Send SIGINT 1284
+2025-11-23 17:34:00 - SIGINT to 1284 failed - Killing as fallback
+2025-11-23 17:34:00 - Finished nodeserverdigitalgarden.exe

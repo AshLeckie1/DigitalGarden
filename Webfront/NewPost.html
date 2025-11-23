@@ -85,11 +85,7 @@
         </div>
     </div>
 </body>
-<footer>
-    <hr>
-    <p>Digital Garden</p>
-    <p>Developed By Ash Leckie</p>
-    <p>No Generative AI was used in the creation of this website, Keep Programming in Human Hands, Fuck AI, Vote Green</p>
+<footer id="footer">
 </footer>
 <script>
 
@@ -120,6 +116,8 @@
                 window.location.href = "/"
             }
         })        
+
+        $("#footer").load("footer.html");
 
         console.log(window.location.href)
         try{
@@ -265,7 +263,7 @@
     }
 
     async function GetPost(PostID){
-        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetPost`, {
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetDraft`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

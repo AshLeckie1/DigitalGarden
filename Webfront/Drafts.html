@@ -39,11 +39,6 @@
                 </div>
             </div>   
         </div>
-         <!-- <div class="MainNav" id="MainNav">
-            <h3 onclick="location.href='NewPost.html'" id="NavNewPost">New Post</h3>
-            <h3 id="NavIndex" onclick="location.href='index.html'">Homepage</h3>
-            <h3 id="NavTags">Tags</h3>
-        </div> -->
         <div class="Row">
             <div class="twelve columns">
                 <div id="Feed">
@@ -52,6 +47,9 @@
         </div>
     </div>
 </body>
+<footer id="footer">
+
+</footer>
 <script>
 
     $session = {
@@ -62,6 +60,7 @@
 
     $(document).ready(function() {
         // check login
+        $("#footer").load("footer.html");
         checkLogin().then(result => {
             if(!result){
                 window.location.href = "/"
@@ -114,6 +113,7 @@
                 method: "POST",
                 body: JSON.stringify({
                     PostID : PostID,
+                    SessionID:GetUserSession()
                 })
             });
 

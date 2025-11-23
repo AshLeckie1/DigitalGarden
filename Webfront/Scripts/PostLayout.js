@@ -23,7 +23,7 @@ function CreatePost(post){
     try{
         var TagsArray =  JSON.parse(post.Tags)
         TagsArray = TagsArray.map(function(e){
-            return `<a class="postTag">#${e}</a>`
+            return `<a class="postTag" href="/FeedByTag.html?tag=${e}">#${e}</a>`
         })
         var Tags = TagsArray.join(" ")
         

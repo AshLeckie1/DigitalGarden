@@ -423,6 +423,11 @@ body.DarkMode{
     margin-right:1rem;
 }
 
+.LoginContainer p{
+    margin-left:1rem;
+    margin-right:1rem;
+}
+
 /* User hover menu */
 .HoverProfile{
     padding:1rem;
@@ -927,4 +932,58 @@ footer p{
     margin: auto;
     text-align: center;
     color:gray;
+}
+
+.TagItem{
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    width:40rem;
+    cursor: pointer;
+}
+
+.DarkMode .TagItem{
+    background-color: var(--DarkModeSecondary);
+    border:1px solid var(--DarkModeHighLight);
+}
+
+.LightMode .TagItem{
+    background-color: var(--LightModePrimary);
+    border:1px solid var(--lightModeHighLight);
+}
+
+.DarkMode .TagItem:hover{
+    background-color: var(--DarkModeTertiary);
+    outline:1px solid var(--DarkModeHighLight);
+}
+
+.LightMode .TagItem{
+    outline:1px solid var(--lightModeHighLight);
+}
+
+
+.TagItem .TagName{
+    font-size: larger;
+}
+
+.TagItem span{
+    display: flex;
+    flex-direction: column;
+}
+
+#TagFeed{
+    width:42rem;
+}
+
+.TagSearch{
+    margin-top: 1rem;
+    width:42rem;
+}
+
+.TagSearch #TagSearch{
+    width:30rem;
+}
+
+.TagSearch button{
+    width:11.5rem;
 }

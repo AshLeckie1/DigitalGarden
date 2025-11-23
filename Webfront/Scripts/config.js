@@ -1,4 +1,4 @@
 const CONFIG = {
-    nodeserver:"192.168.1.97",
+    nodeserver:"thedigitalgarden.net",
     nodeport:"3000"
 }

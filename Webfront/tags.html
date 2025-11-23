@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Digital Garden</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Scripts/FlippyTextReader.js"></script>
+    <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
+    <link href="Style/Skeleton/normalize.css" rel="stylessheet">
+    <link href="Style/Style.css" rel = "stylesheet">
+    <link href="Style/IconStyles.css" rel = "stylesheet">
+
+    <script src="Scripts/userSession.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="Scripts/config.js"></script>
+    <script src="Scripts/userPopup.js"></script>
+    <script src="Scripts/PostLayout.js"></script>
+    <script src="Scripts/LightDarkMode.js"></script>
+    <script src="Scripts/NavControlls.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/SH20RAJ/ShowdownCSS@main/showdown.css">
+</head>
+<body class="LightMode" id="body">
+    <div class="MainTitle">
+        <h1 id="Title"></h1>
+        <div id="UserSession"></div>
+    </div>
+    <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
+    </div>
+    <div class="container MainBody"> 
+        <div class="Row">
+            <div class="Twelve columns">
+                <div class="input-group grid-cols-[auto_1fr_auto] TagSearch">
+                    <input class="ig-input" type="search" id="TagSearch" placeholder="Search..." />
+                    <button class="ig-btn preset-filled" onclick="SearchTag()">Submit</button>
+                </div>
+                <div id="TagFeed">   
+                                     
+                </div>
+            </div>            
+        </div>
+    </div>
+</body>
+<footer id="footer">
+</footer>
+<script>
+
+    $session = {
+        postPos:0,
+        searchTerm:""
+    }
+
+    $(document).ready(function() {
+        // check login
+        checkLogin()
+        $("#footer").load("footer.html");
+        //set site title
+        TitleLoop()
+        function TitleLoop(){
+            TriggerChange("Title")
+            setTimeout(TitleLoop,10000)
+        }
+
+        GetTags()
+
+    })
+
+    function GetTags(){
+        GetTagsFromServer().then(result => {
+
+            $session.postPos += result.length
+            
+            try{
+                document.getElementById("NoPostDiv").remove()
+            }catch{}
+            
+
+            if(result.length == 0){
+                document.getElementById("TagFeed").innerHTML += `<dir class='NoPosts' id='NoPostDiv'><div><span>No Tags found :( <br></span><br><button onclick='GetTags()'>Refresh</button></div></div>`
+            }
+
+            result.forEach(element => {
+                 var html = `
+                <div class="TagItem" onclick="window.location.href='/FeedByTag.html?tag=${element.Name}'">
+                    <span class="TagName">#${element.Name.toLowerCase()}</span>
+                    <span class="TagPosts">Related Posts ${element.Posts}</span>    
+                </div>`
+                document.getElementById("TagFeed").innerHTML += html
+            });
+
+            if(result.length > 0){
+                document.getElementById("TagFeed").innerHTML += `<dir class='NoPosts' id='NoPostDiv'><button onclick='GetTags()'>Get More Tags</button></div></div>`
+                
+            }
+        })     
+    }
+
+    function SearchTag(){
+        $session.searchTerm = document.getElementById("TagSearch").value
+        $session.postPos  = 0;
+        document.getElementById("TagFeed").innerHTML = ""
+        GetTags()
+
+    }
+
+    async function GetTagsFromServer() {
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/SearchTags`,{ 
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                pos : $session.postPos,
+                search : $session.searchTerm
+                
+            }),
+            signal: AbortSignal.timeout(5000) 
+        });
+        return await response.json()
+    }
+
+    function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+        );
+    }
+
+</script>
+</html>
