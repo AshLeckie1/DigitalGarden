@@ -1,20 +1,26 @@
 {
     "debug":1,
     
-    "SQLUser":"ServiceAccount",
-    "SQLPass":"E21ZaSkQGFbRa2xKBIdv",
-    "SQLServer":"VM005",
-    "SQLDatabase":"digitalGarden",
+    "SQLUser":"",
+    "SQLPass":"",
+    "SQLServer":"",
+    "SQLDatabase":"",
 
-    "DecryptKey":"39468206394101903145559142724892",
+    "DecryptKey":"",
 
-    "NodeServer":"VM007",
-    "NodePort":"3000",
+    "NodeServer":"",
+    "NodePort":"",
 
     "SQLLogLocation":"Logs\\SqlTransLog",
     "ServiceLogLocation":"Logs\\ServiceLog",
     "DefaultLogs":"Logs\\Log",
     "LogAgeDays":7,
 
-    "PostGetLimit":5
+    "PostGetLimit":5,
+    "Default_Welcome_Message":"Welcome to the Digital Garden!",
+
+    "GmailUser":"",
+    "GmailClientID":"",
+    "GmailClientSecret":"",
+    "GmailRefreshToken":""
 }

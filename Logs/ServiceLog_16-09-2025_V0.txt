@@ -1,4 +1,0 @@
-16/09/2025 21:23 [BOOT] Port: 3000 en Started! 
-16/09/2025 21:23 [BOOT] Version: undefined 
-16/09/2025 21:23 [BOOT] Cors Options: {"origin":"*","optionsSuccessStatus":200} 
-16/09/2025 21:23 [BOOT] Connected to Database! 
