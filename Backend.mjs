@@ -547,7 +547,7 @@ app.post('/ModifyWelcomeMessage', (req,res) => {
 
             fs.writeFile(WelcomeFile,message, err => {
                 if (err) {
-                    console.log(`${formattedDate} [ERROR] ${err}`);
+                    log(`[ERROR] Modifying Welcome Message ${err}`,"service");
                     res.status(500).send({error:true,msg:err})
                 }else{
                     res.send({error:false})
@@ -681,11 +681,11 @@ app.post('/ModifyDraft', (req,res) =>{
                 try{
                     fs.writeFileSync(`${__dirname}/data/POSTS/${PostID}/post.md`,PostText,{encoding:'utf8',flag:'w'})
 
-                    log(`[INFO] Draft ${PostID} Modified successfully by ${userSession.UserID}`,"status")
+                    log(`[INFO] Draft ${PostID} Modified successfully by ${userSession.UserID}`,"service")
                     res.status(200).send({"error":false,msg:"Draft Updated!"})
 
                 }catch(err){
-                    log(`[ERROR] Editing Draft ${PostID} - ${err}`,"status")
+                    log(`[ERROR] Editing Draft ${PostID} - ${err}`,"service")
                     res.status(500).send({"error":false,msg:err})
                 }
             }
@@ -696,7 +696,7 @@ app.post('/ModifyDraft', (req,res) =>{
         }
         else{
             //user is not valid
-            log(`[ERROR] an attempt was made by ${JSON.stringify(userSession)} to modify a draft that they do not own. Draft ID ${PostID}`,"status")
+            log(`[ERROR] an attempt was made by ${JSON.stringify(userSession)} to modify a draft that they do not own. Draft ID ${PostID}`,"service")
             res.status(403).send({error:true,"msg":"You do not have permissions to edit this post"})
         }
     })
@@ -882,15 +882,13 @@ app.post('/PostDraft', (req,res) =>{
                 //get Search Data from MD string
                 var postText = fs.readFileSync(`${__dirname}/data/POSTS/${PostID}/post.md`)
                 var SearchData = []
-                console.log(postText)
+
                 postText.toString().split(" ").forEach(Text => {
                     Text = Text.toUpperCase().split('').map(function(char){
                         if (/[a-zA-Z0-9]/.test(char)) {
                             return char;
                         } 
                     }).join('')
-
-                    console.log(Text)
 
                     if(!SearchData.includes(Text)){
                         SearchData.push(Text)
@@ -1216,7 +1214,6 @@ app.post('/GetDrafts', (req,res) => {
     }
 
     var user = IsUserSessionValid(req.body.SessionID)
-    console.log(user)
     if(!user.login){
         res.status(403).send({error:true,"msg":"User Session is not valid!"})
         return;
@@ -1300,7 +1297,6 @@ app.post('/GetUserDetails',(req,res) =>{
     }else{
         var UserID = req.body.UserID
     }
-    console.log(UserID)
     
     var sql = `SELECT Username, UserData FROM DigitalGarden.users WHERE ID = '${UserID}'`
 
@@ -1330,7 +1326,7 @@ app.post('/GetUserDetailsForEditing',(req,res) =>{
     }else{
         res.status(405).send({error:true, msg:"missing user session ID"})
     }
-    console.log(UserID)
+
     
     var sql = `SELECT Username, UserData, Email FROM DigitalGarden.users WHERE ID = '${UserID}'`
 
@@ -1399,7 +1395,7 @@ app.post('/SetUserBackground',FileUpload.single("BackgroundImage"),(req,res)=>{
 
     var UserID = IsUserSessionValid(req.body.SessionID)
     //save user icon to server if on is attached
-    console.log(req.file)
+
     if(req.file != undefined){
         if (!fs.existsSync(`${__dirname}/data/UserIcons/${UserID.UserID}`)){
             fs.mkdirSync(`${__dirname}/data/UserIcons/${UserID.UserID}`);
@@ -1498,7 +1494,7 @@ app.post('/AddImageToPost',FileUpload.single("Image"),(req,res) => {
 
     try{
         var PostID = req.body.PostID
-        console.log(PostID)
+
         if(PostID == undefined || PostID == ""){
             res.status(402).send({error:true,"msg":"Missing Post ID"})
             return
@@ -1547,10 +1543,10 @@ app.get('/GetImageThumbnail',(req,res) =>{
 
     try{
         var FilePath = `${__dirname}\\${req.query.ImgUrl}`
-        console.log(FilePath)
+
         if(fs.existsSync(FilePath)){
             CreateThumb(FilePath).then(thumb => {
-                console.log(thumb)
+
                 res.send(thumb)
             })
         }else{
@@ -1592,7 +1588,7 @@ app.get('/GetImage',(req,res) =>{
 
 
 function ProcessImage(File,TargetDropOff,NewName){
-    console.log(File)
+
     //add file extension to file
     var FilePath = `${File.path}.${File.mimetype.replace("image/","")}`
     fs.rename(

@@ -87,13 +87,12 @@
 
         //check if email is valid
 
-        const validateEmail = (email) => {
-        return email.match(
-            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
-        };
+        function validateEmail(email) {
+            const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return pattern.test(email);
+        }
 
-        if(validateEmail(document.getElementById("Email").value)){
+        if(!validateEmail(document.getElementById("Email").value)){
             document.getElementById("ErrorMessage").innerHTML = "Please enter a valid email, this is for account recovery"
             return
         }
@@ -124,8 +123,8 @@
             if(!json.error){
                 
                 //document.cookie=`sessionLogin = ${json.SessionID};`
-                localStorage.setItem('SessionID',json.loginSession.SessionID)
-                location.href = `settings.html`
+                alert("Account Created!")
+                window.location.href='login.html'
             
             }else{
                 document.getElementById("ErrorMessage").innerHTML = json.msg
