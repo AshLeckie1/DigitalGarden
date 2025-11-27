@@ -1141,6 +1141,22 @@ app.post('/SearchTags',(req,res)=>{
 
 });
 
+app.post('/SearchUser', (req,res) =>{
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    var Query = req.body.search
+
+    var sql =`SELECT * FROM digitalgarden.users WHERE Username LIKE '%${Query}%' OR UserData LIKE '%"Alias":"${Query}%';`
+    SqlQuery(sql).then(result => {
+        res.status(200).send(result)
+    })
+
+});
+
 app.post('/SearchPosts', (req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body == null) {
@@ -1396,19 +1412,55 @@ app.post('/SetUserBackground',FileUpload.single("BackgroundImage"),(req,res)=>{
     var UserID = IsUserSessionValid(req.body.SessionID)
     //save user icon to server if on is attached
 
-    if(req.file != undefined){
-        if (!fs.existsSync(`${__dirname}/data/UserIcons/${UserID.UserID}`)){
-            fs.mkdirSync(`${__dirname}/data/UserIcons/${UserID.UserID}`);
-        }
-        try{
-            ProcessImage(req.file,`${__dirname}/data/UserIcons/${UserID.UserID}`,"UserBackground")
+    if(UserID.login){
+        if(req.file != undefined){
+            if (!fs.existsSync(`${__dirname}/data/UserIcons/${UserID.UserID}`)){
+                fs.mkdirSync(`${__dirname}/data/UserIcons/${UserID.UserID}`);
+            }
+            try{
+                ProcessImage(req.file,`${__dirname}/data/UserIcons/${UserID.UserID}`,"UserBackground")
 
-            res.send({"error":false,"msg":"User Background updated"})
-        }catch(err){
-             res.send({error:true,"msg":err})
-        }       
+                res.send({"error":false,"msg":"User Background updated"})
+            }catch(err){
+                res.send({error:true,"msg":err})
+            }       
+        }else{
+            res.send({error:true,"msg":"Missing File"})
+        }
     }else{
-        res.send({error:true,"msg":"Missing File"})
+        res.status(403).send({error:true,"msg":"User session not valid!"})
+    }
+    
+});
+
+app.post('/RemoveUserBackground', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.body == null) {
+        res.send({"error":"Missing query"});
+        return;
+    }
+    
+    var UserID = IsUserSessionValid(req.body.SessionID)
+    if(UserID.login){
+        if (fs.existsSync(`${__dirname}/data/UserIcons/${UserID.UserID}/UserBackground.png`)){
+            fs.unlinkSync(`${__dirname}/data/UserIcons/${UserID.UserID}/UserBackground.png`,function(err) {
+                if(err && err.code == 'ENOENT') {
+                    // file doens't exist
+                    res.status(200).send({error:false,msg:"Background not found!"})
+                } else if (err) {
+                    // other errors, e.g. maybe we don't have enough permission
+                    res.status(403).send({error:true,msg:err})                    
+                } else {
+                    res.status(200).send({error:false,msg:"Background removed!"})
+                }
+            })
+        }else{
+            res.status(200).send({error:false,msg:"Background not found!"})
+        }
+          
+    }
+    else{
+        res.status(403).send({error:true,msg:"User session not valid!"})
     }
 });
 

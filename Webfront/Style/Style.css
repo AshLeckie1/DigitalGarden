@@ -104,6 +104,8 @@ body.DarkMode{
     object-fit: cover;
     overflow:hidden;
     cursor: pointer;
+    aspect-ratio: 1/1;
+    object-fit: fill;
 }
 
 .UserIcon:hover{
@@ -121,6 +123,8 @@ body.DarkMode{
     width:100px;
     border-radius: 50px;
     margin-right: -2rem;
+    aspect-ratio: 1/1;
+    object-fit: fill;
 }
 
 #UserSession #Username{
@@ -383,6 +387,10 @@ body.DarkMode{
     margin-left: 1rem;
     margin-right: 1rem;
     margin-top: 0.5rem;
+}
+
+.LoginContainer a{
+    margin-left: 1rem;
 }
 
 .LoginContainer .SubContainer {
@@ -660,7 +668,9 @@ body.DarkMode{
     width:150px;
 
     border-radius: 50%;
-    object-fit: cover;
+
+    aspect-ratio: 1/1;
+    object-fit: fill;
 }
 
 .PageBackButton{
@@ -829,8 +839,10 @@ body.DarkMode{
     padding:15px;
     width:102px !important;
     height:102px !important;
-    border-radius: 50%;
+    border-radius: 100% !important;
     aspect-ratio: 1/1;
+    object-fit: fill;
+    
 }
 
 .UserPageDetails .LinkPreview{
@@ -986,4 +998,90 @@ footer p{
 
 .TagSearch button{
     width:11.5rem;
+}
+
+.SearchSelection{
+    display: flex;
+}
+
+.SearchSelection h2{
+    width:auto;
+    flex-grow: 1;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom:0;
+    padding-bottom: 5px;
+    border-radius: 20px 20px 0 0;
+}
+
+.DarkMode .SearchSelection h2:hover{
+    background-color: var(--DarkModeTertiary);
+    outline: 1px solid var(--DarkModeHighLight);
+}
+
+.DarkMode .SearchSelection h2.selected{
+    background-color: var(--DarkModeTertiary);
+    outline: 1px solid var(--DarkModeHighLight);
+}
+
+.LightMode .SearchSelection h2:hover{
+    outline: 1px solid var(--lightModeHighLight);
+}
+
+.LightMode .SearchSelection h2.selected{
+    outline: 1px solid var(--lightModeHighLight);
+}
+
+.DarkMode .UserResult{
+    background-color: var(--DarkModeSecondary);
+    outline: 1px solid var(--DarkModeHighLight);
+}
+
+.LightMode .UserResult{
+    outline: 1px solid var(--lightModeHighLight);
+}
+
+.DarkMode .UserResult:hover{
+    background-color: var(--DarkModeTertiary);
+}
+
+.UserResult{
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 50px;
+    display:flex;
+}
+
+.UserResult img{
+    height:100px;
+    width:100px;
+    border-radius: 50px;
+    padding-right: 1rem;
+    aspect-ratio: 1/1;
+    object-fit: fill;
+}
+
+.UserResult .UserDetails{
+    display: flex;
+    flex-direction: column;
+}
+
+.UserResult .UserDetails .Alias{
+    font-size: x-large !important;
+    height:fit-content;
+    margin-bottom: 0;
+}
+
+.UserResult .UserDetails .Username{
+    font-size: medium !important;
+    color:gray;
+    height:fit-content; 
+}
+
+.PostSearch input{
+    width:65%;
+}
+
+.PostSearch button{
+    width:30%;
 }

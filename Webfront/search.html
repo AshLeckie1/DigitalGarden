@@ -39,8 +39,17 @@
                     <input class="ig-input" type="search" id="PostSearch" placeholder="Search..." />
                     <button class="ig-btn preset-filled" onclick="SearchPosts()">Submit</button>
                 </div>
+                <div class="SearchSelection">
+                    <h2 class="selected" onclick="SwitchToPosts()" id="PostHeader">Posts</h2>
+                    <h2 onclick="SwitchToUsers()" id="UserHeader">Users</h2>
+                </div>
                 <div id="Feed">
                     <div class='NoPosts' id='NoPostDiv'>
+                        <p>Nothing to show, try searching for something :)</p>         
+                    </div>          
+                </div>
+                <div id="UserResults" hidden>
+                    <div class='NoPosts' id='NoUserDiv'>
                         <p>Nothing to show, try searching for something :)</p>         
                     </div>          
                 </div>
@@ -57,6 +66,21 @@
         search:""
     }
 
+    function SwitchToPosts(){
+        document.getElementById("UserHeader").classList.remove("selected")
+        document.getElementById("PostHeader").classList.add("selected")
+        document.getElementById("Feed").removeAttribute("hidden")
+        document.getElementById("UserResults").setAttribute("hidden",true)
+
+    }
+
+    function SwitchToUsers(){
+        document.getElementById("PostHeader").classList.remove("selected")
+        document.getElementById("UserHeader").classList.add("selected")
+        document.getElementById("UserResults").removeAttribute("hidden")
+        document.getElementById("Feed").setAttribute("hidden",true)
+    }
+
     $(document).ready(function() {
         // check login
         checkLogin()
@@ -70,13 +94,67 @@
         }
     })
 
+    var SearchBar = document.getElementById("PostSearch");
+    SearchBar.addEventListener("keydown", function (e) {
+        if (e.code === "Enter") {  //checks whether the pressed key is "Enter"
+            SearchPosts();
+        }
+    });
+
     function SearchPosts(){
         $session.search = document.getElementById("PostSearch").value
         $session.postPos = 0
         document.getElementById("Feed").innerHTML = ""
         GetFeed()
+        SearchUsers()
     }
 
+
+    function SearchUsers(){
+       
+
+        PostGetUsers().then(users => {
+            try{
+                document.getElementById("NoUserDiv").remove()
+            }catch{}
+
+            if(users.length == 0){
+                document.getElementById("UserResults").innerHTML += `<div class='NoPosts' id='NoPostDiv'><div><span>No Users found :( <br></span><br><button onclick='SearchPosts()'>Refresh</button></div></div>`
+            }
+
+            document.getElementById("UserResults").innerHTML = ""
+
+            users.forEach(user => {
+                    var userData = JSON.parse(user.UserData)
+                    document.getElementById("UserResults").innerHTML += 
+                    `<div class="UserResult" onclick="window.location.href='user.html?ID=${user.Username}'">
+                        <img src="http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${user.ID}">
+                        <span class="UserDetails">
+                            <p class="Alias">${userData.Alias}</p>
+                            <p class="Username">${user.Username}</p>
+                        <span>
+                    </div>`
+                    
+            });
+
+        });
+
+        async function PostGetUsers() {
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/SearchUser`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    search : $session.search
+                })
+            });
+
+            return response.json()
+        }
+            
+    }
 
     function GetFeed(){
         PostGetFeed().then(feed => {

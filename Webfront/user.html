@@ -32,11 +32,6 @@
         </ul>
     </div>
     <div class="container MainBody" id="MainBody" > 
-        <!-- <div class="MainNav" id="MainNav">
-            <h3 onclick="location.href='NewPost.html'" id="NavNewPost">New Post</h3>
-            <h3 id="NavIndex" onclick="location.href='index.html'">Homepage</h3>
-            <h3 id="NavTags">Tags</h3>
-        </div> -->
         <div id="EditUserPage" hidden>
             <form method="post"  enctype="multipart/form-data" id="SetUserBackgroundForm" >
                 <h4>Edit Page</h4>
@@ -46,6 +41,8 @@
                 <input value="" name="SessionID" id="EditPageSessionID" hidden>
                 <button type="submit">Upload</button>
             </form>
+            <label>Remove Background Image</label>
+            <button onclick="RemoveBackground()">Remove Image</button>
         </div>
         <div class="Row UserPageDetails">
             <div class="two columns ">
@@ -152,6 +149,33 @@
             x.hidden = true;
         }
     }
+
+    function RemoveBackground(){
+        RemoveUserBackground().then(result => {
+            if(!result.error){
+                alert("Background Removed!")
+                window.location.reload()
+            }else{
+                alert("There was an Error :(")
+            }
+        })
+    }
+
+
+    async function RemoveUserBackground() {
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/RemoveUserBackground`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({"SessionID":GetUserSession()})
+        });
+    
+        return await response.json()
+    }
+
+
 
     async function GetUserDetails() {
         const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/checkLogin`, {
