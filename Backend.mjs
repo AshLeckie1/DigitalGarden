@@ -97,11 +97,11 @@ PurgeEmptyDrafts()
 function PurgeEmptyDrafts(){
 
     //get all drafts
-    SqlQuery(`SELECT ID FROM digitalgarden.posts WHERE Stage = "DRAFT"`).then(result =>{
+    SqlQuery(`SELECT ID FROM ${CONFIG.SQLDatabase}.posts WHERE Stage = "DRAFT"`).then(result =>{
         result.forEach(draft => {
             if(!fs.existsSync(`${__dirname}\\data\\POSTS\\${draft.ID}\\post.md`)){
                 //if the post.md file dosnt exist delete the folder
-                var sql = `DELETE FROM DigitalGarden.posts WHERE ID = '${draft.ID}'`
+                var sql = `DELETE FROM ${CONFIG.SQLDatabase}.posts WHERE ID = '${draft.ID}'`
                 SqlQuery(sql).then(result =>{
                     if(result.affectedRows > 0){
                         //file was removed from DB
@@ -186,8 +186,8 @@ app.post('/NewUser', (req,res) => {
         } `
 
         //check invite key is valid
-        var sqlInviteKey = `SELECT * FROM DigitalGarden.invite_tokens WHERE ID = '${InviteKey}' AND date(Experation) > NOW()`
-        var sqlExistingUser = `SELECT COUNT(ID) AS users FROM DigitalGarden.users WHERE UPPER(Username) = '${Username.toUpperCase()}'`
+        var sqlInviteKey = `SELECT * FROM ${CONFIG.SQLDatabase}.invite_tokens WHERE ID = '${InviteKey}' AND date(Experation) > NOW()`
+        var sqlExistingUser = `SELECT COUNT(ID) AS users FROM ${CONFIG.SQLDatabase}.users WHERE UPPER(Username) = '${Username.toUpperCase()}'`
         const allPromise = Promise.all([SqlQuery(sqlInviteKey),SqlQuery(sqlExistingUser)])
         allPromise.then(result  =>{
             
@@ -258,7 +258,7 @@ app.post("/Login",(req,res) => {
     }
 
     try{
-        var sql = `SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = '${Username}'`
+        var sql = `SELECT * FROM ${CONFIG.SQLDatabase}.users WHERE UPPER(Username) = '${Username}'`
         SqlQuery(sql).then(result =>{
 
             if(result.length == 0){
@@ -320,7 +320,7 @@ app.post('/ChangePassword',(req,res)=>{
     if(Session.login){
         var EncryptedPass = encrypt(NewPassword)
 
-        var sql = `UPDATE DigitalGarden.users SET PassKey = '${JSON.stringify(EncryptedPass)}' WHERE ID = '${Session.UserID}'`
+        var sql = `UPDATE ${CONFIG.SQLDatabase}.users SET PassKey = '${JSON.stringify(EncryptedPass)}' WHERE ID = '${Session.UserID}'`
         SqlQuery(sql).then(result =>{
             //add error monitoring...
 
@@ -350,7 +350,7 @@ app.post('/RequestPasswordChange',(req,res)=>{
 
     //get users details
     var username = req.body.username
-    var sql = `SELECT * FROM DigitalGarden.users WHERE UPPER(Username) = UPPER('${username}')`
+    var sql = `SELECT * FROM ${CONFIG.SQLDatabase}.users WHERE UPPER(Username) = UPPER('${username}')`
     SqlQuery(sql).then(result => {
         //check that user is valid
         if(result.length > 0){
@@ -444,7 +444,7 @@ app.post('/ChangeForgottenPassword',(req,res)=>{
         //code is valid, set user password.
         var EncryptedPass = encrypt(NewPassword)
 
-        var sql = `UPDATE DigitalGarden.users SET PassKey = '${JSON.stringify(EncryptedPass)}' WHERE ID = '${Request.UserID}'`
+        var sql = `UPDATE ${CONFIG.SQLDatabase}.users SET PassKey = '${JSON.stringify(EncryptedPass)}' WHERE ID = '${Request.UserID}'`
         SqlQuery(sql).then(result =>{
             //add error monitoring...
 
@@ -475,7 +475,7 @@ app.get('/CreateInvite',(req,res) => {
     var User = IsUserSessionValid(req.query.SessionID)
     if(User.login){
         var Key = uuidv4()
-        var sql = `INSERT INTO DigitalGarden.invite_tokens (ID,Experation,CreatedBy)VALUES('${Key}',NOW() + INTERVAL 3 DAY,'${User.UserID}')`
+        var sql = `INSERT INTO ${CONFIG.SQLDatabase}.invite_tokens (ID,Experation,CreatedBy)VALUES('${Key}',NOW() + INTERVAL 3 DAY,'${User.UserID}')`
         SqlQuery(sql).then(result => {
             
             res.send({"error":false,"InviteLink":`http://${CONFIG.NodeServer}/Register.html?key=${Key}`})
@@ -732,7 +732,7 @@ app.post('/GetPost', (req,res) => {
     var UserSessionID = req.body.SessionID
 
     //get post from database
-    var sql = `SELECT posts.*, users.UserData, users.Username FROM DigitalGarden.posts, DigitalGarden.users WHERE posts.ID = '${PostID}' AND posts.UserID = users.ID`
+    var sql = `SELECT posts.*, users.UserData, users.Username FROM ${CONFIG.SQLDatabase}.posts, ${CONFIG.SQLDatabase}.users WHERE posts.ID = '${PostID}' AND posts.UserID = users.ID`
     SqlQuery(sql).then(result =>{
         
         // Result validation
@@ -796,7 +796,7 @@ app.post('/GetDraft', (req,res) => {
     var UserSessionID = req.body.SessionID
 
     //get post from database
-    var sql = `SELECT posts.*, users.UserData, users.Username FROM DigitalGarden.posts, DigitalGarden.users WHERE posts.ID = '${PostID}' AND posts.UserID = users.ID`
+    var sql = `SELECT posts.*, users.UserData, users.Username FROM ${CONFIG.SQLDatabase}.posts, ${CONFIG.SQLDatabase}.users WHERE posts.ID = '${PostID}' AND posts.UserID = users.ID`
     SqlQuery(sql).then(result =>{
         
         // Result validation
@@ -858,7 +858,7 @@ app.post('/PostDraft', (req,res) =>{
     var PostTags = req.body.Tags
 
     //get post from database
-    var sql = `SELECT * FROM DigitalGarden.posts WHERE ID = '${PostID}'`
+    var sql = `SELECT * FROM ${CONFIG.SQLDatabase}.posts WHERE ID = '${PostID}'`
     SqlQuery(sql).then(result =>{
         try{
             if(result[0].ID != undefined){
@@ -907,13 +907,13 @@ app.post('/PostDraft', (req,res) =>{
                     PostTags = PostTagsFiltered
 
                     PostTags.forEach(element => {
-                        var TagSql = `INSERT INTO DigitalGarden.tags (id,name,posts) SELECT '${uuidv4()}',UPPER('${element}'),0 WHERE NOT EXISTS(SELECT 1 FROM DigitalGarden.tags WHERE UPPER(name) = UPPER('${element}')); SET @TagID = (SELECT id FROM DigitalGarden.tags WHERE UPPER(name) = UPPER('${element}')); UPDATE DigitalGarden.tags SET posts = posts + 1 WHERE id = @TagID`
+                        var TagSql = `INSERT INTO ${CONFIG.SQLDatabase}.tags (id,name,posts) SELECT '${uuidv4()}',UPPER('${element}'),0 WHERE NOT EXISTS(SELECT 1 FROM ${CONFIG.SQLDatabase}.tags WHERE UPPER(name) = UPPER('${element}')); SET @TagID = (SELECT id FROM ${CONFIG.SQLDatabase}.tags WHERE UPPER(name) = UPPER('${element}')); UPDATE ${CONFIG.SQLDatabase}.tags SET posts = posts + 1 WHERE id = @TagID`
                         SqlQuery(TagSql)
                     });
                 }
 
                 //change post stage to POST
-                var sql = `UPDATE DigitalGarden.posts SET Stage = 'LIVE', Posted = NOW(), Tags = '${JSON.stringify(PostTags)}', SearchData = '${JSON.stringify(SearchData)}' WHERE ID = '${PostID}'`
+                var sql = `UPDATE ${CONFIG.SQLDatabase}.posts SET Stage = 'LIVE', Posted = NOW(), Tags = '${JSON.stringify(PostTags)}', SearchData = '${JSON.stringify(SearchData)}' WHERE ID = '${PostID}'`
                 SqlQuery(sql).then(result =>{ 
                     if(result.affectedRows > 0){
                         res.status(200).send({"error":false,msg:"Message updated to post"})
@@ -944,7 +944,7 @@ app.post('/DeletePost',(req,res) =>{
         return;
     }else{
         var PostID = req.body.PostID
-        var sql = `DELETE FROM DigitalGarden.posts WHERE UserID = '${User.UserID}' AND ID = '${PostID}'`
+        var sql = `DELETE FROM ${CONFIG.SQLDatabase}.posts WHERE UserID = '${User.UserID}' AND ID = '${PostID}'`
         SqlQuery(sql).then(result =>{
             if(!result.hasOwnProperty("errno")){
                 //file was removed from DB
@@ -970,7 +970,7 @@ app.post('/GetFeed', (req,res) => {
         pos = 0
     }
 
-    var sql = `SELECT posts.ID, posts.PostData, posts.Tags, posts.Stage, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+    var sql = `SELECT posts.ID, posts.PostData, posts.Tags, posts.Stage, users.Username, users.UserData, posts.posted FROM ${CONFIG.SQLDatabase}.posts, ${CONFIG.SQLDatabase}.users WHERE Stage = "LIVE" AND users.ID = posts.UserID ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
     SqlQuery(sql).then(result => {
 
         result = result.map(e=>{
@@ -1005,7 +1005,7 @@ app.post('/GetFeedByUser', (req,res) => {
     }
         
     try{
-        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "LIVE" AND users.ID = posts.UserID and users.Username = '${req.body.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM ${CONFIG.SQLDatabase}.posts, ${CONFIG.SQLDatabase}.users WHERE Stage = "LIVE" AND users.ID = posts.UserID and users.Username = '${req.body.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
         SqlQuery(sql).then(result => {
 
             var posts = result.map(e=>{
@@ -1018,7 +1018,7 @@ app.post('/GetFeedByUser', (req,res) => {
 
             })
 
-            var sql = `SELECT Username, ID, UserData FROM DigitalGarden.users WHERE Username = '${req.body.UserID}'`
+            var sql = `SELECT Username, ID, UserData FROM ${CONFIG.SQLDatabase}.users WHERE Username = '${req.body.UserID}'`
 
             SqlQuery(sql).then(result => {
                 //should only be one result so no need to worry about potentially sending the data twice
@@ -1056,7 +1056,7 @@ app.post('/GetFeedByTag', (req,res) => {
     }
         
     try{
-        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = 'LIVE' AND users.ID = posts.UserID AND UPPER(Tags) LIKE UPPER('%"${req.body.Tag}"%') ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM ${CONFIG.SQLDatabase}.posts, ${CONFIG.SQLDatabase}.users WHERE Stage = 'LIVE' AND users.ID = posts.UserID AND UPPER(Tags) LIKE UPPER('%"${req.body.Tag}"%') ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
         SqlQuery(sql).then(result => {
 
             var posts = result.map(e=>{
@@ -1096,7 +1096,7 @@ app.get('/GetTags',(req,res) => {
         var pos = 0
     }
 
-    var sql = `SELECT * FROM DigitalGarden.tags ORDER BY posts DESC LIMIT ${pos},${pos + 10}`
+    var sql = `SELECT * FROM ${CONFIG.SQLDatabase}.tags ORDER BY posts DESC LIMIT ${pos},${pos + 10}`
     SqlQuery(sql).then(result => {
 
         result = result.filter(function(e){
@@ -1125,7 +1125,7 @@ app.post('/SearchTags',(req,res)=>{
     }
     var Query = req.body.search
 
-    var sql = `SELECT * FROM DigitalGarden.tags WHERE Name LIKE UPPER('%${Query}%') ORDER BY posts DESC LIMIT ${pos},${pos + 10}`
+    var sql = `SELECT * FROM ${CONFIG.SQLDatabase}.tags WHERE Name LIKE UPPER('%${Query}%') ORDER BY posts DESC LIMIT ${pos},${pos + 10}`
     SqlQuery(sql).then(result => {
         
         result = result.filter(function(e){
@@ -1150,7 +1150,7 @@ app.post('/SearchUser', (req,res) =>{
 
     var Query = req.body.search
 
-    var sql =`SELECT * FROM digitalgarden.users WHERE Username LIKE '%${Query}%' OR UserData LIKE '%"Alias":"${Query}%';`
+    var sql =`SELECT * FROM ${CONFIG.SQLDatabase}.users WHERE Username LIKE '%${Query}%' OR UserData LIKE '%"Alias":"${Query}%';`
     SqlQuery(sql).then(result => {
         res.status(200).send(result)
     })
@@ -1181,13 +1181,13 @@ app.post('/SearchPosts', (req,res) => {
 
         if(Query.length > 1){
             Query.forEach((term,index) =>{
-                sql += `SELECT ID, 1 AS PostPoint FROM digitalgarden.posts WHERE UPPER(Tags) LIKE UPPER('%${term}%') OR SearchData LIKE UPPER('%${term}%') AND Stage = 'LIVE'\n`
+                sql += `SELECT ID, 1 AS PostPoint FROM ${CONFIG.SQLDatabase}.posts WHERE UPPER(Tags) LIKE UPPER('%${term}%') OR SearchData LIKE UPPER('%${term}%') AND Stage = 'LIVE'\n`
                 if(index < Query.length -1 ){
                     sql += `UNION ALL\n`
                 }
             })
         }else{
-            sql += `SELECT ID, 1 AS PostPoint FROM digitalgarden.posts WHERE UPPER(Tags) LIKE UPPER('%${Query[0]}%') OR SearchData LIKE UPPER('%${Query[0]}%') AND Stage = 'LIVE'\n`
+            sql += `SELECT ID, 1 AS PostPoint FROM ${CONFIG.SQLDatabase}.posts WHERE UPPER(Tags) LIKE UPPER('%${Query[0]}%') OR SearchData LIKE UPPER('%${Query[0]}%') AND Stage = 'LIVE'\n`
         }
     sql += `)
         AS X
@@ -1200,7 +1200,7 @@ app.post('/SearchPosts', (req,res) => {
         //get posts from ID
         await Promise.all(
             result.map(async(e) =>{
-                var postSql = `SELECT  posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM digitalgarden.posts, DigitalGarden.users WHERE posts.ID = '${e.ID}' AND users.ID = posts.UserID`
+                var postSql = `SELECT  posts.ID, posts.PostData, posts.Stage, posts.Tags, users.Username, users.UserData, posts.posted FROM ${CONFIG.SQLDatabase}.posts, ${CONFIG.SQLDatabase}.users WHERE posts.ID = '${e.ID}' AND users.ID = posts.UserID`
                 var post =  await SqlQuery(postSql)
                 post = post[0]
 
@@ -1236,7 +1236,7 @@ app.post('/GetDrafts', (req,res) => {
     }
         
     try{
-        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.Username, users.UserData, posts.posted FROM DigitalGarden.posts, DigitalGarden.users WHERE Stage = "DRAFT" AND users.ID = posts.UserID and users.ID = '${user.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
+        var sql = `SELECT posts.ID, posts.PostData, posts.Stage, users.Username, users.UserData, posts.posted FROM ${CONFIG.SQLDatabase}.posts, ${CONFIG.SQLDatabase}.users WHERE Stage = "DRAFT" AND users.ID = posts.UserID and users.ID = '${user.UserID}' ORDER BY posts.posted DESC LIMIT ${pos}, ${CONFIG.PostGetLimit};`   
         SqlQuery(sql).then(result => {
 
             var posts = result.map(e=>{
@@ -1252,7 +1252,7 @@ app.post('/GetDrafts', (req,res) => {
 
             })
 
-            var sql = `SELECT Username, ID, UserData FROM DigitalGarden.users WHERE ID = '${user.UserID}'`
+            var sql = `SELECT Username, ID, UserData FROM ${CONFIG.SQLDatabase}.users WHERE ID = '${user.UserID}'`
 
             SqlQuery(sql).then(result => {
                 //should only be one result so no need to worry about potentially sending the data twice
@@ -1314,7 +1314,7 @@ app.post('/GetUserDetails',(req,res) =>{
         var UserID = req.body.UserID
     }
     
-    var sql = `SELECT Username, UserData FROM DigitalGarden.users WHERE ID = '${UserID}'`
+    var sql = `SELECT Username, UserData FROM ${CONFIG.SQLDatabase}.users WHERE ID = '${UserID}'`
 
     SqlQuery(sql).then(result => {
         //should only be one result so no need to worry about potentially sending the data twice
@@ -1344,7 +1344,7 @@ app.post('/GetUserDetailsForEditing',(req,res) =>{
     }
 
     
-    var sql = `SELECT Username, UserData, Email FROM DigitalGarden.users WHERE ID = '${UserID}'`
+    var sql = `SELECT Username, UserData, Email FROM ${CONFIG.SQLDatabase}.users WHERE ID = '${UserID}'`
 
     SqlQuery(sql).then(result => {
         //should only be one result so no need to worry about potentially sending the data twice
@@ -1386,15 +1386,18 @@ app.post('/UserModification',FileUpload.single("UserIcon"),(req,res)=>{
         var Pronouns = req.body.Pronouns
     }
 
+    //remove newlines from bio
+    var bio = req.body.Bio.replaceAll(/[\r\n]+/g, "<br>")
+
     var UserData = {
         "Alias":req.body.Alias,
         "Subtext":req.body.Subtext,
         "ProNouns":Pronouns,
         "Links":UserLinks,
-        "Bio":req.body.Bio
+        "Bio":bio
     }
 
-    var sql = `UPDATE digitalgarden.users SET UserData = '${JSON.stringify(UserData)}', Email = '${req.body.UserEmail}' WHERE ID = '${UserID.UserID}'`
+    var sql = `UPDATE ${CONFIG.SQLDatabase}.users SET UserData = '${JSON.stringify(UserData)}', Email = '${req.body.UserEmail}' WHERE ID = '${UserID.UserID}'`
     SqlQuery(sql)
 
     res.send({"error":false,"msg":"User profile updated"})
@@ -1491,7 +1494,7 @@ app.get('/GetUserBackground',(req,res) => {
         }
     }else if(req.query.Username){
 
-        var sql = `SELECT ID FROM digitalgarden.users WHERE Username = '${req.query.Username}'`
+        var sql = `SELECT ID FROM ${CONFIG.SQLDatabase}.users WHERE Username = '${req.query.Username}'`
         SqlQuery(sql).then(result => {
             if(result.length > 0){
                 res.sendFile(`${__dirname}/data/UserIcons/${result[0].ID}/UserBackground.png`)

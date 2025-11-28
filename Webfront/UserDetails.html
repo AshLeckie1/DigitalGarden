@@ -157,7 +157,7 @@
             document.getElementById("SubtextInput").value = result.UserData.Subtext
 
             document.getElementById('Alias').value = result.UserData.Alias
-            document.getElementById('Bio').value = result.UserData.Bio
+            document.getElementById('Bio').value = (result.UserData.Bio).replaceAll("<br>","\r\n")
             document.getElementById('UserEmail').value = result.Email
 
             if(["She/Her","He/Him","They/Them"].includes(result.UserData.ProNouns)){
