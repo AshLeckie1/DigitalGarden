@@ -743,10 +743,6 @@ app.post('/ModifyDraft', (req,res) =>{
             res.status(403).send({error:true,"msg":"You do not have permissions to edit this post"})
         }
     })
-        
-
-
-
 })
 
 app.get('/GetPostMD', (req,res) => {
@@ -811,7 +807,7 @@ app.post('/GetPost', (req,res) => {
                         }
                         pos++
                         return e
-                    }).concat()
+                    }).join('\n')
 
                     let converter = new showdown.Converter(),
                     Posthtml = converter.makeHtml(postText);
@@ -1029,7 +1025,21 @@ app.post('/GetFeed', (req,res) => {
     SqlQuery(sql).then(result => {
 
         result = result.map(e=>{
+
             var postText = fs.readFileSync(`${__dirname}/data/POSTS/${e.ID}/post.md`)
+
+            // validate that the spacing is correct 
+            var pos = 0
+            postText = postText.toString().split('\n').map(e=>{
+                //check if string starts with hash and the next line is not empty
+                if(/^#/.test(e) && postText.toString().split('\n')[pos+1] != ''){  
+                    e = `${e} \r\n`
+                }
+                pos++
+                return e
+            }).join('\n')
+
+            
             let converter = new showdown.Converter(),
             Posthtml = converter.makeHtml(postText.toString());
             e["PostHtml"] = Posthtml
@@ -1044,7 +1054,6 @@ app.post('/GetFeed', (req,res) => {
             }
         )
     })
-
 })
 
 app.post('/GetFeedByUser', (req,res) => {
