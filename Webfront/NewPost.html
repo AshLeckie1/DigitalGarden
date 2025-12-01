@@ -230,19 +230,21 @@
         
         document.getElementById("PostButton").disabled = true
 
-        UpdateDraft()
+        UpdateDraft().then(e => {
+             PostDraft($Session.DraftID).then(result =>{
+                if(!result.error){
+                    alert("Post Made!")
 
-        PostDraft($Session.DraftID).then(result =>{
-            if(!result.error){
-                alert("Post Made!")
+                    location.href = `index.html`
+                }
+                else{
+                    alert("Something went wrong!")
+                    document.getElementById("PostButton").disabled = false
+                }
+            }) 
+        })
 
-                location.href = `index.html`
-            }
-            else{
-                alert("Something went wrong!")
-                document.getElementById("PostButton").disabled = false
-            }
-        })  
+        
     }
 
     async function PostDraft(PostID){
@@ -281,38 +283,41 @@
     function updateMD(){
         document.getElementById("MarkdownViewer").innerHTML = `<zero-md style="padding-bottom: 10rem;"><template><xmp>${document.getElementById("Editor").value}</xmp></template></zero-md>`
         //attempt to update draft
-        setTimeout(UpdateDraft,5000)
+        setTimeout(UpdateDraft,2500)
     }
 
     // cooldown
     // server request cooldown
     var cooldown = false    
 
-    function UpdateDraft(){
+    async function UpdateDraft(){
         // if cooldown is set to true ignore this request
         if(!cooldown){
 
             document.getElementById("saveStatus").innerHTML = "Saving..."
 
-            ModifyPost().then(result =>{
+            //set cooldown
+            cooldown = true
+            setTimeout(clearTimeout,2000)
+
+            function clearTimeout(){
+                cooldown = false
+            }
+            
+            return ModifyPost().then(result =>{
                 console.log(result)
                 // TODO check that it did actually save 
                 setTimeout( updateSave,1000)
 
                 function updateSave(){
                     document.getElementById("saveStatus").innerHTML = "Saved"
+                    
+                    return true
+                
                 }
-               
             })
 
-            //set cooldown
-            cooldown = true
-            setTimeout(clearTimeout,5000)
-
-            function clearTimeout(){
-                cooldown = false
-            }
-
+            
             async function ModifyPost() {
                 const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/ModifyDraft`, {
                     headers: {

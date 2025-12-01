@@ -51,7 +51,8 @@ let SQLConnection = await mysql.createConnection({
     host     : CONFIG.SQLServer,
     user     : CONFIG.SQLUser,
     password : CONFIG.SQLPass,
-    database : CONFIG.SQLDatabase
+    database : CONFIG.SQLDatabase,
+    multipleStatements: true
 });
 
 //check that Database is connected
@@ -67,6 +68,45 @@ await SQLConnection.query("SELECT 1").then(result =>{
 var BootTime = Date.now()
 
 var $UserSessions = []
+// read cached UserSessions File
+if(fs.existsSync(`${__dirname}\\data\\UserSessions.json`)){
+    fs.readFile(`${__dirname}\\data\\UserSessions.json`, function(err, data) { 
+        if (err) log(`[ERROR] Unable to read User Sessions file. ${err}`,"service"); 
+        $UserSessions  = JSON.parse(data); 
+    }); 
+}
+
+function AddUserSession(session){
+    $UserSessions.push(session)    
+
+    //update cached file
+    fs.writeFileSync(`${__dirname}\\data\\UserSessions.json`,JSON.stringify($UserSessions))
+
+}
+
+function removeUserSession(SessionID){
+    
+    var output = "No session Found"
+
+    $UserSessions= $UserSessions.filter(function (UserSession) {
+        if(UserSession.SessionID != SessionID){
+            return UserSession
+        }
+        else{
+            log(`[INFO] Removing user session ${SessionID}`,"Service")
+            output = "Session Removed"
+        }
+    });    
+
+    //update cached file
+    fs.writeFileSync(`${__dirname}\\data\\UserSessions.json`,JSON.stringify($UserSessions))
+
+    return {msg:output}
+}
+
+
+
+
 //{Username:{User},SessionStart:{DateTime},SessionID={GUID}}
 
 const algorithm = 'aes-256-cbc';
@@ -287,7 +327,7 @@ app.post("/Login",(req,res) => {
                 var sessionStart = Date.now()
                 var SessionVar = {ID:UserData.ID,Username:UserData.Username,SessionStart:sessionStart,SessionID:sessionID,Permission:UserData.Permission}
 
-                $UserSessions.push(SessionVar)
+                AddUserSession(SessionVar)
 
                 log(`[INFO] User ${UserData.Username} logged in successfully`,"Service")
 
@@ -503,8 +543,9 @@ app.post('/ActiveSessions',(req,res) =>{
         res.send($UserSessions)
 
     }catch(err){
-        log(`[ERROR] /ActiveSessions`, "service", JSON.stringify(err))
-        res.status(500).send({error:true,msg:err})
+        var stack = uuidv4()
+        log(`[ERROR] ${stack} /ActiveSessions `, "service", JSON.stringify(err))
+        res.status(500).send({error:true,msg:stack})
     }
 });
 
@@ -547,8 +588,9 @@ app.post('/ModifyWelcomeMessage', (req,res) => {
 
             fs.writeFile(WelcomeFile,message, err => {
                 if (err) {
-                    log(`[ERROR] Modifying Welcome Message ${err}`,"service");
-                    res.status(500).send({error:true,msg:err})
+                    var stack = uuidv4()
+                    log(`[ERROR] ${stack} Modifying Welcome Message ${err}`,"service");
+                    res.status(500).send({error:true,msg:stack})
                 }else{
                     res.send({error:false})
                 }
@@ -560,9 +602,9 @@ app.post('/ModifyWelcomeMessage', (req,res) => {
             res.status(500).send({error:true,msg:"User not an admin"})
         }
     }catch(err){
-
-        log(`[ERROR] /ModifyWelcomeMessage`, "service", JSON.stringify(err))
-        res.status(500).send({error:true,msg:err})
+        var stack = uuidv4()
+        log(`[ERROR] ${stack} /ModifyWelcomeMessage`, "service", JSON.stringify(err))
+        res.status(500).send({error:true,msg:stack})
     }
 
 
@@ -685,8 +727,9 @@ app.post('/ModifyDraft', (req,res) =>{
                     res.status(200).send({"error":false,msg:"Draft Updated!"})
 
                 }catch(err){
-                    log(`[ERROR] Editing Draft ${PostID} - ${err}`,"service")
-                    res.status(500).send({"error":false,msg:err})
+                    var stack = uuidv4()
+                    log(`[ERROR] ${stack} Editing Draft ${PostID} - ${err}`,"service")
+                    res.status(500).send({"error":false,msg:`There was an error saving changes to the draft, stacktrace ${stack}`})
                 }
             }
             else{
@@ -758,8 +801,20 @@ app.post('/GetPost', (req,res) => {
                 //read post MD
                 try{
                     var postText = fs.readFileSync(`${__dirname}\\data\\POSTS\\${PostID}\\post.md`)
+                    
+                    // validate that the spacing is correct 
+                    var pos = 0
+                    postText = postText.toString().split('\n').map(e=>{
+                        //check if string starts with hash and the next line is not empty
+                        if(/^#/.test(e) && postText.toString().split('\n')[pos+1] != ''){  
+                            e = `${e} \r\n`
+                        }
+                        pos++
+                        return e
+                    }).concat()
+
                     let converter = new showdown.Converter(),
-                    Posthtml = converter.makeHtml(postText.toString());
+                    Posthtml = converter.makeHtml(postText);
 
                     //send post data
                     res.status(200).send({
@@ -1388,6 +1443,7 @@ app.post('/UserModification',FileUpload.single("UserIcon"),(req,res)=>{
 
     //remove newlines from bio
     var bio = req.body.Bio.replaceAll(/[\r\n]+/g, "<br>")
+    bio = bio.replaceAll(/"/g,'\\"')
 
     var UserData = {
         "Alias":req.body.Alias,
@@ -1452,7 +1508,9 @@ app.post('/RemoveUserBackground', (req,res) => {
                     res.status(200).send({error:false,msg:"Background not found!"})
                 } else if (err) {
                     // other errors, e.g. maybe we don't have enough permission
-                    res.status(403).send({error:true,msg:err})                    
+                    var stack = uuidv4()
+                    log(`[Error] ${stack} Error Removing user background, ${err}`)
+                    res.status(403).send({error:true,msg:`Error removing background, stacktrace ${stack}`})                    
                 } else {
                     res.status(200).send({error:false,msg:"Background removed!"})
                 }
@@ -1557,15 +1615,17 @@ app.post('/AddImageToPost',FileUpload.single("Image"),(req,res) => {
 
         if(req.file != undefined){
             if (!fs.existsSync(`${__dirname}/data/POSTS/${PostID}/Images`)){
-                fs.mkdirSync(`${__dirname}/data/POSTS/${PostID}/Images`);
+                fs.mkdirSync(`${__dirname}/data/POSTS/${PostID}/Images`, { recursive: true });
             }
             ProcessImage(req.file,`${__dirname}/data/POSTS/${PostID}/Images`,uuidv4())
-            res.status(200).send({"error":false,"msg":"Img Uploaded"})
+            res.status(200).send({error:false,"msg":"Img Uploaded"})
         }else{
             res.status(400).send({error:true,"msg":"Missing File!"})
         }
     }catch(err){
-        res.status(500).send({error:true,"msg":err})
+        var trace = uuidv4()
+        log(`[ERROR] ${trace} There was an error processing a Imag uploaded to a post (${PostID}), err: ${err}`,"service")
+        res.status(500).send({error:true,"msg":`There was an error, stacktrace ${trace}`})
     }
 })
 
@@ -1601,7 +1661,6 @@ app.get('/GetImageThumbnail',(req,res) =>{
 
         if(fs.existsSync(FilePath)){
             CreateThumb(FilePath).then(thumb => {
-
                 res.send(thumb)
             })
         }else{
@@ -1610,7 +1669,13 @@ app.get('/GetImageThumbnail',(req,res) =>{
         
         async function CreateThumb(FilePath) {
             var options = {height:100,withMetaData:true}
-            return await imageThumbnail(FilePath,options)
+            try{
+                return await imageThumbnail(FilePath,options)
+            }
+            catch(err){
+                log(`[ERROR] Unable to convert image to thumbnail ${err}`,"service")
+                return {error:true, msg:"There was an error converting the image"}
+            }
         }
 
     }catch(err){
@@ -1643,6 +1708,18 @@ app.get('/GetImage',(req,res) =>{
 
 
 function ProcessImage(File,TargetDropOff,NewName){
+    console.log(File.mimetype)
+    console.log(JSON.stringify(File))
+    // make sure image is correct file type
+    const allowedFiles = ["image/png", "image/jpeg", "image/jpg"]
+    if(!allowedFiles.includes(File.mimetype)){
+        log(`[ERROR] Attempting to upload non-image/unauthorized file type, ${File.path}`,"service")
+
+        // remove file 
+        fs.rmSync(File.path)
+
+        return false
+    }
 
     //add file extension to file
     var FilePath = `${File.path}.${File.mimetype.replace("image/","")}`
@@ -1733,22 +1810,6 @@ function IsUserSessionValid(LoginSession){
 }
 
 
-function removeUserSession(SessionID){
-    
-    var output = "No session Found"
-
-    $UserSessions= $UserSessions.filter(function (UserSession) {
-        if(UserSession.SessionID != SessionID){
-            return UserSession
-        }
-        else{
-            log(`[INFO] Removing user session ${SessionID}`,"Service")
-            output = "Session Removed"
-        }
-    });    
-
-    return {msg:output}
-}
 
 
 

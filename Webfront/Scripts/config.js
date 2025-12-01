@@ -1,4 +1,4 @@
 const CONFIG = {
-    nodeserver:"thedigitalgarden.net",
+    nodeserver:"localhost",
     nodeport:"3000"
 }
