@@ -30,15 +30,29 @@ function CreatePost(post){
     }catch{
         var Tags = ""
     }
-    
 
 
+    DoesThisPostBelongToMe(PostData.ID).then(result =>{
+        if(!result.error && result.valid){
+            document.getElementById(`${PostID}_PostMenu`).innerHTML =  `
+            <button>Options</button>
+            <div class="PostMenuContent">
+                <a href="EditPost.html?draft=${PostData.ID.replace("/","-")}">Edit</a>
+                <a class="remove" onclick="DeleteDraft('${PostData.ID}')">Remove</a>
+            </div>
+            `
+        }
+    })
+
+       
     var Post = `
-    <div class='PostContainer' data-UserDataId='${PostID}' onclick="GoToPost('${PostData.ID}','${PostID}')">
-        <div class='PostInfo'>
+    <div class='PostContainer' id='${PostID}_PostContainer' data-UserDataId='${PostID}' onclick="GoToPost('${PostData.ID}','${PostID}')">
+        <div class='PostInfo' id='${PostID}_PostInfo'>
             <span class='UserDetails'>
                 <img class='UserIcon' src='http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetUserPfp?UserID=${PostData.Author}' onclick="window.location.href='user.html?ID=${post.Username}'"> 
                 <span class="PostUsername" onclick="window.location.href='user.html?ID=${post.Username}'" onmouseover="ShowUserPopup('${PostID}','${PostData.ID}')" id="Username${PostData.ID}" onmouseout="HideUserPopup('${PostID}')">${PostUserData.Alias}</span> <span class="Subtext">${PostUserData.Subtext}</span>
+                <div class="PostMenu" id="${PostID}_PostMenu">
+                </div>
             <span class='PostDate'>
                 ${formattedDate}
             </span>
@@ -92,10 +106,59 @@ function isPostNotOverflown(elementID) {
 }
 
 function GoToPost(FullPostID,PostID){
-    if(document.elementFromPoint($MousePos.x, $MousePos.y) != document.getElementById(`${PostID}_Expand`)){
+    //if(document.elementFromPoint($MousePos.x, $MousePos.y) != document.getElementById(`${PostID}_Expand` )){
+    if(document.elementFromPoint($MousePos.x, $MousePos.y) == document.getElementById(`${PostID}_PostContainer`)
+        || document.elementFromPoint($MousePos.x, $MousePos.y) == document.getElementById(`${PostID}_PostInfo`)
+        || document.elementFromPoint($MousePos.x, $MousePos.y) == document.getElementById(`${PostID}_Textarea`)
+    )
+    {
+
         window.location.href = `post.html?ID=${FullPostID}`
     }
     else{
         Expand(PostID)
     }
+}
+
+ function DeleteDraft(postID){
+    if(confirm("Are you sure you want to delete post?")){
+        DeleteDraftPost(postID).then(result => {
+            if(!result.error){
+                document.getElementById(`${postID.split('-')[postID.split('-').length - 1]}_PostContainer`).remove()
+                alert("Post was deleted!")
+            }else{
+                alert("There was an error Deleting post")
+            }
+        })
+    }
+}
+
+async function DeleteDraftPost(postID){
+    const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/DeletePost`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+            PostID : postID.replace("/","-"),
+            SessionID : GetUserSession()
+        })
+    });
+    return response.json()
+}
+
+async function DoesThisPostBelongToMe(postID){
+    const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/DoesThisPostBelongToMe`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+            PostID : postID.replace("/","-"),
+            SessionID : GetUserSession()
+        })
+    });
+    return response.json()
 }

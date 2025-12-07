@@ -52,7 +52,6 @@ function isPostNotOverflown(elementID) {
             }
         })
     }
-
 }
 
 async function DeleteDraftPost(postID){
@@ -69,5 +68,4 @@ async function DeleteDraftPost(postID){
     });
 
     return response.json()
-
 }

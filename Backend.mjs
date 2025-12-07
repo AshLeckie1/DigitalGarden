@@ -710,7 +710,7 @@ app.post('/ModifyDraft', (req,res) =>{
         // check that user is the one who created the draft
         if(result.UserID == userSession.UserID){
             // check if post it modifiable
-            if(result.Stage == "DRAFT"){
+            //if(result.Stage == "DRAFT"){
                 // Allow post ot be modified
                 var postData = JSON.parse(result.PostData)
                 postData.Modified = Date.now()  
@@ -731,11 +731,11 @@ app.post('/ModifyDraft', (req,res) =>{
                     log(`[ERROR] ${stack} Editing Draft ${PostID} - ${err}`,"service")
                     res.status(500).send({"error":false,msg:`There was an error saving changes to the draft, stacktrace ${stack}`})
                 }
-            }
-            else{
-                // post cannot be modified
-                res.status(403).send({error:true, "msg":"Post is no longer modifiable!"})
-            }
+            // }
+            // else{
+            //     // post cannot be modified
+            //     res.status(403).send({error:true, "msg":"Post is no longer modifiable!"})
+            // }
         }
         else{
             //user is not valid
@@ -1106,7 +1106,6 @@ app.post('/GetFeedByUser', (req,res) => {
     }
 })
 
-
 app.post('/GetFeedByTag', (req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body == null) {
@@ -1144,6 +1143,44 @@ app.post('/GetFeedByTag', (req,res) => {
         res.status(500).send({error:true,"msg":err})
     }
 })
+
+app.post('/DoesThisPostBelongToMe',(req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    if (req.query == null) {
+        res.status(400).send({"error":"Missing query"});
+        return;
+    }
+
+    try{
+        var UserSession = IsUserSessionValid(req.body.SessionID)
+        var PostID = req.body.PostID
+        
+
+        if(UserSession.login){
+            var sql = `SELECT ID FROM ${CONFIG.SQLDatabase}.posts WHERE ID = '${PostID}' AND UserID = '${UserSession.UserID}'`
+            SqlQuery(sql).then(result => {
+                if(result.length == 1){
+                    res.status(200).send({error:false,valid:true})
+                }else{
+                    res.status(403).send({error:false,valid:false})
+                }
+            });
+        }else{
+            res.status(403).send({error:false,valid:false})
+        }
+
+        
+
+    }catch(err){
+        var stack = uuidv4()
+        log(`[ERROR] Checking if post belongs to the user, ${err}`,"service")
+        res.status(500).send({error:true,msg:`Something went wrong!`,stack:stack,valid:false})
+    }
+
+
+
+});
+
 
 app.get('/GetTags',(req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
