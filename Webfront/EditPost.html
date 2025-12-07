@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>New Post - Digital Garden</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="Style/Skeleton/skeleton.css" rel="stylesheet">
+    <link href="Style/Skeleton/normalize.css" rel="stylessheet">
+    <link href="Style/Style.css" rel = "stylesheet">
+    <link href="Style/NewPost.css" rel = "stylesheet">
+    <link href="Style/MultiTagInput.css" rel="stylesheet">
+    <script src="Scripts/userSession.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="Scripts/config.js"></script>
+    <script src="Scripts/LightDarkMode.js"></script>
+    <script src="Scripts/NavControlls.js"></script>
+    <script src="Scripts/MultiTagInput.js"></script>
+    
+    <script type="module">
+        WebComponents.waitFor(() => {
+        let el = document.createElement('script');
+        el.src = 'https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js';
+        document.head.appendChild(el);
+        });
+    </script>
+    <title>New Post</title>
+</head>
+<iframe  name="dummyframe" id="dummyframe" hidden></iframe>
+<body class="LightMode" id="body">
+     <div class="MainTitle">
+        <h1 id="Title" style = "font-family: Consolas;"></h1>
+        <div id="UserSession"></div>
+    </div>
+    <div class="SideNav">
+        <ul id="SideNavUL">
+
+        </ul>
+    </div>
+    <div class="container MainBody"> 
+        <div class="PageBackButton" >
+            <span onclick="window.location.href='/';">Cancel</span>
+            <button onclick="SaveDraftAsPost()" id="PostButton">Save Changes</button>
+        </div>
+        <div class="UploadImage" id="UploadImage" hidden>
+            <div>
+                <h5 id="Title">Draft Images</h5>
+                <h5 id="Close" onclick="ToggleImageUpload()">X</h5>
+            </div>
+            <form id="UploadImageForm" method="post" enctype="multipart/form-data" target="dummyframe"  onsubmit="setTimeout(PopulateImagesInSelection,500)">
+                <input name="Image" id="ImageUpload" type="file" accept="image/png, image/jpeg, image/jpg" required>
+                <input name="PostID" id="PostID" value="" hidden>
+                <button type="submit">Upload</button>
+            </form>
+            <div class="Images" >
+                <ul id="UploadedImages">
+
+                </ul>
+            </div>
+        </div>
+        <div class="Row">
+            <div class="six columns">
+                <h2 style="margin-left:20px">Editor</h2>
+                <ul class="PostEditor">
+                    <li><span id="saveStatus"></span></li>
+                    <li><button onclick="ToggleImageUpload()">Images</button></li>
+
+                </ul>
+                <div id="PostTags">
+
+                </div>
+                <textarea id="Editor"></textarea>
+                
+            </div>
+            <div class="six columns">
+                <h2>Preview</h2>
+                <div id="MarkdownViewer">
+                    <zero-md style="padding-bottom: 10rem;">
+                    </zero-md>
+                </div>
+                <div id="TagPreview">
+
+                </div>
+            </div>            
+        </div>
+    </div>
+</body>
+<footer id="footer">
+</footer>
+<script>
+
+    $Session = {
+        DraftID:""
+    }
+    
+    InitializeMultiTagInput("PostTags","Tags...")
+
+    var Editor = document.getElementById('Editor');
+    if (Editor.addEventListener) {
+    Editor.addEventListener('input', function() {
+        updateMD()
+
+        // event handling code for sane browsers
+    }, false);
+    } else if (Editor.attachEvent) {
+    Editor.attachEvent('onpropertychange', function() {
+        updateMD()
+        // IE-specific event handling code
+    });
+    }
+
+    $(document).ready(function() {
+        //check login
+        checkLogin().then(result => {
+            if(!result){
+                window.location.href = "/"
+            }
+        })        
+
+        $("#footer").load("footer.html");
+
+        console.log(window.location.href)
+        try{
+            if(new URL(window.location.href).searchParams.get("draft") != null){
+                $Session.DraftID = new URL(window.location.href).searchParams.get("draft")
+
+                document.getElementById("saveStatus").innerHTML = "Loading Post..."
+                //get draft from server
+                GetPost($Session.DraftID).then(result => {
+                    //check that post is a draft
+             
+                    document.getElementById("Editor").innerHTML = result.PostText.replace(/(<([^>]+)>)/ig, '')
+                    document.getElementById("saveStatus").innerHTML = "Post Loaded"
+                    PopulateImagesInSelection()
+                    //update md preview but prevent saving to DB
+                    cooldown = true
+                    setTimeout(clearTimeout,5000)
+
+                    function clearTimeout(){
+                        cooldown = false
+                    }
+                    updateMD()
+
+                   
+                })
+
+
+            }
+            else{
+                $Session.DraftID = uuidv4()
+                //create new draft
+
+                CreateDraft()
+
+                async function CreateDraft() {
+                    const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/NewDraft`, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        method: "POST",
+                        body: JSON.stringify({
+                            DraftID : $Session.DraftID,
+                            SessionID : GetUserSession()
+                        })
+                    });
+                }
+            }
+        }catch{
+           
+        }
+
+        document.getElementById("PostID").value=$Session.DraftID
+        document.getElementById("UploadImageForm").action = `http://${CONFIG.nodeserver}:${CONFIG.nodeport}/AddImageToPost`
+    })
+
+    function ToggleImageUpload(){
+         var x = document.getElementById("UploadImage");
+        if (x.hidden == true) {
+            x.hidden = false;
+        } else {
+            x.hidden = true;
+        }
+    }
+    
+    function PopulateImagesInSelection(){
+
+        document.getElementById("UploadImageForm").reset()
+
+        //set draft id
+       document.getElementById("PostID").value=$Session.DraftID
+
+        GetImages().then(Imgs =>{
+            var html = ""
+            Imgs.forEach(Img => {
+                html += `<li><img src="http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImageThumbnail?ImgUrl=${Img}"><button onclick="AddImage('${Img}')">Add</button></li>`
+            });
+
+            document.getElementById("UploadedImages").innerHTML = html
+            
+        })
+
+        async function GetImages() {
+            const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImagesinPost?PostID=${$Session.DraftID}`)
+            return response.json()
+        }
+    }  
+
+    function AddImage(Img){
+        document.getElementById("Editor").value += `![](http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImage?ImgUrl=${Img})`
+        updateMD()
+    }
+
+    function GetImageEmbed(Img){
+        
+        //close image upload
+        ToggleImageUpload()
+        navigator.clipboard.writeText(`![](http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetImage?ImgUrl=${Img})`).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    }
+
+    function SaveDraftAsPost(){
+        
+        document.getElementById("PostButton").disabled = true
+
+        UpdateDraft().then(e => {
+             PostDraft($Session.DraftID).then(result =>{
+                if(!result.error){
+                    alert("Post Modified!")
+                    location.href = `post.html?ID=${$Session.DraftID}`
+                }
+                else{
+                    alert("Something went wrong!")
+                    document.getElementById("PostButton").disabled = false
+                }
+            }) 
+        })
+
+        
+    }
+
+    async function PostDraft(PostID){
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/PostDraft`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                PostID : PostID,
+                SessionID : GetUserSession(),
+                Tags:MultiTagValue("PostTags")
+            })
+        });
+
+        return response.json()
+    }
+
+    async function GetPost(PostID){
+        const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/GetDraft`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                PostID : PostID,
+                SessionID : GetUserSession()
+            })
+        });
+
+        return response.json()
+    }
+
+    function updateMD(){
+        document.getElementById("MarkdownViewer").innerHTML = `<zero-md style="padding-bottom: 10rem;"><template><xmp>${document.getElementById("Editor").value}</xmp></template></zero-md>`
+    }
+
+    // cooldown
+    // server request cooldown
+    var cooldown = false    
+
+    async function UpdateDraft(){
+        // if cooldown is set to true ignore this request
+        if(!cooldown){
+
+            document.getElementById("saveStatus").innerHTML = "Saving..."
+
+            //set cooldown
+            cooldown = true
+            setTimeout(clearTimeout,2000)
+
+            function clearTimeout(){
+                cooldown = false
+            }
+            
+            return ModifyPost().then(result =>{
+                console.log(result)
+                // TODO check that it did actually save 
+                setTimeout( updateSave,1000)
+
+                function updateSave(){
+                    document.getElementById("saveStatus").innerHTML = "Saved"
+                    
+                    return true
+                
+                }
+            })
+
+            
+            async function ModifyPost() {
+                const response = await fetch(`http://${CONFIG.nodeserver}:${CONFIG.nodeport}/ModifyDraft`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        PostID : $Session.DraftID,
+                        SessionID : GetUserSession(),
+                        PostText : document.getElementById("Editor").value
+                    })
+                });
+
+                const json = await response.json()
+            }
+        }
+    }
+
+    function uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+        );
+    }
+
+    //store mouse position
+    $MousePos = {x:0,y:0}
+    document.addEventListener('mousedown', function(event) {
+        $MousePos.x = event.clientX
+        $MousePos.y = event.clientY
+        console.log()
+        if(document.elementFromPoint($MousePos.x, $MousePos.y) == document.getElementById(`Editor`)){
+            document.getElementById("UploadImage").hidden = true
+        }        
+    });
+
+</script>
+
+</html>
+
